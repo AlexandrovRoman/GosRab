@@ -19,7 +19,3 @@ class ProductionConfig(Config):
 class DevelopConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
-
-
-def from_object(Config):
-    return None
