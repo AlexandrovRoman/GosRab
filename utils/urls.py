@@ -30,7 +30,6 @@ def include(dir):
         pack = import_module(dir)
         patterns = getattr(pack, 'urlpatterns')
     except ModuleNotFoundError:
-        warn(f"Не удалось найти {dir}.urlpatterns", ImportWarning)
-        return
+        raise ImportError(f"Не удалось найти {dir}.urlpatterns")
     print('include success')
     yield from patterns

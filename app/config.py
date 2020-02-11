@@ -3,7 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-class Config(object):
+class Config:
     DEBUG = False
     CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = 'dsofpkoasodksap'
@@ -19,3 +19,7 @@ class ProductionConfig(Config):
 class DevelopConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
+
+
+def from_object(Config):
+    return None
