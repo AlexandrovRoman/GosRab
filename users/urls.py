@@ -1,7 +1,7 @@
 from utils.urls import path
-from .views import hello
+from .views import hello, start
 
 urlpatterns = [
     path('hello/', hello),
-    path(),
+    path('start/', start),
 ]
