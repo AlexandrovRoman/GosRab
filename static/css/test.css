@@ -1,0 +1,29 @@
+h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, Sans-Serif;
+}
+
+input {
+    margin-top: 10px;
+    padding: 5 10;
+}
+
+#enter-text {
+    margin-top: 10px;
+    text-indent: 20px;
+    text-align: center;
+    font-family: Arial, Helvetica, Sans-Serif;
+}
+#enter {
+    margin-top: 10px;
+    background-color: white;
+    color: black;
+    border: 2px solid rgba(255, 125, 0, 1.0);
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+#enter:hover {
+    background-color: rgba(255, 125, 0, 1);
+    color: white;
+}
