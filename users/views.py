@@ -8,7 +8,7 @@ current_users: List[Tuple[str, str]] = [
 ]
 
 
-def hello():
+def profile():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -21,7 +21,8 @@ def hello():
 
 
 def cookie_test():
-    click_count = cook if (cook := request.cookies.get('click')) else '2'
+    cook = request.cookies.get('click')
+    click_count = cook if cook else '2'
     res = make_response(f"Your click count is {click_count}")
     res.set_cookie('click', str(int(click_count) + 1), max_age=1)
 

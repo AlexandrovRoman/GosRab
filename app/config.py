@@ -1,6 +1,10 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+# add your file containing models
+models = [
+    'users.models',
+]
 
 
 class Config:
