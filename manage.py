@@ -14,7 +14,7 @@ db upgrade - обновление бд
 db downgrade - откат миграции
 some methods:
 runserver - запуск сервера
-startapp -n=name - создание приложения name
+startapp name - создание приложения name
 """
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -28,10 +28,8 @@ def runserver():
     app.run()
 
 
-@manager.option('-n', '--name', help='App name')
+@manager.command
 def startapp(name):
-    if not name:
-        raise NameError
     if not exists(name):
         makedirs(name)
     with open(f'{name}/views.py', 'w') as f:
