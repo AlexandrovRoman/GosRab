@@ -34,11 +34,14 @@ def startapp(name):
         raise NameError
     if not exists(name):
         makedirs(name)
-    open(f'{name}/views.py', 'w').close()
+    with open(f'{name}/views.py', 'w') as f:
+        f.write('# Create your views functions or classes\n')
     with open(f'{name}/models.py', 'w') as f:
-        f.write('from app import db\n')
+        f.write('from app import db\n\n# Create your models\n')
     with open(f'{name}/urls.py', 'w') as f:
-        f.writelines(['from utils.urls import path\n\n', 'urlpatterns = [\n', '    ', '\n]\n'])
+        f.write('from utils.urls import path\n\n# Add your urls\nurlpatterns = [\n    \n]\n')
+    with open(f'{name}/forms.py', 'w') as f:
+        f.write('from flask_wtf import FlaskForm\nimport wtforms\n\n# Create your forms\n')
     print(f'app {name} created')
 
 
