@@ -31,3 +31,15 @@ def cookie_test():
 
 def index():
     return render_template('news.html')
+
+
+def education():
+    return 'Обучение'
+
+
+def job():
+    return 'работай'
+
+
+def community_work():
+    return 'общественная деятельность'
