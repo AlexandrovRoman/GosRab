@@ -1,8 +1,3 @@
-"""
-flask db migrate -m "users table" - create table
-flask db upgrade - upgrade table
-"""
-
 from app import db
 
 
