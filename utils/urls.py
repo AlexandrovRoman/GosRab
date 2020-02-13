@@ -1,6 +1,3 @@
-# TODO: This code not worked
-
-
 from app.__init__ import app
 from importlib import import_module
 from warnings import warn
