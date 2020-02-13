@@ -1,5 +1,5 @@
 from flask import Flask
-from data import db_session
+from .data import db_session
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'something_key'
