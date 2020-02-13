@@ -9,3 +9,14 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+class MainPagePost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(140))
+    description = db.Column(db.Text)
+    image = db.Column(db.Binary)
+    url_to_orig = db.Column(db.String(100))
+
+    def __init__(self, *args, **kwargs):
+        super(MainPagePost, self).__init__(*args, **kwargs)
