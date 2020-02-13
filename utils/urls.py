@@ -30,7 +30,10 @@ def path(url: str, func, *, methods=['GET'], _main=False):
 def include(dir):
     try:
         pack = import_module(dir)
-        patterns = getattr(pack, 'urlpatterns')
+        try:
+            patterns = getattr(pack, 'urlpatterns')
+        except AttributeError:
+            raise AttributeError(f'Файл {dir}.urlpatterns не содержит urlpatterns')
     except ModuleNotFoundError:
         raise ImportError(f"Не удалось найти {dir}.urlpatterns")
     print('include success\n' if debug else '', end='')
