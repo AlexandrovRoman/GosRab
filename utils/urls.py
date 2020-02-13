@@ -3,6 +3,9 @@ from importlib import import_module
 from warnings import warn
 
 
+debug = app.debug
+
+
 def path(url: str, func, *, methods=['GET'], _main=False):
     if not hasattr(func, '__iter__'):
         if _main:
@@ -10,7 +13,7 @@ def path(url: str, func, *, methods=['GET'], _main=False):
                 warn(f"Некорректные данные", Warning)
                 return False
             app.add_url_rule(url, view_func=func, methods=methods)
-            print(f'add url: {url}')
+            print(f'add url: {url}\n' if debug else '', end='')
             return True
         else:
             return url, func, methods
@@ -20,7 +23,7 @@ def path(url: str, func, *, methods=['GET'], _main=False):
                 warn(f"Некорректные данные", Warning)
                 return False
             app.add_url_rule(url + url_, view_func=fnc, methods=methods_)
-            print(f'add url: {url + url_}')
+            print(f'add url: {url + url_}\n' if debug else '', end='')
         return True
 
 
@@ -30,7 +33,7 @@ def include(dir):
         patterns = getattr(pack, 'urlpatterns')
     except ModuleNotFoundError:
         raise ImportError(f"Не удалось найти {dir}.urlpatterns")
-    print('include success')
+    print('include success\n' if debug else '', end='')
     for args in patterns:
         if isinstance(args, bool):
             continue
