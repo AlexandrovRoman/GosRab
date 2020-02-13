@@ -1,7 +1,7 @@
 from utils.urls import path
-from .views import hello, cookie_test
+from .views import profile, cookie_test
 
 urlpatterns = [
-    path('hello/', hello, methods=['GET', 'POST']),
+    path('profile/', profile, methods=['GET', 'POST']),
     path('start/', cookie_test),
 ]

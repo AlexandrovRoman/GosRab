@@ -41,7 +41,8 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-pills">
-          <a class="nav-link active" href="profile.html">Личный кабинет <span class="sr-only">(current)</span></a>
+          <a class="nav-link active" href="../templates/profile.html">Личный кабинет <span class="sr-only">(current)</span></a>
+          <a class="nav-link active" href="{{ url_for('hello') }}">Личный кабинет <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="#">Курсы</a>
@@ -50,10 +51,6 @@
           <a class="nav-link active" href="#">Доступные вакансии</a>
         </li>
       </ul>
-      <form class="form-inline mt-2 mt-md-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Введите название курса" aria-label="Search">
-        <button class="btn btn-light my-0 my-sm-0" type="submit">Поик</button>
-      </form>
     </div>
   </nav>
 </header>
