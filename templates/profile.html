@@ -21,6 +21,7 @@
         }
       }
     </style>
+      <link rel="icon" href="{{ url_for('static', filename="icon/icon.png") }}">
   </head>
   <body>
 
@@ -31,12 +32,24 @@
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
-    </button>
+      </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-pills">
-          <a class="nav-link active" href="#">Личный кабинет <span class="sr-only">(current)</span></a>
-        </li>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-pills">
+              <a class="nav-link active" href="users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="users/education">Обучение<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="users/job">Вакансии<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="users/training">Навставничество<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="users/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
       </ul>
     </div>
   </nav>
@@ -49,7 +62,7 @@
     <div class="row">
       <div class="order-md-2 mb-4 ">
         <h4 class="d-flex justify-content-center align-items-start mb-3">
-          <span class="h1 mb-3">Личный профиль</span>
+          <span class="h1 mt-3">Личный профиль</span>
         </h4>
         <h4 class="mb-3">Фамилия: Федоров</h4>
         <h4 class="mb-3">Имя: Дмитрий</h4>
@@ -57,29 +70,24 @@
         <h4 class="mb-3">Пол: Мужское</h4>
         <h4 class="mb-3">Возраст: 34 года</h4>
         <h4 class="mb-3">Грейд: Новичок</h4>
-        <h4 class="mb-3">Образование: Высшее специальное</h4>
+        <h4 class="mb-3">Образование: Высшее професиональное</h4>
         <h4 class="mb-3">Семейное положение: В браке</h4>
       </div>
       <div class="order-md-1" style="width: 350px">
-        <img class="mb-4" src="{{ url_for('static', filename="icon/polz.png") }}" alt="" style="width: 300px; height: 400px">
-        <form class="needs-validation" novalidate>
-          <div class="column">
-            <h4 class="mb-3">Возраст: 34 года</h4>
-            <h4 class="mb-3">Возраст: 34 года</h4>
-            <h4 class="mb-3">Возраст: 34 года</h4>
-            <h4 class="mb-3">Возраст: 34 года</h4>
-            <h4 class="mb-3">Возраст: 34 года</h4>
-          </div>
-        </form>
+        <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/polz.png") }}" alt="" style="max-width: 100%; height: auto">
       </div>
     </div>
-    <hr class="featurette-divider">
+      <div class="column">
+          <h4 class="mb-3">Знание иностранного языка: Английский, Итальянский, Немецкий, Французкий, Испанский, Португальсский, Китайский, Турский, Казахский, Узбецкий, Татарский.</h4>
+      </div>
+    <hr class="featurette-divider my-5">
 
     <footer class="container mt-3" style="height: 60px">
       <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
       <p>&copy; SAMARA-CORPARATION</p>
     </footer>
   </div>
+</main>
+  </body>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script>window.jQuery || document.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.4/dist/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
 </html>
