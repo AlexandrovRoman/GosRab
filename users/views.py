@@ -8,7 +8,7 @@ current_users: List[Tuple[str, str]] = [
 ]
 
 
-def hello():
+def profile():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
