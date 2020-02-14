@@ -1,8 +1,10 @@
+from flask_login import UserMixin
+
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer,
@@ -15,7 +17,7 @@ class User(db.Model):
     # hashed_password = db.Column(db.String, nullable=True)
     # birth_date = db.Column(db.Date, nullable=
     age = db.Column(db.Integer)
-    sex = db.Column(db.String(1), nullable=True) # М/Ж
+    sex = db.Column(db.String(1), nullable=True)  # М/Ж
     status = db.Column(db.String, nullable=True,
                        default='standart_user')  # standart_user, admin, organistaion, superuser
     grate = db.Column(db.String, default='Новичок')
@@ -30,3 +32,11 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    @staticmethod
+    def get_logged(login, password):
+        return User()
+
+    @staticmethod
+    def get(user_id):
+        return User()

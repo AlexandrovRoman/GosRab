@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Ошибка 404</title>
+    <title>Авторизация</title>
 
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -35,19 +35,25 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-pills">
-              <a class="nav-link active" href="users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/education">Обучение<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/education">Обучение<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/job">Вакансии<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/job">Вакансии<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/training">Навставничество<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/training">Навставничество<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/sers/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="/users/job">Проект. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="/users/training">Статистика<span class="sr-only">(current)</span></a>
           </li>
       </ul>
     </div>
@@ -61,12 +67,14 @@
     </div>
           <div class="h1 mx-auto" style="width: 100px; height: 30px">Вход</div>
           <div class="h6 mx-auto mt-3" style="width: 160px; height: 30px">Для портала госулуг</div>
+
+          <form method="POST" action="">
           <div class="d-flex justify-content-center" style="height: 100px">
             <div class="d-flex p-3 my-1 flex-column" style="width: 300px">
               <label for="inputEmail" class="sr-only">Адрес электронной почты</label>
-              <input type="email" id="inputEmail" class="form-control" placeholder="Адрес электронной почты" required autofocus>
+              <input  name="username" type="email" id="inputEmail" class="form-control" placeholder="Адрес электронной почты" required autofocus>
               <label for="inputPassword" class="sr-only">Пароль</label>
-              <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
+              <input  name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
             </div>
           </div>
           <div class="d-flex p-3 mx-5 flex-row justify-content-center" style="height: 50px; max-width: 1800px">
@@ -83,6 +91,8 @@
               <p class="mt-1 mb-3 ml-5 mt-3 text-muted">&copy; SAMARA-CORPARATION</p>
             </div>
           </div>
+          </form>
+
         </div>
 </body>
 </html>
