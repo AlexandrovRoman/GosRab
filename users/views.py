@@ -57,6 +57,7 @@ def login():
         user = User.get_logged(request.form['username'], request.form['password'])
         if user is not None:
             login_user(user)
+            return redirect('/')
 
     # if form.validate_on_submit():
         # Login and validate the user.

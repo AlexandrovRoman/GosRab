@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
     def get_logged(login, password):
         session = create_session()
         user = session.query(User).filter(User.email == login).first()
-        if user.check_password(password):
+        if user and user.check_password(password):
             return user
         return None
 

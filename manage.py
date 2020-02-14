@@ -28,9 +28,9 @@ manager.add_command('db', MigrateCommand)
 for file in models:
     import_module(file)
 
-if 'runserver' in sys.argv:
-    global_init('app.db')
-    user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
+# if 'runserver' in sys.argv:
+#     global_init('app.db')
+#     user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
 
 
 @manager.command

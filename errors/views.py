@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for
-from app import app
+from app import app, login_manager
 
 
 @app.errorhandler(404)
@@ -12,6 +12,6 @@ def server_error(error):
     return render_template('error.html', error=500, discription="Проблемы с сервером или ведутся санитарные работы")
 
 
-@app.errorhandler(401)
-def login_error(error):
+@login_manager.unauthorized_handler
+def authorize():
     return redirect(url_for('login'))
