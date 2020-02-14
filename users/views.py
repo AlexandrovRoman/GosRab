@@ -30,5 +30,4 @@ def cookie_test():
 
 
 def index():
-    int('ggg')
     return render_template('news.html')
