@@ -53,7 +53,9 @@ def login():
     # handle this for us, and we use a custom LoginForm to validate.
     # form = LoginForm()
     if request.method == 'POST':
-        login_user(User.get_logged(request.form['username'], request.form['password']))
+        user = User.get_logged(request.form['username'], request.form['password'])
+        if user is not None:
+            login_user(user)
 
     # if form.validate_on_submit():
         # Login and validate the user.

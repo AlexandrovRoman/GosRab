@@ -17,10 +17,10 @@ db downgrade - откат миграции
 some methods:
 runserver - запуск сервера
 startapp name - создание приложения name
-db downgrade - 
-runserver - запоткат миграции
-some methods:уск сервера
-startapp -n=name - создание приложения name
+db downgrade - откат миграции
+some methods:
+runserver - запуск сервера
+startapp name - создание приложения name
 """
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -29,6 +29,8 @@ for file in models:
 
 global_init('app.db')
 user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
+
+
 @manager.command
 def runserver():
     add_urls()
@@ -36,7 +38,6 @@ def runserver():
 
 
 @manager.command
-@manager.option('-n', '--name', help='App name')
 def startapp(name):
     if not exists(name):
         makedirs(name)
