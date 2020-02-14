@@ -19,7 +19,9 @@ def profile():
                 return render_template('news.html')
 
         # return render_template('news.html')
-    return render_template('profile.html')
+    return render_template('profile.html', Surname="Федоров", Name="Дмитрий", Middle_name="Иванович", Gender="Мужское",
+                           Age="34 года", Grade="Новичок", Education="Высшее професиональное", Marital_status="В браке",
+                           Knowledge_of_foreign_language="Английский, Французкий, Немецкий, Татарский, Африканский.")
 
 
 def cookie_test():
