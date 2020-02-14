@@ -39,7 +39,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-pills">
-              <a class="nav-link active" href="/users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/profile">Профиль<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
               <a class="nav-link active" href="/users/education">Обучение<span class="sr-only">(current)</span></a>
@@ -51,15 +51,23 @@
               <a class="nav-link active" href="/users/training">Навставничество<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="/users/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-pills">
-              <a class="nav-link active" href="/users/job">Проект. Деятельность<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-pills">
               <a class="nav-link active" href="/users/training">Статистика<span class="sr-only">(current)</span></a>
           </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link active dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Деятельности</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="/users/community_work">Общественная</a>
+                    <a class="dropdown-item" href="/users/job">Проектная</a>
+                </div>
+            </li>
       </ul>
+         <form class="form-inline mt-2 mt-md-0">
+        <ul class="navbar-nav mr-auto">
+             <li class="nav-pills">
+                 <a class="nav-link" href="/users/login">Вход<span class="sr-only">(current)</span></a>
+             </li>
+        </ul>
+         </form>
     </div>
   </nav>
 </header>
@@ -73,3 +81,10 @@
         <h2>{{ discription }}</h2>
     </div>
 </main>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
