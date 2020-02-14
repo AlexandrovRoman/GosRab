@@ -1,9 +1,10 @@
 from flask_login import UserMixin
-
+from app import global_init, create_session
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
 
+global_init('app.db')
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
@@ -35,8 +36,13 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def get_logged(login, password):
-        return User()
+        session = create_session()
+        user = session.query(User).filter(User.email == login).first()
+        if user.check_password(password):
+            return user
+        return None
 
     @staticmethod
     def get(user_id):
-        return User()
+        session = create_session()
+        return session.query(User).filter(User.id == user_id).first()

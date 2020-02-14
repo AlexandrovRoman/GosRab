@@ -8,10 +8,10 @@ from importlib import import_module
 from app import global_init
 from users.views import user_add
 
-"""
-database-methods: https://flask-migrate.readthedocs.io/en/latest/
+"""sk-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
 db migrate - миграция бд
+database-methods: https://fla
 db upgrade - обновление бд
 db downgrade - откат миграции
 some methods:
