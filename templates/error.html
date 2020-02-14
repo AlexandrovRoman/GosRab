@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Ошибка 404</title>
+    <title>Ошибка {{ error }}</title>
 
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -39,26 +39,30 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-pills">
-              <a class="nav-link active" href="users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/education">Обучение<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/education">Обучение<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/job">Вакансии<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/job">Вакансии<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/training">Навставничество<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/training">Навставничество<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/sers/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="/users/job">Проект. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="/users/training">Статистика<span class="sr-only">(current)</span></a>
           </li>
       </ul>
     </div>
   </nav>
 </header>
-
-
 
 <main role="main">
     <hr class="featurette-divider mb-4">
@@ -66,6 +70,6 @@
     <hr class="featurette-divider mb-5">
     <div class="pricing-header mt-px-50 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
         <h1 class="display-1 mt-5">Ошибка {{ error }}</h1>
-        <h2>Файл не найден или находится в разработке</h2>
+        <h2>{{ discription }}</h2>
     </div>
 </main>
