@@ -13,6 +13,10 @@ database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
 db migrate - миграция бд
 db upgrade - обновление бд
+db downgrade - откат миграции
+some methods:
+runserver - запуск сервера
+startapp name - создание приложения name
 db downgrade - 
 runserver - запоткат миграции
 some methods:уск сервера
@@ -30,10 +34,10 @@ def runserver():
     add_urls()
     app.run()
 
+
+@manager.command
 @manager.option('-n', '--name', help='App name')
 def startapp(name):
-    if not name:
-        raise NameError
     if not exists(name):
         makedirs(name)
     with open(f'{name}/views.py', 'w') as f:
