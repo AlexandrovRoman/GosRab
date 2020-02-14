@@ -1,22 +1,39 @@
 from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer,
+                   primary_key=True, autoincrement=True)
+    name = db.Column(db.String(80), nullable=True)
+    surname = db.Column(db.String(80), nullable=True)
+    fathername = db.Column(db.String(80), nullable=True)
+    email = db.Column(db.String(40),
+                      index=True, unique=True, nullable=True)
+    hashed_password = db.Column(db.String, nullable=True)
+    # birth_date = db.Column(db.Date, nullable=True)
+    status = db.Column(db.String, nullable=True,
+                       default='standart_user')  # standart_user, admin, organistaion, superuser
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+    def set_password(self, password):
+        self.hashed_password = generate_password_hash(password)
 
-class MainPagePost(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(140))
-    description = db.Column(db.Text)
-    image = db.Column(db.Binary)
-    url_to_orig = db.Column(db.String(100))
+    def check_password(self, password):
+        return check_password_hash(self.hashed_password, password)
 
-    def __init__(self, *args, **kwargs):
-        super(MainPagePost, self).__init__(*args, **kwargs)
+# session = create_session()
+# for i in range(1, 5):
+#     user = User()
+#     user.name = f"Имя {i}"
+#     user.surname = f'Фамилия {i}'
+#     user.fathername = f'Отчество {i}'
+#     user.email = f"email{i}@email.ru"
+#     user.set_password(f'password_{i}')
+#     # user.birth_date = datetime.date(1998, 7, i)
+#     session.add(user)
+#     session.commit()

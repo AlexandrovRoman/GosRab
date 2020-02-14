@@ -12,6 +12,7 @@ migrate = Migrate(app, db)
 
 def add_urls():
     from app import urls
+    from errors import views
     if len(urls.urlpatterns) == 0:
         warn("urlpatterns is empty")
     assert all(urls.urlpatterns)
