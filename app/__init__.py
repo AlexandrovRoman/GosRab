@@ -1,5 +1,6 @@
 from warnings import warn
 from flask import Flask
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from .config import Config
@@ -15,6 +16,7 @@ migrate = Migrate(app, db)
 
 SqlAlchemyBase = dec.declarative_base()
 __factory = None
+
 
 def global_init(db_file):
     global __factory
@@ -33,9 +35,15 @@ def global_init(db_file):
 
     SqlAlchemyBase.metadata.create_all(engine)
 
+
 def create_session() -> Session:
     global __factory
     return __factory()
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 
 def add_urls():
     from app import urls
