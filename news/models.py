@@ -1,6 +1,7 @@
 from app import db
 import datetime
 
+
 class News(db.Model):
     __tablename__ = 'news_table'
 
