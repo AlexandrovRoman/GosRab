@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for
 from app import app
 
 
@@ -10,3 +10,8 @@ def not_found_error(error):
 @app.errorhandler(500)
 def server_error(error):
     return render_template('500.html', error=500)
+
+
+@app.errorhandler(401)
+def user_not_auth(error):
+    return redirect(url_for('users/login/'))
