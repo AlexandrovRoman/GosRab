@@ -32,13 +32,14 @@ def index():
     return render_template('news.html')
 
 
-def user_add(surname,name, fathername, birth_year, birth_month, birth_day, age, email, password, sex):
+def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex):
     session = create_session()
     user = User()
     user.surname = surname
     user.name = name
     user.age = age
     user.fathername = fathername
+    user.hashed_password = user.set_password(password)
     user.birth_date = datetime.date(birth_year, birth_month, birth_day)
     user.sex = sex
     user.email = email

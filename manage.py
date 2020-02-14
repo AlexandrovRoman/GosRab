@@ -7,6 +7,7 @@ from app.config import models
 from importlib import import_module
 from app import global_init
 from users.views import user_add
+import sys
 
 """
 database-methods: https://flask-migrate.readthedocs.io/en/latest/
@@ -27,8 +28,9 @@ manager.add_command('db', MigrateCommand)
 for file in models:
     import_module(file)
 
-global_init('app.db')
-user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
+if 'runserver' in sys.argv:
+    global_init('app.db')
+    user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
 
 
 @manager.command

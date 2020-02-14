@@ -42,4 +42,3 @@ class User(db.Model, UserMixin):
     @staticmethod
     def get(user_id):
         return User()
-
