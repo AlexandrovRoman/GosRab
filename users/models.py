@@ -4,6 +4,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
 
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
@@ -34,9 +35,10 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.hashed_password, password)
 
     @staticmethod
-    def get_logged(login, password):
+    def get_logged(login, password):  # Вернуть None если нету такого
         return User()
 
     @staticmethod
     def get(user_id):
         return User()
+
