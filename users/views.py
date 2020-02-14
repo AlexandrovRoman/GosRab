@@ -1,10 +1,12 @@
 from typing import List, Tuple
-
 from flask import render_template, request, make_response
+from app import create_session
+from users.models import User
+import datetime
 
 current_users: List[Tuple[str, str]] = [
     ('aaa', '111'),
-    ('ggg', '123'),
+    ('ggg', '123'),  # эта чоита?
 ]
 
 
@@ -33,3 +35,18 @@ def cookie_test():
 
 def index():
     return render_template('news.html')
+
+def user_add(surname,name, fathername, birth_year, birth_month, birth_day, email, password, sex):
+    session = create_session()
+    user = User()
+    user.surname = surname
+    user.name = name
+    user.fathername = fathername
+    # user.birth_date = datetime.date(birth_year, birth_month, birth_day)
+    user.sex = sex
+    user.email = email
+    # user.set_password(password)
+    session.add(user)
+    session.commit()
+
+

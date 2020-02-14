@@ -5,7 +5,6 @@ from warnings import warn
 
 debug = app.debug
 
-
 def path(url: str, func, *, methods=['GET'], _main=False):
     if not hasattr(func, '__iter__'):
         if _main:
