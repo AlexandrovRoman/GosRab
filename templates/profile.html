@@ -25,7 +25,8 @@
   </head>
   <body>
 
-    <header>
+
+<header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
     <a class="navbar-brand" href="/">
       <img src="{{ url_for('static', filename="icon/icon.png") }}" width="50" height="50" alt="" data-toggle="modal" data-target="#exampleModalLong">
@@ -36,25 +37,30 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-pills">
-              <a class="nav-link active" href="users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/profile">Личный кабинет<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/education">Обучение<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/education">Обучение<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/job">Вакансии<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/job">Вакансии<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/training">Навставничество<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/training">Навставничество<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-pills">
-              <a class="nav-link active" href="users/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+              <a class="nav-link active" href="/users/community_work">Общ. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="/users/job">Проект. Деятельность<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-pills">
+              <a class="nav-link active" href="/users/training">Статистика<span class="sr-only">(current)</span></a>
           </li>
       </ul>
     </div>
   </nav>
 </header>
-
     <hr class="featurette-divider m-5">
 
 <main role="main" style="height: 2000px">
@@ -64,21 +70,21 @@
         <h4 class="d-flex justify-content-center align-items-start mb-3">
           <span class="h1 mt-3">Личный профиль</span>
         </h4>
-        <h4 class="mb-3">Фамилия: Федоров</h4>
-        <h4 class="mb-3">Имя: Дмитрий</h4>
-        <h4 class="mb-3">Отчество: Иванович</h4>
-        <h4 class="mb-3">Пол: Мужское</h4>
-        <h4 class="mb-3">Возраст: 34 года</h4>
-        <h4 class="mb-3">Грейд: Новичок</h4>
-        <h4 class="mb-3">Образование: Высшее професиональное</h4>
-        <h4 class="mb-3">Семейное положение: В браке</h4>
+        <h4 class="mb-3">Фамилия: {{ Surname }}</h4>
+        <h4 class="mb-3">Имя: {{ Name }}</h4>
+        <h4 class="mb-3">Отчество: {{ Middle_name }}</h4>
+        <h4 class="mb-3">Пол: {{ Gender }}</h4>
+        <h4 class="mb-3">Возраст: {{ Age }}</h4>
+        <h4 class="mb-3">Грейд: {{ Grade }}</h4>
+        <h4 class="mb-3">Образование: {{ Education }}</h4>
+        <h4 class="mb-3">Семейное положение: {{ Marital_status }}</h4>
       </div>
       <div class="order-md-1" style="width: 350px">
         <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/polz.png") }}" alt="" style="max-width: 100%; height: auto">
       </div>
     </div>
       <div class="column">
-          <h4 class="mb-3">Знание иностранного языка: Английский, Итальянский, Немецкий, Французкий, Испанский, Португальсский, Китайский, Турский, Казахский, Узбецкий, Татарский.</h4>
+          <h4 class="mb-3">Знание иностранных язаков: {{ Knowledge_of_foreign_language }}</h4>
       </div>
     <hr class="featurette-divider my-5">
 

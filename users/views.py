@@ -1,25 +1,24 @@
 from typing import List, Tuple
+from flask import render_template, request, make_response, redirect
+from flask_login import login_user, logout_user, login_required
 
-from flask import render_template, request, make_response
+from app import create_session, login_manager
+from users.models import User
+import datetime
 
-current_users: List[Tuple[str, str]] = [
-    ('aaa', '111'),
-    ('ggg', '123'),
-]
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 
 def profile():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        for i, j in current_users:
-            if i == username and j == password:
-                return render_template('news.html')
-
-        # return render_template('news.html')
-    return render_template('profile.html')
+    return render_template('profile.html', Surname="Федоров", Name="Дмитрий", Middle_name="Иванович", Gender="Мужское",
+                           Age="34 года", Grade="Новичок", Education="Высшее професиональное", Marital_status="В браке",
+                           Knowledge_of_foreign_language="Английский, Французкий, Немецкий, Татарский, Африканский.")
 
 
+@login_required
 def cookie_test():
     cook = request.cookies.get('click')
     click_count = cook if cook else '2'
@@ -31,3 +30,47 @@ def cookie_test():
 
 def index():
     return render_template('news.html')
+
+
+def user_add(surname,name, fathername, birth_year, birth_month, birth_day, email, password, sex):
+    session = create_session()
+    user = User()
+    user.surname = surname
+    user.name = name
+    user.fathername = fathername
+    # user.birth_date = datetime.date(birth_year, birth_month, birth_day)
+    user.sex = sex
+    user.email = email
+    # user.set_password(password)
+    session.add(user)
+    session.commit()
+
+
+def login():
+    # Here we use a class of some kind to represent and validate our
+    # client-side form data. For example, WTForms is a library that will
+    # handle this for us, and we use a custom LoginForm to validate.
+    # form = LoginForm()
+    if request.method == 'POST':
+        login_user(User.get_logged(request.form['username'], request.form['password']))
+
+    # if form.validate_on_submit():
+        # Login and validate the user.
+        # user should be an instance of your `User` class
+        # login_user()
+        #
+        # flask.flash('Logged in successfully.')
+        #
+        # next = flask.request.args.get('next')
+        # is_safe_url should check if the url is safe for redirects.
+        # See http://flask.pocoo.org/snippets/62/ for an example.
+        # if not is_safe_url(next):
+        #     return flask.abort(400)
+
+        # return flask.redirect(next or flask.url_for('index'))
+    return render_template('sigin.html')  # , form=form)
+
+
+def logout():
+    logout_user()
+    return redirect('/')
