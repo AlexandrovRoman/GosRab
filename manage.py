@@ -28,7 +28,7 @@ for file in models:
     import_module(file)
 
 global_init('app.db')
-user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 'example@email.ru', 'qwertyuiop', 'М')
+user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
 @manager.command
 def runserver():
     add_urls()
