@@ -36,9 +36,10 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.hashed_password, password)
 
     @staticmethod
-    def get_logged(login, password):
+    def get_logged(login, password):  # Вернуть None если нету такого
         return User()
 
     @staticmethod
     def get(user_id):
         return User()
+
