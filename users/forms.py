@@ -15,5 +15,5 @@ class LoginForm(FlaskForm):
     date_of_bith = DateTimeLocalField('Дата рождения', format='%d/%m/%y', validators=[DataRequired()])
     marrage = BooleanField('В браке', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Запомнить меня')
+    remember_me = BooleanField('Получать уведомления о событиях')
     submit = SubmitField('Войти')
