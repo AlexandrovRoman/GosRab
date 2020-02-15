@@ -4,7 +4,7 @@ from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import DataRequired, Optional
 
 
-class LoginForm(FlaskForm):
+class RegisterForm(FlaskForm):
     name = StringField('Имя', validators=[DataRequired()])
     surname = StringField('Фамилия', validators=[DataRequired()])
     fathername = StringField('Очество', default='', validators=[Optional()])
@@ -12,8 +12,8 @@ class LoginForm(FlaskForm):
     start_place = StringField('Место рождения',  validators=[DataRequired()])
     nationality = StringField('Гражданство',  validators=[DataRequired()])
     education = StringField('Образование', default='', validators=[Optional()])
-    date_of_bith = DateTimeLocalField('Дата рождения', format='%d/%m/%y', validators=[DataRequired()])
-    marrage = BooleanField('В браке', validators=[DataRequired()])
+    date_of_birth = DateTimeLocalField('Дата рождения', format='%d/%m/%y', validators=[DataRequired()])
+    marriage = BooleanField('В браке', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Получать уведомления о событиях')
     submit = SubmitField('Войти')

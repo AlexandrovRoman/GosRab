@@ -48,7 +48,7 @@ login_manager.init_app(app)
 def add_urls():
     from errors import views
     from app import urls
-    from errors import views
-    if len(urls.urlpatterns) == 0:
-        warn("urlpatterns is empty")
-    assert all(urls.urlpatterns)
+    if app.debug:
+        if len(urls.urlpatterns) == 0:
+            warn("urlpatterns is empty")
+        assert all(urls.urlpatterns)

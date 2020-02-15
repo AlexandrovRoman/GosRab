@@ -1,4 +1,3 @@
-from typing import List, Tuple
 from flask import render_template, request, make_response, redirect
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -15,10 +14,8 @@ def load_user(user_id):
 @login_required
 def profile():
     user = current_user
-    # return render_template('profile.html', Surname="Федоров", Name="Дмитрий", Middle_name="Иванович", Gender="Мужское",
-    #                        Age="34 года", Grade="Новичок", Education="Высшее професиональное", Marital_status="В браке",
-    #                        Knowledge_of_foreign_language="Английский, Французкий, Немецкий, Татарский, Африканский.")
-    return render_template('profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername, Gender=user.sex,
+    return render_template('profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername,
+                           Gender=user.sex,
                            Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
                            Knowledge_of_foreign_language=user.foreign_languges)
 
@@ -72,19 +69,19 @@ def login():
             return redirect('/')
 
     # if form.validate_on_submit():
-        # Login and validate the user.
-        # user should be an instance of your `User` class
-        # login_user()
-        #
-        # flask.flash('Logged in successfully.')
-        #
-        # next = flask.request.args.get('next')
-        # is_safe_url should check if the url is safe for redirects.
-        # See http://flask.pocoo.org/snippets/62/ for an example.
-        # if not is_safe_url(next):
-        #     return flask.abort(400)
+    # Login and validate the user.
+    # user should be an instance of your `User` class
+    # login_user()
+    #
+    # flask.flash('Logged in successfully.')
+    #
+    # next = flask.request.args.get('next')
+    # is_safe_url should check if the url is safe for redirects.
+    # See http://flask.pocoo.org/snippets/62/ for an example.
+    # if not is_safe_url(next):
+    #     return flask.abort(400)
 
-        # return flask.redirect(next or flask.url_for('index'))
+    # return flask.redirect(next or flask.url_for('index'))
     return render_template('sigin.html')  # , form=form)
 
 
