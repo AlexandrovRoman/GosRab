@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Редактирование</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+      body {
+        background-color: white;
+      }
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <link href="../static/css/carousel.css" rel="stylesheet">
+      <link rel="icon" href="{{ url_for('static', filename="icon/icon.png") }}">
+      <link rel="import" href="../templates/base.html">
+  </head>
+  <body>
+  <script>
+    var link = document.querySelector('link[rel="import"]');
+    var content = link.import;
+    var el = content.querySelector('.header');
+    document.body.appendChild(el.cloneNode(true));
+  </script>
+  <hr class="featurette-divider m-5">
+
+  <div class="container marketing">
+    <div class="row justify-content-center">
+              <div class="column mt-5 col-9 col-sm-9 col-md-4 col-lg-3 col-xl-3">
+                  <p><a class="btn btn-lg btn-primary col-12" href="/users/profile" role="button">Профиль</a></p>
+                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Редактирование</a></p>
+                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Уведомления</a></p>
+                  <p><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти</a></p>
+                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Удалить</a></p>
+              </div>
+              <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9" style="background-color: whitesmoke">
+                  <h4 class="d-flex justify-content-center mb-3">
+                      <span class="h1 mt-3">Редактирование профиля</span>
+                  </h4>
+                  <form class="needs-validation" novalidate>
+                      <div class="row mb-3">
+                          <div class="col-md-4">
+                              <label for="Фамилия">Фамилия</label>
+                              <input type="text" class="form-control" id="Фамилия" value="Олегов" required>
+                              <div class="invalid-feedback">
+                                  Введите свою фамилию.
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <label for="Имя">Имя</label>
+                              <input type="text" class="form-control" id="Имя" value="Исач" required>
+                              <div class="invalid-feedback">
+                                  Введите своё имя.
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <label for="Отчество">Отчество</label>
+                              <input type="text" class="form-control" id="Отчество" value="Олегович" required>
+                              <div class="invalid-feedback">
+                                  Введите своё отчество.
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-3">
+                              <label for="country">Пол</label>
+                              <select class="custom-select d-block w-100" id="country" required>
+                                  <option value=" ">Мужской</option>
+                                  <option value=" ">Женский</option>
+                              </select>
+                          </div>
+                          <div class="col-md-3">
+                              <label for="country">Семейное положение</label>
+                              <select class="custom-select d-block w-100" id="country" required>
+                                  <option value=" ">Андрей</option>
+                                  <option value=" ">В браке</option>
+                                  <option value=" ">Не в браке</option>
+                              </select>
+                          </div>
+                          <div class="mb-3 col-md-3">
+                              <label for="email">Почта</label>
+                              <input type="email" class="form-control" id="email" value="example@email.ru" required>
+                              <div class="invalid-feedback">
+                                  Пожалуйста, укажите вашу почту
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                              <label for="Возраст">Возраст</label>
+                              <input type="text" class="form-control" id="Отчество" value="10" required>
+                              <div class="invalid-feedback">
+                                  Укажите возраст
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="mb-3">
+                          <label for="address">Информация о себе</label>
+                          <input type="text" class="form-control" id="address" placeholder="Отсутвует">
+                      </div>
+                  </form>
+                  <hr class="featurette-divider">
+                  <footer class="row justify-content-between m-4">
+                      <p>&copy; SAMARA-CORPARATION</p>
+                      <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
+                  </footer>
+              </div>
+    </div>
+  </div>
+</div>
+<script src="../static/js/form-validation.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
