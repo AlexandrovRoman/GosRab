@@ -1,23 +1,17 @@
-from flask import render_template
-from app import app
-import logging
-from logging.handlers import RotatingFileHandler
-
-file_handler = RotatingFileHandler('logs/server.log', maxBytes=1024 * 1024, encoding='utf-8', mode='w')
-file_handler.setFormatter(logging.Formatter('%(message)s\nin %(pathname)s:%(lineno)d\n'
-                                            '-----------------------------------------------------------------------'))
-app.logger.setLevel(logging.INFO)
-file_handler.setLevel(logging.INFO)
-app.logger.addHandler(file_handler)
+from flask import render_template, redirect, url_for
+from app import app, login_manager
 
 
 @app.errorhandler(404)
 def not_found_error(error):
-    app.logger.error(error)
-    return render_template('404.html')
+    return render_template('error.html', error=404, discription="Файл не найден или находится в разработке")
 
 
 @app.errorhandler(500)
 def server_error(error):
-    app.logger.error(error)
-    return render_template('500.html')
+    return render_template('error.html', error=500, discription="Проблемы с сервером или ведутся санитарные работы")
+
+
+@login_manager.unauthorized_handler
+def authorize():
+    return redirect(url_for('login'))

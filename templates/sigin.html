@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Личный профиль</title>
+    <title>Авторизация</title>
+
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -21,11 +22,9 @@
         }
       }
     </style>
-    <link href="../static/css/carousel.css" rel="stylesheet">
       <link rel="icon" href="{{ url_for('static', filename="icon/icon.png") }}">
   </head>
-  <body>
-  <header>
+  <header style="height: 150px">
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
     <a class="navbar-brand" href="/">
       <img src="{{ url_for('static', filename="icon/icon.png") }}" width="50" height="50" alt="" data-toggle="modal" data-target="#exampleModalLong">
@@ -51,7 +50,7 @@
               <a class="nav-link active" href="/users/training">Статистика<span class="sr-only">(current)</span></a>
           </li>
             <li class="nav-item dropdown">
-                <a class="nav-link active dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Деятельности</a>
+                <a class="nav-link active dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Деятельности</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                     <a class="dropdown-item" href="/users/community_work">Общественная</a>
                     <a class="dropdown-item" href="/users/job">Проектная</a>
@@ -61,49 +60,43 @@
     </div>
   </nav>
 </header>
-  <hr class="featurette-divider m-5">
+<body>
 
-  <div class="container marketing">
-    <div class="row justify-content-center">
-              <div class="column mt-5 col-9 col-sm-9 col-md-4 col-lg-3 col-xl-3">
-                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Редактирование</a></p>
-                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Уведомления</a></p>
-                  <p><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти</a></p>
-                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Удалить</a></p>
-              </div>
-              <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9" style="background-color: whitesmoke">
-                  <div class="row">
-                      <div class="order-md-2 mt-4 mb-4 col-12 col-sm-12 col-md-12 col-lg-11 col-xl-7">
-                          <h4 class="d-flex justify-content-center mb-3">
-                              <span class="h1 mt-3">Личный профиль</span>
-                          </h4>
-                          <h4 class="mb-3">Фамилия: {{ Surname }}</h4>
-                          <h4 class="mb-3">Имя: {{ Name }}</h4>
-                          <h4 class="mb-3">Отчество: {{ Middle_name }}</h4>
-                          <h4 class="mb-3">Пол: {{ Gender }}</h4>
-                          <h4 class="mb-3">Возраст: {{ Age }}</h4>
-                          <h4 class="mb-3">Грейд: {{ Grade }}</h4>
-                          <h4 class="mb-3">Образование: {{ Education }}</h4>
-                          <h4 class="mb-3">Семейное положение: {{ Marital_status }}</h4>
-                      </div>
-                      <div class="order-md-1 mt-2 col-11 col-sm-11 col-md-11 col-lg-11 col-xl-5">
-                          <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" alt="" style="max-width: 100%; height: auto">
-                      </div>
-                  </div>
-                  <div class="column">
-                      <h4 class="mb-3">Знание иностранных язаков: {{ Knowledge_of_foreign_language }}</h4>
-                  <hr class="featurette-divider">
+<div class="column">
+    <div class="d-flex justify-content-center mt-5" style="height: 100px">
+        <img class="mb-4" src="{{ url_for('static', filename="icon/icon.png") }}" alt="" style="width: 43px; height: 43px">
+            <img class="mb-4 mx-4" src="{{ url_for('static', filename="icon/Gos.jpg") }}" alt="" style="width: 300px; height: 51px">
+    </div>
+          <div class="h1 mx-auto" style="width: 100px; height: 30px">Вход</div>
+          <div class="h6 mx-auto mt-3" style="width: 160px; height: 30px">Для портала госулуг</div>
 
-                  </div><!-- /.container -->
-
-                  <footer class="row justify-content-between m-4">
-                      <p>&copy; SAMARA-CORPARATION</p>
-                      <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
-                  </footer>
-              </div>
+          <form method="POST" action="">
+          <div class="d-flex justify-content-center" style="height: 100px">
+            <div class="d-flex p-3 my-1 flex-column" style="width: 300px">
+              <label for="inputEmail" class="sr-only">Адрес электронной почты</label>
+              <input  name="username" type="email" id="inputEmail" class="form-control" placeholder="Адрес электронной почты" required autofocus>
+              <label for="inputPassword" class="sr-only">Пароль</label>
+              <input  name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
+            </div>
           </div>
-      </header>
-  </div>
+          <div class="row p-3 mx-5 mb-2 justify-content-center" style="height: 50px; max-width: 1800px">
+            <div class="checkbox mx-5">
+              <label>
+                <input type="checkbox" value="remember-me"> Запомнить пароль
+              </label>
+            </div>
+            <p class="mx-5 float-right"><a href=https://esia.gosuslugi.ru/registration/>Зарегистрироватся</a></p>
+          </div>
+          <div class="d-flex justify-content-center" style="height: 130px">
+            <div class="d-flex p-3 my-1 flex-column">
+              <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 300px">Войти</button>
+              <p class="mt-1 mb-3 ml-5 mt-3 text-muted">&copy; SAMARA-CORPARATION</p>
+            </div>
+          </div>
+          </form>
+
+        </div>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
