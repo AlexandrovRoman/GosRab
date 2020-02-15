@@ -1,6 +1,6 @@
 from typing import List, Tuple
 from flask import render_template, request, make_response, redirect
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 from app import create_session, login_manager
 from users.models import User
@@ -12,14 +12,26 @@ def load_user(user_id):
     return User.get(user_id)
 
 
+@login_required
 def profile():
-    return render_template('profile.html', Surname="Федоров", Name="Дмитрий", Middle_name="Иванович", Gender="Мужское",
-                           Age="34 года", Grade="Новичок", Education="Высшее професиональное", Marital_status="В браке",
-                           Knowledge_of_foreign_language="Английский, Французкий, Немецкий, Татарский, Африканский.")
+    user = current_user
+    # return render_template('profile.html', Surname="Федоров", Name="Дмитрий", Middle_name="Иванович", Gender="Мужское",
+    #                        Age="34 года", Grade="Новичок", Education="Высшее професиональное", Marital_status="В браке",
+    #                        Knowledge_of_foreign_language="Английский, Французкий, Немецкий, Татарский, Африканский.")
+    return render_template('profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername, Gender=user.sex,
+                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
+                           Knowledge_of_foreign_language=user.foreign_languges)
 
 
 @login_required
 def cookie_test():
+    print(current_user)
+    print(type(current_user))
+    print(isinstance(current_user, User))
+    print(current_user.name)
+    print(current_user.surname)
+    print(current_user.fathername)
+    print(current_user.email)
     cook = request.cookies.get('click')
     click_count = cook if cook else '2'
     res = make_response(f"Your click count is {click_count}")
