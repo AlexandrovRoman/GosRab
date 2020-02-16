@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
 
 global_init('app.db')
+
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
@@ -25,6 +27,7 @@ class User(db.Model, UserMixin):
     grate = db.Column(db.String, default='Новичок')
     education = db.Column(db.String, default='Нет')
     foreign_languges = db.Column(db.String, default='Нет')
+    role = db.Column(db.String, default='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -48,3 +51,8 @@ class User(db.Model, UserMixin):
         session = create_session()
         return session.query(User).filter(User.id == user_id).first()
 
+
+class Model1(db.Model):
+    __tablename__ = 'model1'
+    id = db.Column(db.Integer,
+                    primary_key=True, autoincrement=True)

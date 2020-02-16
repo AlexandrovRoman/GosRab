@@ -51,7 +51,7 @@ def index():
     return render_template('news.html')
 
 
-def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex):
+def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
     session = create_session()
     user = User()
     user.surname = surname
@@ -62,6 +62,7 @@ def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age,
     user.birth_date = datetime.date(birth_year, birth_month, birth_day)
     user.sex = sex
     user.email = email
+    user.role = role
     user.set_password(password)
     session.add(user)
     session.commit()
