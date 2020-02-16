@@ -1,4 +1,4 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, url_for
 from app import app, login_manager
 
 
@@ -14,4 +14,4 @@ def server_error(error):
 
 @login_manager.unauthorized_handler
 def authorize():
-    return redirect('users/login')
+    return redirect(url_for('login'))

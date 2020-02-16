@@ -1,4 +1,4 @@
-from flask import render_template, request, make_response, redirect
+from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 
 from app import create_session, login_manager
@@ -18,6 +18,16 @@ def profile():
                            Gender=user.sex,
                            Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
                            Knowledge_of_foreign_language=user.foreign_languges)
+
+
+@login_required
+def redact_profile():
+    if request.method == 'POST':
+        user = current_user
+        print('\n\t', user, '\n')
+        pass  # Редактировать информацию о профиле
+        return redirect(url_for('profile'))
+    return render_template('redactirovanie.html')
 
 
 @login_required
