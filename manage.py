@@ -5,19 +5,11 @@ from flask_migrate import MigrateCommand
 from flask_script import Manager
 from app.config import models
 from importlib import import_module
-from app import global_init
-from users.views import user_add
-import sys
 
-"""sk-migrate.readthedocs.io/en/latest/
+"""database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
 db migrate - миграция бд
-database-methods: https://fla
 db upgrade - обновление бд
-db downgrade - откат миграции
-some methods:
-runserver - запуск сервера
-startapp name - создание приложения name
 db downgrade - откат миграции
 some methods:
 runserver - запуск сервера
@@ -28,9 +20,10 @@ manager.add_command('db', MigrateCommand)
 for file in models:
     import_module(file)
 
-if False:
-    global_init('app.db')
-    user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'su@b.b', 'aaa', 'М', 'superuser')
+
+# if 'runserver' in sys.argv:
+#     global_init('app.db')
+#     user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'М')
 
 # Кто удалит - у того рак яичка
 # https://getbootstrap.com/2.3.2/components

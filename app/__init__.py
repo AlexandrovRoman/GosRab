@@ -1,5 +1,5 @@
 from warnings import warn
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, url_for
 from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -30,7 +30,8 @@ def global_init(db_file):
         raise Exception("Необходимо указать файл базы данных.")
 
     conn_str = f'{config.BaseConfig.SQLALCHEMY_DATABASE_URI}?check_same_thread=False'
-    print(f"Подключение к базе данных по адресу {conn_str}")
+    if app.debug:
+        print(f"Подключение к базе данных по адресу {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)
     __factory = orm.sessionmaker(bind=engine)
@@ -47,7 +48,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-class Roled(object):
+class Roled:
 
     def is_accessible(self):
         roles_accepted = getattr(self, 'roles_accepted', None)
