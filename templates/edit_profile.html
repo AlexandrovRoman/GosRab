@@ -1,36 +1,7 @@
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Редактирование</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <style>
-      body {
-        background-color: white;
-      }
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-      }
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <link href="../static/css/carousel.css" rel="stylesheet">
-      <link rel="icon" href="{{ url_for('static', filename="icon/icon.png") }}">
-      <link rel="import" href="bs.html">
-  </head>
-  <body>
-  <script>
-    var link = document.querySelector('link[rel="import"]');
-    var content = link.import;
-    var el = content.querySelector('.header');
-    document.body.appendChild(el.cloneNode(true));
-  </script>
+{% set title = "Редактирование" %}
+{% set footer = false %}
+{% extends "base.html" %}
+{% block content %}
   <hr class="featurette-divider m-5">
 
   <div class="container marketing">
@@ -80,7 +51,7 @@
                           </div>
                           <div class="col-md-3">
                               <label for="country">Семейное положение</label>
-                              <select class="custom-select d-block w-100" id="country" required>
+                              <select class="custom-select d-block w-100" id="marital status" required>
                                   <option value=" ">Андрей</option>
                                   <option value=" ">В браке</option>
                                   <option value=" ">Не в браке</option>
@@ -94,8 +65,8 @@
                               </div>
                           </div>
                           <div class="col-md-3">
-                              <label for="Возраст">Возраст</label>
-                              <input type="text" class="form-control" id="Отчество" value="10" required>
+                              <label for="age">Возраст</label>
+                              <input type="text" class="form-control" id="age" value="10" required>
                               <div class="invalid-feedback">
                                   Укажите возраст
                               </div>
@@ -117,10 +88,4 @@
               </div>
     </div>
   </div>
-</div>
-<script src="../static/js/form-validation.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
-</html>
+{% endblock %}
