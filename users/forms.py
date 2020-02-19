@@ -14,6 +14,7 @@ class RegisterForm(FlaskForm):
     nationality = StringField('Гражданство',  validators=[DataRequired()])
     education = StringField('Образование', default='Отсутствует')
     date_of_birth = DateTimeLocalField('Дата рождения', format='%d/%m/%y', validators=[DataRequired()])
+    foreign_languge = StringField('Иностранные языки', validators=[DataRequired()])
     marriage = BooleanField('В браке', validators=[DataRequired()])
     email = EmailField('', validators=[Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])
