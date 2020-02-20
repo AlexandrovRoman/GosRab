@@ -94,3 +94,7 @@ def login():
 def logout():
     logout_user()
     return redirect('/')
+
+
+def personnel():
+    return render_template('personnel.html')
