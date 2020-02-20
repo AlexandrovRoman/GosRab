@@ -1,11 +1,9 @@
 from flask_login import UserMixin
-from app import global_init, create_session
+from app import create_session
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
-
-global_init('app.db')
 
 
 class User(db.Model, UserMixin):
