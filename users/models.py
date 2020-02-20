@@ -28,6 +28,9 @@ class User(db.Model, UserMixin):
     education = db.Column(db.String, default='Нет')
     foreign_languges = db.Column(db.String, default='Нет')
     role = db.Column(db.String, default='user')
+    start_place = db.Column(db.String)
+    nationality = db.Column(db.String)
+    marriage = db.Column(db.String(10))
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
