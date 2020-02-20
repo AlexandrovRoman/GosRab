@@ -8,7 +8,7 @@ models = [
 ]
 # Special urlpatterns
 urlpatterns = [
-    'app.urlpatterns',
+    'app.urls',
     'errors.views',
     'admin.urls',
 ]
