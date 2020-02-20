@@ -7,10 +7,13 @@
     <div class="row justify-content-center">
               <div class="column mt-5 col-9 col-sm-9 col-md-4 col-lg-3 col-xl-3">
                   <p><a class="btn btn-lg btn-primary col-12" href="/users/profile" role="button">Профиль</a></p>
-                  <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Редактирование</a></p>
+                  <p><a class="btn btn-lg btn-primary col-12" href="/users/redact" role="button">Редактирование</a></p>
                   <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Уведомления</a></p>
+                  <hr class="featurette-divider my-4">
                   <p><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти</a></p>
                   <p><a class="btn btn-lg btn-primary col-12" href=# role="button">Удалить</a></p>
+                  <hr class="featurette-divider my-4">
+                  <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/personnel" role="button">Отдел кадров</a></p>
               </div>
               <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9" style="background-color: whitesmoke">
                   <h4 class="d-flex justify-content-center mb-3">
@@ -51,7 +54,7 @@
                           <div class="col-md-3">
                               <label for="country">Семейное положение</label>
                               <select class="custom-select d-block w-100" id="marital status" required>
-                                  <option value=" ">Андрей</option>
+                                  <option value="">Андрей</option>
                                   <option value=" ">В браке</option>
                                   <option value=" ">Не в браке</option>
                               </select>
@@ -76,7 +79,7 @@
                           <label for="address">Информация о себе</label>
                           <input type="text" class="form-control" id="address" placeholder="Отсутвует">
                       </div>
-                      <button class="btn btn-primary btn-lg btn-block" type="submit">Завершить</button> {# Переместить #}
+                      <button class="btn btn-primary btn-lg btn-block" type="submit">Редактировать</button>
                   </form>
                   <hr class="featurette-divider">
                   <footer class="row justify-content-between m-4">
@@ -86,4 +89,5 @@
               </div>
     </div>
   </div>
+  <script src="{{ url_for('static', filename="js/form-validation.js") }}"></script>
 {% endblock %}
