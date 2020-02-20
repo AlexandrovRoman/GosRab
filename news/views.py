@@ -1,1 +1,5 @@
-# Create your views functions or classes
+from flask import render_template
+
+
+def index():
+    return render_template('news.html')

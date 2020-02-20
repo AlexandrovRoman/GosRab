@@ -6,6 +6,12 @@ models = [
     'users.models',
     'news.models'
 ]
+# Special urlpatterns
+urlpatterns = [
+    'app.urlpatterns',
+    'errors.views',
+    'admin.urls',
+]
 
 
 class BaseConfig:

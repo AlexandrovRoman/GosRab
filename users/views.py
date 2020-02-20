@@ -46,10 +46,6 @@ def cookie_test():
     return res
 
 
-def index():
-    return render_template('news.html')
-
-
 def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
     session = create_session()
     user = User()
