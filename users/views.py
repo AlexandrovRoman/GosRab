@@ -15,18 +15,33 @@ def profile():
     user = current_user
     return render_template('profile.html',
                            Surname=user.surname, Name=user.name, Middle_name=user.fathername, Gender=user.sex,
-                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
+                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status=user.marriage,
                            Knowledge_of_foreign_language=user.foreign_languges)
 
 
 @login_required
 def edit_profile():
+    user = current_user
     if request.method == 'POST':
-        user = current_user
-        print('\n\t', user, '\n')
-        pass  # Редактировать информацию о профиле
+        # print('\n\t', current_user, '\n')
+        session = create_session()
+
+        current_user.name = request.form['name']
+        current_user.surname = request.form['surname']
+        current_user.fathername = request.form['middlename']
+        current_user.age = request.form['age']
+        current_user.email = request.form['email']
+        current_user.sex = request.form['gender']
+        # current_user.about = request.form['aboutmyself'] Отсутствует столбец
+
+        session.merge(current_user)
+        session.commit()
+
         return redirect(url_for('profile'))
-    return render_template('edit_profile.html')
+    return render_template('edit_profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername,
+                           Gender=user.sex,
+                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
+                           Knowledge_of_foreign_language=user.foreign_languges, Email=user.email)
 
 
 @login_required

@@ -23,21 +23,21 @@
                       <div class="row mb-3">
                           <div class="col-md-4">
                               <label for="Фамилия">Фамилия</label>
-                              <input type="text" class="form-control" id="Фамилия" value="Олегов" required>
+                              <input type="text" class="form-control" id="Фамилия" value={{ Surname }} name="surname" required>
                               <div class="invalid-feedback">
                                   Введите свою фамилию.
                               </div>
                           </div>
                           <div class="col-md-4">
                               <label for="Имя">Имя</label>
-                              <input type="text" class="form-control" id="Имя" value="Исач" required>
+                              <input type="text" class="form-control" id="Имя" value={{ Name }} name="name" required>
                               <div class="invalid-feedback">
                                   Введите своё имя.
                               </div>
                           </div>
                           <div class="col-md-4">
                               <label for="Отчество">Отчество</label>
-                              <input type="text" class="form-control" id="Отчество" value="Олегович" required>
+                              <input type="text" class="form-control" id="Отчество" value={{ Middle_name }} name="middlename" required>
                               <div class="invalid-feedback">
                                   Введите своё отчество.
                               </div>
@@ -46,29 +46,29 @@
                       <div class="row mb-3">
                           <div class="col-md-3">
                               <label for="country">Пол</label>
-                              <select class="custom-select d-block w-100" id="country" required>
+                              <select class="custom-select d-block w-100" id="country" name="gender" required>
                                   <option value=" ">Мужской</option>
                                   <option value=" ">Женский</option>
                               </select>
                           </div>
                           <div class="col-md-3">
                               <label for="country">Семейное положение</label>
-                              <select class="custom-select d-block w-100" id="marital status" required>
-                                  <option value="">Андрей</option>
+                              <select class="custom-select d-block w-100" id="marital status" name="maritalstatus" required>
+{#                                  <option value="">Андрей</option>#}
                                   <option value=" ">В браке</option>
                                   <option value=" ">Не в браке</option>
                               </select>
                           </div>
                           <div class="mb-3 col-md-3">
                               <label for="email">Почта</label>
-                              <input type="email" class="form-control" id="email" value="example@email.ru" required>
+                              <input type="email" class="form-control" id="email" value={{ Email }} name="email" required>
                               <div class="invalid-feedback">
                                   Пожалуйста, укажите вашу почту
                               </div>
                           </div>
                           <div class="col-md-3">
                               <label for="age">Возраст</label>
-                              <input type="text" class="form-control" id="age" value="10" required>
+                              <input type="text" class="form-control" id="age" value={{ Age }} name="age" required>
                               <div class="invalid-feedback">
                                   Укажите возраст
                               </div>
@@ -77,7 +77,7 @@
 
                       <div class="mb-3">
                           <label for="address">Информация о себе</label>
-                          <input type="text" class="form-control" id="address" placeholder="Отсутвует">
+                          <input type="text" class="form-control" id="address" placeholder="Отсутвует в бд" name="aboutmyself">
                       </div>
                       <button class="btn btn-primary btn-lg btn-block" type="submit">Редактировать</button>
                   </form>
