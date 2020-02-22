@@ -1,5 +1,5 @@
 from utils.urls import path
-from .views import profile, cookie_test, login, logout, edit_profile, personnel
+from .views import profile, cookie_test, login, logout, edit_profile, personnel, education
 
 urlpatterns = [
     path('profile/', profile),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', logout),
     path('start/', cookie_test),
     path('profile/personnel/', personnel),
+    path('education/', education)
 ]

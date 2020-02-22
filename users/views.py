@@ -113,3 +113,7 @@ def logout():
 
 def personnel():
     return render_template('personnel.html')
+
+
+def education():
+    return render_template("education.html")
