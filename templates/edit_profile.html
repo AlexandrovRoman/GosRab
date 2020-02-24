@@ -47,16 +47,16 @@
                           <div class="col-md-3">
                               <label for="country">Пол</label>
                               <select class="custom-select d-block w-100" id="country" name="gender" required>
-                                  <option value=" ">Мужской</option>
-                                  <option value=" ">Женский</option>
+                                  <option value="Мужской">Мужской</option>
+                                  <option value="Женский">Женский</option>
                               </select>
                           </div>
                           <div class="col-md-3">
                               <label for="country">Семейное положение</label>
                               <select class="custom-select d-block w-100" id="marital status" name="maritalstatus" required>
 {#                                  <option value="">Андрей</option>#}
-                                  <option value=" ">В браке</option>
-                                  <option value=" ">Не в браке</option>
+                                  <option value="В браке">В браке</option>
+                                  <option value="Не в браке">Не в браке</option>
                               </select>
                           </div>
                           <div class="mb-3 col-md-3">
@@ -68,7 +68,7 @@
                           </div>
                           <div class="col-md-3">
                               <label for="age">Возраст</label>
-                              <input type="text" class="form-control" id="age" value={{ Age }} name="age" required>
+                              <input type="number" min="0" class="form-control" id="age" value={{ Age }} name="age" required>
                               <div class="invalid-feedback">
                                   Укажите возраст
                               </div>

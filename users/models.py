@@ -29,7 +29,7 @@ class User(db.Model, UserMixin):
     start_place = db.Column(db.String)
     nationality = db.Column(db.String)
     marriage = db.Column(db.String(10))
-    about_myself = db.Column(db.String)
+    # about_myself = db.Column(db.String)
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
