@@ -1,111 +1,94 @@
 {% set footer = true %}
 {% extends "base.html" %}
 {% block content %}
-  <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel">
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-          <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-        <div class="container">
-          <div class="carousel-caption text-left">
-            <h1>Новое обновление Gos.Rab.0.1</h1>
-            <p>Сирвис теперь имеет личный профиль пользователя</p>
-            <p><a class="btn btn-lg btn-primary" href=# role="button">Узнать подробнее</a></p>
-          </div>
+    <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for i in news %}
+                <li data-target="#myCarousel" data-slide-to="{{ i[0] }}"
+                    {% if i[0] == 0 %}class="active"{% endif %}></li>
+            {% endfor %}
+        </ol>
+        <div class="carousel-inner">
+            {% for i in news %}
+                <div class="carousel-item {% if i[0] == 0 %} active {% endif %}">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                         preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                        <rect width="100%" height="100%" fill="#777"/>
+                    </svg>
+                    <div class="container">
+                        <div class="carousel-caption text-left">
+                            <h1>{{ i[1] }}</h1>
+                            <p>{{ i[2] }}</p>
+                            <p><a class="btn btn-lg btn-primary" href="{{ i[3] }}" role="button">Узнать подробнее</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-      </div>
-      <div class="carousel-item">
-          <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-        <div class="container">
-          <div class="carousel-caption text-left">
-            <h1>Рейтинг</h1>
-            <p>У каждого пользователя имеется личный рейтинг</p>
-            <p><a class="btn btn-lg btn-primary" href=# role="button">Узнать подробнее</a></p>
-          </div>
-        </div>
-      </div>
-        <div class="carousel-item">
-          <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-        <div class="container">
-          <div class="carousel-caption text-left">
-            <h1>Реклама</h1>
-            <p>Сдесь могла была бать ваша реклама</p>
-            <p><a class="btn btn-lg btn-primary" href=# role="button">Узнать подробнее</a></p>
-          </div>
-        </div>
-      </div>
+        <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-  <div class="container marketing">
-    <div class="row justify-content-center">
-        <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-4">
-          <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Вакансии работника</h4>
+    <div class="container marketing">
+        <div class="row justify-content-center">
+            <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Вакансии работника</h4>
+                    </div>
+                    <img class="img-fluid" src="{{ url_for('static', filename="icon/1.jpg") }}" alt=""
+                         style="max-width: 100%; height: auto">
+                    <div class="card-body">
+                        <p class="card-text">Работадатель может как вручную искать новых сотрудников и просматривать
+                            объявления, а так же выставить свободные вакансии предприятия, интересы которого он
+                            представляет.</p>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <p><a class="btn btn-lg btn-block btn-outline-primary" href="/users/job" role="button">Узнать
+                                подробнее</a></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <img class="img-fluid" src="{{ url_for('static', filename="icon/1.jpg") }}" alt="" style="max-width: 100%; height: auto">
-            <div class="card-body">
-              <p class="card-text">Работадатель может как вручную искать новых сотрудников и просматривать объявления, а так же выставить свободные вакансии предприятия, интересы которого он представляет.</p>
-              <div class="d-flex justify-content-center align-items-center">
-                  <p><a class="btn btn-lg btn-block btn-outline-primary" href="/users/job" role="button">Узнать подробнее</a></p>
-              </div>
+
+            <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">Вакансии работадателя</h4>
+                    </div>
+                    <img class="img-fluid" src="{{ url_for('static', filename="icon/1.jpg") }}" alt=""
+                         style="max-width: 100%; height: auto">
+                    <div class="card-body">
+                        <p class="card-text">Работадатель может как вручную искать новых сотрудников и просматривать
+                            объявления, а так же выставить свободные вакансии предприятия, интересы которого он
+                            представляет.</p>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <p><a class="btn btn-lg btn-block btn-outline-primary" href="/users/job" role="button">Узнать
+                                подробнее</a></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
 
-        <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-4">
-          <div class="card mb-4 shadow-sm">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Вакансии работадателя</h4>
+        <hr class="featurette-divider">
+
+        {% for i in courses %}
+            <div class="row featurette">
+                <div class="col-md-7{% if i[0] % 2 == 1 %} order-md-2 {% endif %}">
+                    <h2 class="featurette-heading">{{ i[1] }}</h2>
+                    <p class="lead">{{ i[2] }}</p>
+                </div>
+                <div class="col"><img src="{{ i[3] }}" alt="" class="w-100">
+                </div>
             </div>
-            <img class="img-fluid" src="{{ url_for('static', filename="icon/1.jpg") }}" alt="" style="max-width: 100%; height: auto">
-            <div class="card-body">
-              <p class="card-text">Работадатель может как вручную искать новых сотрудников и просматривать объявления, а так же выставить свободные вакансии предприятия, интересы которого он представляет.</p>
-              <div class="d-flex justify-content-center align-items-center">
-                  <p><a class="btn btn-lg btn-block btn-outline-primary" href="/users/job" role="button">Узнать подробнее</a></p>
-              </div>
-            </div>
-          </div>
-        </div>
+
+            <hr class="featurette-divider">
+        {% endfor %}
     </div>
-
-    <hr class="featurette-divider">
-
-
-    <div class="row featurette">
-      <div class="col-md-7">
-        <h2 class="featurette-heading">Яндекс лицей</h2>
-        <p class="lead">Комампания яндекс в очередной раз проводит делает набор в ряды своих юных разработчиков. Бесплатное обучение проходит в течении 4 полугодии, в течении которых ученики получают хорошие знания языка програмирования Python.</p>
-      </div>
-      <div class="col"><img src="../static/icon/Yandex_lyceum.jpg" alt="" class="w-100">
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-
-    <div class="row featurette">
-      <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading">GitHub</h2>
-        <p class="lead">GitHub — это крупнейший веб-сервис для хостинга IT-проектов и их совместной разработки. Веб-сервис основан на системе контроля версий Git и разработан на Ruby on Rails и Erlang компанией GitHub, Inc (ранее Logical Awesome). Сервис бесплатен для проектов с открытым исходным кодом и (с 2019 года) небольших частных проектов, предоставляя им все возможности (включая SSL), а для крупных корпоративных проектов предлагаются различные платные тарифные планы.</p>
-      </div>
-      <div class="col"><img src="../static/icon/git.png" alt="" class="w-100">
-      </div>
-    </div>
-
-
-    <hr class="featurette-divider">
-  </div>
 {% endblock %}

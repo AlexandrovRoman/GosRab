@@ -1,4 +1,4 @@
-{% set title = "Авторизация" %}
+{% set title = "Обучение" %}
 {% set footer = true %}
 {% set height = "100px"%}
 {% extends "base.html" %}
@@ -16,7 +16,7 @@
         </div>
         <h1 class="display-4 text-center m-5">Ваши курсы:</h1>
         <div class="row mb-2 justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div href="#" type="button" class="card flex-md-row mb-4 box-shadow h-md-250"  style="height: 252px; width: 446px">
                     <div class="card-body d-flex flex-column align-items-start bg-light">
                         <strong class="d-inline-block mb-2 text-primary">Курсы</strong>
@@ -29,7 +29,7 @@
                         <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/yandex.jpg") }}" style="height:250px; width: 199px" alt="Card image cap">
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div type="button" class="card flex-md-row mb-4 box-shadow h-md-250" style="height: 252px; width: 446px">
                     <div class="card-body d-flex flex-column align-items-start bg-light">
                         <strong class="d-inline-block mb-2 text-success">Онлайн обучение</strong>

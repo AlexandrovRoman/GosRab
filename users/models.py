@@ -32,6 +32,7 @@ class User(db.Model, UserMixin):
     marriage = db.Column(db.String(10))
     about_myself = db.Column(db.String)
     # organisation = orm.relation('Organisation', back_populates='organisation')
+    # about_myself = db.Column(db.String)
 
     def __repr__(self):
         return '<User {}>'.format(self.name)

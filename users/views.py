@@ -32,6 +32,7 @@ def edit_profile():
         current_user.age = request.form['age']
         current_user.email = request.form['email']
         current_user.sex = request.form['gender']
+        current_user.marriage = request.form['maritalstatus']
         # current_user.about = request.form['aboutmyself'] Отсутствует столбец
 
         session.merge(current_user)
@@ -40,7 +41,7 @@ def edit_profile():
         return redirect(url_for('profile'))
     return render_template('edit_profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername,
                            Gender=user.sex,
-                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
+                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status=user.marriage,
                            Knowledge_of_foreign_language=user.foreign_languges, Email=user.email)
 
 
@@ -112,8 +113,19 @@ def logout():
 
 
 def personnel():
-    return render_template('personnel.html')
+    return render_template('personnel.html', organizations=[('Хлебобулочный комбинат', 217, 23, 90),
+                                                            ('ПФР пром. района', 340, 60, 100 * 340 // (340 + 60)),
+                                                            ('Автосервис Михаил-авто', 666, 69, 100 * 666 // (666 + 69))],
+                           stats=(217 + 340 + 666, 23 + 60 + 69, 100 * (217 + 340 + 666) // (217 + 340 + 666 + 23 + 60 + 69)))
 
 
 def education():
     return render_template("education.html")
+
+
+def notification():
+    return render_template("notifications.html")
+
+
+def job():
+    return render_template("job.html")
