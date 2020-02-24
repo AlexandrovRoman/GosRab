@@ -32,6 +32,7 @@ def edit_profile():
         current_user.age = request.form['age']
         current_user.email = request.form['email']
         current_user.sex = request.form['gender']
+        current_user.marriage = request.form['maritalstatus']
         # current_user.about = request.form['aboutmyself'] Отсутствует столбец
 
         session.merge(current_user)
@@ -40,7 +41,7 @@ def edit_profile():
         return redirect(url_for('profile'))
     return render_template('edit_profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername,
                            Gender=user.sex,
-                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status='отсутствует в бд',
+                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status=user.marriage,
                            Knowledge_of_foreign_language=user.foreign_languges, Email=user.email)
 
 
