@@ -113,7 +113,10 @@ def logout():
 
 
 def personnel():
-    return render_template('personnel.html')
+    return render_template('personnel.html', organizations=[('Хлебобулочный комбинат', 217, 23, 90),
+                                                            ('ПФР пром. района', 340, 60, 100 * 340 // (340 + 60)),
+                                                            ('Автосервис Михаил-авто', 666, 69, 100 * 666 // (666 + 69))],
+                           stats=(217 + 340 + 666, 23 + 60 + 69, 100 * (217 + 340 + 666) // (217 + 340 + 666 + 23 + 60 + 69)))
 
 
 def education():
