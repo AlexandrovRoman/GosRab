@@ -48,7 +48,12 @@
                               <label for="country">Пол</label>
                               <select class="custom-select d-block w-100" id="country" name="gender" required>
                                   <option value="Мужской">Мужской</option>
-                                  <option value="Женский">Женский</option>
+                                  {% if Gender == "Женский" %}
+                                      <option value="Женский" selected>Женский</option>
+                                  {% else %}
+                                      <option value="Женский">Женский</option>
+                                  {% endif %}
+
                               </select>
                           </div>
                           <div class="col-md-3">
@@ -56,7 +61,11 @@
                               <select class="custom-select d-block w-100" id="marital status" name="maritalstatus" required>
 {#                                  <option value="">Андрей</option>#}
                                   <option value="В браке">В браке</option>
-                                  <option value="Не в браке">Не в браке</option>
+                                  {% if Marital_status == "Не в браке" %}
+                                    <option value="Не в браке" selected>Не в браке</option>
+                                  {% else %}
+                                      <option value="Не в браке">Не в браке</option>
+                                  {% endif %}
                               </select>
                           </div>
                           <div class="mb-3 col-md-3">
