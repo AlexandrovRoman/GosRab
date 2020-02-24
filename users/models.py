@@ -56,3 +56,8 @@ class User(db.Model, UserMixin):
         session = create_session()
         return session.query(User).filter(User.id == user_id).first()
 
+# ЭТО ЗАГЛУШКА НЕ УДАЛЯТЬ
+class Model1(db.Model):
+    __tablename__ = 'model1'
+    id = db.Column(db.Integer,
+                    primary_key=True, autoincrement=True)
