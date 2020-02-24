@@ -117,3 +117,7 @@ def personnel():
 
 def education():
     return render_template("education.html")
+
+
+def notification():
+    return render_template("notifications.html")
