@@ -125,3 +125,7 @@ def education():
 
 def notification():
     return render_template("notifications.html")
+
+
+def job():
+    return render_template("job.html")
