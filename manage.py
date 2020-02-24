@@ -6,6 +6,7 @@ from flask_script import Manager
 from app.config import models
 from importlib import import_module
 from users.views import user_add
+from organisations.views import organistion_add
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
@@ -26,9 +27,8 @@ for file in models:
 
 global_init('app.db')
 
-
 # if 'runserver' in sys.argv:
-# global_init('app.db')
+organistion_add('OOO Лег', 1)
 # user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'Мужской')
 
 # Кто удалит - у того рак яичка

@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from app import create_session
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import orm
 
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
 
@@ -19,7 +20,7 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String, nullable=True)
     birth_date = db.Column(db.Date)
     age = db.Column(db.Integer)
-    sex = db.Column(db.String(1), nullable=True)  # М/Ж
+    sex = db.Column(db.String(20), nullable=True)  # М/Ж
     status = db.Column(db.String, nullable=True,
                        default=role_list[0])
     grate = db.Column(db.String, default='Новичок')
@@ -30,6 +31,7 @@ class User(db.Model, UserMixin):
     nationality = db.Column(db.String)
     marriage = db.Column(db.String(10))
     about_myself = db.Column(db.String)
+    # organisation = orm.relation('Organisation', back_populates='organisation')
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -53,8 +55,3 @@ class User(db.Model, UserMixin):
         session = create_session()
         return session.query(User).filter(User.id == user_id).first()
 
-
-class Model1(db.Model):
-    __tablename__ = 'model1'
-    id = db.Column(db.Integer,
-                    primary_key=True, autoincrement=True)
