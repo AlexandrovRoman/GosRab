@@ -2,4 +2,7 @@ from flask import render_template
 
 
 def index():
-    return render_template('news.html')
+    return render_template('news.html',
+                           news=[(0, 'Новое обновление Gos.Rab.0.1', 'Сервис теперь имеет личный профиль пользователя', '#'),
+                                 (1, 'Рейтинг', 'У каждого пользователя имеется личный рейтинг', '#'),
+                                 (2, 'Реклама', 'Здесь могла была быть ваша реклама', '#')])
