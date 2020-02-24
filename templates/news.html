@@ -78,35 +78,17 @@
 
         <hr class="featurette-divider">
 
-
-        <div class="row featurette">
-            <div class="col-md-7">
-                <h2 class="featurette-heading">Яндекс лицей</h2>
-                <p class="lead">Комампания яндекс в очередной раз проводит делает набор в ряды своих юных разработчиков.
-                    Бесплатное обучение проходит в течении 4 полугодии, в течении которых ученики получают хорошие
-                    знания языка програмирования Python.</p>
+        {% for i in courses %}
+            <div class="row featurette">
+                <div class="col-md-7{% if i[0] % 2 == 1 %} order-md-2 {% endif %}">
+                    <h2 class="featurette-heading">{{ i[1] }}</h2>
+                    <p class="lead">{{ i[2] }}</p>
+                </div>
+                <div class="col"><img src="{{ i[3] }}" alt="" class="w-100">
+                </div>
             </div>
-            <div class="col"><img src="../static/icon/Yandex_lyceum.jpg" alt="" class="w-100">
-            </div>
-        </div>
 
-        <hr class="featurette-divider">
-
-
-        <div class="row featurette">
-            <div class="col-md-7 order-md-2">
-                <h2 class="featurette-heading">GitHub</h2>
-                <p class="lead">GitHub — это крупнейший веб-сервис для хостинга IT-проектов и их совместной разработки.
-                    Веб-сервис основан на системе контроля версий Git и разработан на Ruby on Rails и Erlang компанией
-                    GitHub, Inc (ранее Logical Awesome). Сервис бесплатен для проектов с открытым исходным кодом и (с
-                    2019 года) небольших частных проектов, предоставляя им все возможности (включая SSL), а для крупных
-                    корпоративных проектов предлагаются различные платные тарифные планы.</p>
-            </div>
-            <div class="col"><img src="../static/icon/git.png" alt="" class="w-100">
-            </div>
-        </div>
-
-
-        <hr class="featurette-divider">
+            <hr class="featurette-divider">
+        {% endfor %}
     </div>
 {% endblock %}
