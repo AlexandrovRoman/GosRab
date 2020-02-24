@@ -1,0 +1,43 @@
+{% set title = "Вакансии" %}
+{% set footer = true %}
+{% set height = "100px"%}
+{% extends "base.html" %}
+{% block content %}
+    <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9">
+        <div class="jumbotron p-md-2 text-white rounded row" style="background-color: #777">
+            <h1 class="display-4 mx-5 font-italic">Вакансии - найди работу по душе</h1>
+       </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Организация</th>
+                <th scope="col">Должность</th>
+                <th scope="col">Зарплата</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Хлебобулочный комбинат</td>
+                <td>Кондитер</td>
+                <td>30.000₽</td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>ПФР промю района</td>
+                <td>Администратор</td>
+                <td>25.000₽</td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Автосервис Михаил-авто</td>
+                <td>механик</td>
+                <td>27.500₽</td>
+            </tr>
+            </tbody>
+        </table>
+    <hr class="featurette-divider m-4">
+
+    </div>
+{% endblock %}
