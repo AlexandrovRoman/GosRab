@@ -13,10 +13,7 @@ def load_user(user_id):
 @login_required
 def profile():
     user = current_user
-    return render_template('profile.html',
-                           Surname=user.surname, Name=user.name, Middle_name=user.fathername, Gender=user.sex,
-                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status=user.marriage,
-                           Knowledge_of_foreign_language=user.foreign_languges)
+    return render_template('profile.html', **user.get_profile_info())
 
 
 @login_required
@@ -39,10 +36,7 @@ def edit_profile():
         session.commit()
 
         return redirect(url_for('profile'))
-    return render_template('edit_profile.html', Surname=user.surname, Name=user.name, Middle_name=user.fathername,
-                           Gender=user.sex,
-                           Age=user.age, Grade=user.grate, Education=user.education, Marital_status=user.marriage,
-                           Knowledge_of_foreign_language=user.foreign_languges, Email=user.email)
+    return render_template('edit_profile.html', **user.get_profile_info())
 
 
 @login_required
@@ -80,31 +74,13 @@ def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age,
 
 
 def login():
-    # Here we use a class of some kind to represent and validate our
-    # client-side form data. For example, WTForms is a library that will
-    # handle this for us, and we use a custom LoginForm to validate.
-    # form = LoginForm()
     if request.method == 'POST':
         user = User.get_logged(request.form['username'], request.form['password'])
         if user is not None:
             login_user(user)
             return redirect('/')
 
-    # if form.validate_on_submit():
-    # Login and validate the user.
-    # user should be an instance of your `User` class
-    # login_user()
-    #
-    # flask.flash('Logged in successfully.')
-    #
-    # next = flask.request.args.get('next')
-    # is_safe_url should check if the url is safe for redirects.
-    # See http://flask.pocoo.org/snippets/62/ for an example.
-    # if not is_safe_url(next):
-    #     return flask.abort(400)
-
-    # return flask.redirect(next or flask.url_for('index'))
-    return render_template('sign_in.html')  # , form=form)
+    return render_template('sign_in.html')
 
 
 def logout():
@@ -113,10 +89,12 @@ def logout():
 
 
 def personnel():
-    return render_template('personnel.html', organizations=[('Хлебобулочный комбинат', 217, 23, 90),
-                                                            ('ПФР пром. района', 340, 60, 100 * 340 // (340 + 60)),
-                                                            ('Автосервис Михаил-авто', 666, 69, 100 * 666 // (666 + 69))],
-                           stats=(217 + 340 + 666, 23 + 60 + 69, 100 * (217 + 340 + 666) // (217 + 340 + 666 + 23 + 60 + 69)))
+    organizations = current_user.get_organizations()
+    workers = sum((i[1] for i in organizations))
+    vacancy = sum((i[2] for i in organizations))
+
+    return render_template('personnel.html', organizations=organizations,
+                           stats=(workers, vacancy, 100 * workers // (workers + vacancy)))
 
 
 def education():

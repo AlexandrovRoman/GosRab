@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     nationality = db.Column(db.String)
     marriage = db.Column(db.String(10))
     about_myself = db.Column(db.String)
+
     # organisation = orm.relation('Organisation', back_populates='organisation')
     # about_myself = db.Column(db.String)
 
@@ -42,6 +43,17 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def get_profile_info(self):
+        return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
+                'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,
+                'Education': self.education, 'Marital_status': self.marriage,
+                'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email}
+
+    def get_organizations(self):  # todo Наименование, Рабочие, Вакансии
+        return [('Хлебобулочный комбинат', 217, 23),
+                ('ПФР пром. района', 1000, 500),
+                ('Автосервис Михаил-авто', 666, 69)]
 
     @staticmethod
     def get_logged(login, password):
@@ -56,8 +68,9 @@ class User(db.Model, UserMixin):
         session = create_session()
         return session.query(User).filter(User.id == user_id).first()
 
+
 # ЭТО ЗАГЛУШКА НЕ УДАЛЯТЬ
 class Model1(db.Model):
     __tablename__ = 'model1'
     id = db.Column(db.Integer,
-                    primary_key=True, autoincrement=True)
+                   primary_key=True, autoincrement=True)
