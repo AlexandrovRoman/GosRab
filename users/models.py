@@ -1,3 +1,4 @@
+import datetime
 from flask_login import UserMixin
 from app import create_session
 from app import db
@@ -5,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import orm
 
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
+session = create_session()
 
 
 class User(db.Model, UserMixin):
@@ -57,7 +59,6 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def get_logged(login, password):
-        session = create_session()
         user = session.query(User).filter(User.email == login).first()
         if user and user.check_password(password):
             return user
@@ -65,8 +66,22 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def get(user_id):
-        session = create_session()
         return session.query(User).filter(User.id == user_id).first()
+
+    @staticmethod
+    def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
+        user = User()
+        user.surname = surname
+        user.name = name
+        user.age = age
+        user.fathername = fathername
+        user.birth_date = datetime.date(birth_year, birth_month, birth_day)
+        user.sex = sex
+        user.email = email
+        user.role = role
+        user.set_password(password)
+        session.add(user)
+        session.commit()
 
 
 # ЭТО ЗАГЛУШКА НЕ УДАЛЯТЬ

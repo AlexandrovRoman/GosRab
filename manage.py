@@ -5,8 +5,7 @@ from flask_migrate import MigrateCommand
 from flask_script import Manager
 from app.config import models
 from importlib import import_module
-from users.views import user_add
-import sys
+from users.models import User
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
@@ -27,17 +26,18 @@ for file in models:
 
 global_init('app.db')
 
+
 # Кто удалит - у того рак яичка
 # https://getbootstrap.com/2.3.2/components
 
 @manager.command
 def new_user_has_full_data(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex):
-    user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex)
+    User.user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex)
 
 
 @manager.command
 def new_default_user(mail, password):
-    user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'М')
+    User.user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'М')
 
 
 @manager.command
