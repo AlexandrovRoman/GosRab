@@ -2,7 +2,6 @@ from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from app import create_session, login_manager
 from users.models import User
-import datetime
 
 
 @login_manager.user_loader
@@ -54,23 +53,6 @@ def cookie_test():
     res.set_cookie('click', str(int(click_count) + 1), max_age=1)
 
     return res
-
-
-def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
-    session = create_session()
-    user = User()
-    user.surname = surname
-    user.name = name
-    user.age = age
-    user.fathername = fathername
-    user.hashed_password = user.set_password(password)
-    user.birth_date = datetime.date(birth_year, birth_month, birth_day)
-    user.sex = sex
-    user.email = email
-    user.role = role
-    user.set_password(password)
-    session.add(user)
-    session.commit()
 
 
 def login():
