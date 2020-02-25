@@ -107,3 +107,7 @@ def notification():
 
 def job():
     return render_template("job.html")
+
+
+def organization():
+    return render_template("organization.html")
