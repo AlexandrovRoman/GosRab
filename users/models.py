@@ -1,11 +1,12 @@
 import datetime
 from flask_login import UserMixin
-from app import create_session
+from app import create_session, global_init
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import orm
 
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
+global_init('app.db')
 session = create_session()
 
 
