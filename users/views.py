@@ -93,3 +93,7 @@ def job():
 
 def organization():
     return render_template("organization.html")
+
+
+def add_organization():
+    return render_template("add_organization.html")

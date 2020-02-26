@@ -1,0 +1,90 @@
+{% set title = "Добавление организации" %}
+{% extends "base.html" %}
+{% block content %}
+    <hr class="featurette-divider m-5">
+    <div class="container marketing">
+        <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-12">
+            <div class="card mb-4 shadow-sm" style="background-color: whitesmoke">
+                <div class="mx-5">
+                    <h4 class="d-flex justify-content-center mb-3">
+                        <span class="h1 mt-3">Добавление организации</span>
+                    </h4>
+                    <div class="row justify-content-center">
+                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg"
+                             preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder: Thumbnail" style="width: 300px; height: 300px">
+                            <rect fill="#55595c" width="100%" height="100%"/>
+                            <text fill="#eceeef" x="50%" y="50%">Thumbnail</text>
+                        </svg>
+                        <div class="column mx-3">
+                            <div>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlFile1">Изображение</label>
+                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <label for="Фамилия">Имя организации</label>
+                                <input type="text" class="form-control" id="Фамилия" required>
+                                <div class="invalid-feedback">
+                                    Введите имя организации.
+                                </div>
+                            </div>
+                            <div>
+                                <label for="email">Почта организации</label>
+                              <input type="email" class="form-control" id="email" required>
+                              <div class="invalid-feedback">
+                                  Пожалуйста, укажите почту организации.
+                              </div>
+                            </div>
+                            <div>
+                                <label for="Фамилия">Имя организации</label>
+                                <input type="text" class="form-control" id="Фамилия" required>
+                                <div class="invalid-feedback">
+                                    Введите имя организации.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column mt-2">
+                            <div>
+                                <label for="country">Вид организации</label>
+                                <select class="custom-select d-block w-100" id="country" name="gender" required>
+                                    <option value="ИП">ИП</option>
+                                    <option value="ООО">ООО</option>
+                              </select>
+                            </div>
+                            <div>
+                                <label for="Фамилия">Имя организации</label>
+                                <input type="text" class="form-control" id="Фамилия" required>
+                                <div class="invalid-feedback">
+                                    Введите имя организации.
+                                </div>
+                            </div>
+                            <div>
+                                <label for="Фамилия">Имя организации</label>
+                                <input type="text" class="form-control" id="Фамилия" required>
+                                <div class="invalid-feedback">
+                                    Введите имя организации.
+                                </div>
+                            </div>
+                            <div>
+                                <label for="Фамилия">Имя организации</label>
+                                <input type="text" class="form-control" id="Фамилия" required>
+                                <div class="invalid-feedback">
+                                    Введите имя организации.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block my-3" type="submit">Добавить организацию</button>
+                    <hr class="featurette-divider">
+                </div>
+                <footer class="container">
+                    <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
+                    <p>&copy; SAMARA-CORPARATION</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+{% endblock %}
