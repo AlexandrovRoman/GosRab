@@ -92,7 +92,8 @@ def job():
 
 
 def organization():
-    return render_template("organization.html")
+    return render_template("organization.html", required_employees=enumerate([('Кондитер', 30000),
+                                                                              ('Директор', 50000)], 1))
 
 
 def add_organization():

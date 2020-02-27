@@ -3,6 +3,6 @@ from news.models import News, Courses
 
 
 def index():
-    news = News.get_news()
+    news = [(i, *j) for i, j in enumerate(News.get_news())]
     courses = Courses.get_courses()
-    return render_template('news.html', news=news, courses=courses)
+    return render_template('news.html', news=news, courses=enumerate(courses))

@@ -21,7 +21,7 @@ class News(db.Model):
 
     @staticmethod
     def get_news():
-        news = [(obj.id, obj.title, obj.description, obj.link) for obj in News.query.all()]
+        news = [(obj.title, obj.description, obj.link) for obj in News.query.all()]
         return news
 
     @staticmethod
@@ -48,7 +48,7 @@ class Courses:
 
     @staticmethod
     def get_courses():
-        courses = [(obj.id, obj.title, obj.description, obj.image_link) for obj in News.query.all()]
+        courses = [(obj.title, obj.description, obj.image_link) for obj in News.query.all()]
         return courses
 
     @staticmethod

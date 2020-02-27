@@ -78,13 +78,13 @@
 
         <hr class="featurette-divider">
 
-        {% for i in courses %}
+        {% for i, course in courses %}
             <div class="row featurette">
-                <div class="col-md-7{% if i[0] % 2 == 1 %} order-md-2 {% endif %}">
-                    <h2 class="featurette-heading">{{ i[1] }}</h2>
-                    <p class="lead">{{ i[2] }}</p>
+                <div class="col-md-7{% if i % 2 == 1 %} order-md-2 {% endif %}">
+                    <h2 class="featurette-heading">{{ course[0] }}</h2>
+                    <p class="lead">{{ course[1] }}</p>
                 </div>
-                <div class="col"><img src="{{ i[3] }}" alt="" class="w-100">
+                <div class="col"><img src="{{ course[2] }}" alt="" class="w-100">
                 </div>
             </div>
 
