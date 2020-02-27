@@ -1,11 +1,10 @@
 import datetime
 from flask_login import UserMixin
 from app import create_session
-from app import db
+from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
-session = create_session()
 
 
 class User(db.Model, UserMixin):

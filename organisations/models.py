@@ -1,9 +1,7 @@
-from app import db, create_session
+from app import db, session
 from sqlalchemy import orm
 from datetime import datetime
 from users.models import User
-
-session = create_session()
 
 
 class Organisation(db.Model):

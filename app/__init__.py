@@ -45,6 +45,7 @@ def create_session() -> Session:
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+session = create_session()
 
 
 def add_urls():

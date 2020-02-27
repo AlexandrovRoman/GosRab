@@ -1,6 +1,6 @@
 from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
-from app import create_session, login_manager
+from app import login_manager, session
 from users.models import User
 
 
@@ -20,7 +20,6 @@ def edit_profile():
     user = current_user
     if request.method == 'POST':
         # print('\n\t', current_user, '\n')
-        session = create_session()
 
         current_user.name = request.form['name']
         current_user.surname = request.form['surname']

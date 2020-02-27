@@ -1,8 +1,5 @@
-from app import db, create_session
+from app import db, session
 import datetime
-
-
-session = create_session()
 
 
 class News(db.Model):
@@ -21,7 +18,7 @@ class News(db.Model):
 
     @classmethod
     def get_news(cls):
-        news = [(obj.id, obj.title, obj.description, obj.link) for obj in cls.query.all()]
+        news = [(obj.title, obj.description, obj.link) for obj in cls.query.all()]
         return news
 
     @classmethod
@@ -48,7 +45,7 @@ class Courses(db.Model):
 
     @classmethod
     def get_courses(cls):
-        courses = [(obj.id, obj.title, obj.description, obj.image_link) for obj in cls.query.all()]
+        courses = [(obj.title, obj.description, obj.image_link) for obj in cls.query.all()]
         return courses
 
     @classmethod
