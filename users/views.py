@@ -92,8 +92,10 @@ def job():
 
 
 def organization():
-    return render_template("organization.html", required_employees=enumerate([('Кондитер', 30000),
-                                                                              ('Директор', 50000)], 1))
+    organization_info = current_user.get_organization(request.args.get('organization'))
+    if organization_info is None:
+        return 'Нет доступа'
+    return render_template("organization.html", **organization_info)
 
 
 def add_organization():

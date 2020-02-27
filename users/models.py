@@ -53,10 +53,23 @@ class User(db.Model, UserMixin):
                 'Education': self.education, 'Marital_status': self.marriage,
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email}
 
-    def get_organizations(self):  # todo Наименование, Рабочие, Вакансии
-        return [('Хлебобулочный комбинат', 0, 0),
-                ('ПФР пром. района', 1000, 500),
-                ('Автосервис Михаил-авто', 666, 69)]
+    def get_organizations(self):  # todo Наименование, Рабочие, Вакансии, id организации
+        return [('Хлебобулочный комбинат', 0, 0, 1),
+                ('ПФР пром. района', 1000, 500, 2),
+                ('Автосервис Михаил-авто', 666, 69, 3)]
+
+    def get_organization(self, org_id):
+        if org_id is None:
+            return None
+        if org_id not in ['1', '2', '3']:  # Если пользователь не состоит в этой организации
+            return None
+        # Вернуть в зависимость от org_id
+        return {'required_employees': enumerate([('Кондитер', 30000), ('Директор', 50000)], 1),
+                'workers': [('Карпов Павел Андреевич', 'Кондитер', 30000),
+                           ('Денисов Шамиль Вадимович', 'Директор', 50000),
+                           ('Федункив Сава Богданович', 'Администратор', 25000),
+                           ('Бирюков Мирослав Васильевич', 'Кондитер', 30000)],
+                'stats': (1000, 500)}
 
     @staticmethod
     def get_logged(login, password):
