@@ -80,7 +80,10 @@ def personnel():
 
 
 def education():
-    return render_template("education.html")
+    return render_template("education.html", courses=[
+        ('Курсы', 'Яндекс Лицей', 'Сентябрь 2018', 'Обучение програмированию на языке Python на базе компании Яндекс.', 'icon/yandex.jpg'),
+        ('Онлайн обучение', 'Super-English', 'Февраль 2020', 'Изучение английского языка с нуля, до свободного общения вместе с Петровой Оксаной Сергеевной.', 'icon/English.jpg'),
+    ])
 
 
 def notification():
