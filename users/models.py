@@ -54,7 +54,7 @@ class User(db.Model, UserMixin):
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email}
 
     def get_organizations(self):  # todo Наименование, Рабочие, Вакансии
-        return [('Хлебобулочный комбинат', 217, 23),
+        return [('Хлебобулочный комбинат', 0, 0),
                 ('ПФР пром. района', 1000, 500),
                 ('Автосервис Михаил-авто', 666, 69)]
 

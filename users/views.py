@@ -76,7 +76,7 @@ def personnel():
     vacancy = sum((i[2] for i in organizations))
 
     return render_template('personnel.html', organizations=organizations,
-                           stats=(workers, vacancy, 100 * workers // (workers + vacancy)))
+                           stats=(workers, vacancy))
 
 
 def education():

@@ -4,38 +4,51 @@
 {% block content %}
     <hr class="featurette-divider m-5">
     <div class="container marketing">
-        <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-12">
-            <div class="card mb-4 shadow-sm">
-                <h1 class="card-text font-weight-normal text-center">Кадровый отдел</h1>
-                <div class="progress m-3">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                         style="width: 91%" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100">91%
-                    </div>
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
-                         style="width: 9%" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100">9%
-                    </div>
-                </div>
-                <div class="row mx-3">
-                    <h5 class="card-text font-weight-normal">Общее количество рабочих: {{ stats[0] }}</h5>
-                    <div class="progress mt-1" style="width: 20px">
+        {% if organizations %}
+            {% set stat = 100 * stats[0] // (stats[0] + stats[1]) %}
+            <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-12">
+                <div class="card mb-4 shadow-sm">
+                    <h1 class="card-text font-weight-normal text-center">Кадровый отдел</h1>
+                    <div class="progress m-3">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                             style="width: 100%">
+                             style="width: 91%" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100">{{ stat }}%
+                        </div>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
+                             style="width: 9%" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100">{{ 100 - stat }}%
+                        </div>
+                    </div>
+                    <div class="row mx-3">
+                        <h5 class="card-text font-weight-normal">Общее количество рабочих: {{ stats[0] }}</h5>
+                        <div class="progress mt-1" style="width: 20px">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                 style="width: 100%">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mx-3">
+                        <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: {{ stats[1] }}</h5>
+                        <div class="progress mt-1" style="width: 20px">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+                                 role="progressbar" style="width: 100%"></div>
                         </div>
                     </div>
                 </div>
-                <div class="row mx-3">
-                    <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: {{ stats[1] }}</h5>
-                    <div class="progress mt-1" style="width: 20px">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
-                             role="progressbar" style="width: 100%"></div>
-                    </div>
+            </div>
+        {% else %}
+            <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-12">
+                <div class="card mb-4 shadow-sm">
+                    <h1 class="card-text font-weight-normal text-center">Вы не состоите ни в одной организации.</h1>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
         <div class="row justify-content-center">
             {% for company in organizations %}
-                {% set percent = 100 * company[1] // (company[1] + company[2]) %}
+                {% if (company[1] + company[2]) != 0 %}
+                    {% set percent = 100 * company[1] // (company[1] + company[2]) %}
+                {% else %}
+                    {% set percent = 0 %}
+                {% endif %}
                 <div class="col-11 col-sm-11 col-md-6 col-lg-5 col-xl-4 justify-content-center">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-header">
