@@ -80,7 +80,10 @@ def personnel():
 
 
 def education():
-    return render_template("education.html")
+    return render_template("education.html", courses=[
+        ('Курсы', 'Яндекс Лицей', 'Сентябрь 2018', 'Обучение програмированию на языке Python на базе компании Яндекс.', 'icon/yandex.jpg'),
+        ('Онлайн обучение', 'Super-English', 'Февраль 2020', 'Изучение английского языка с нуля, до свободного общения вместе с Петровой Оксаной Сергеевной.', 'icon/English.jpg'),
+    ])
 
 
 def notification():
@@ -92,7 +95,10 @@ def job():
 
 
 def organization():
-    return render_template("organization.html")
+    organization_info = current_user.get_organization(request.args.get('organization'))
+    if organization_info is None:
+        return 'Нет доступа'
+    return render_template("organization.html", **organization_info)
 
 
 def add_organization():
