@@ -19,14 +19,14 @@ class News(db.Model):
     def __repr__(self):
         return '<News {}>'.format(self.title)
 
-    @staticmethod
-    def get_news():
-        news = [(obj.id, obj.title, obj.description, obj.link) for obj in News.query.all()]
+    @classmethod
+    def get_news(cls):
+        news = [(obj.id, obj.title, obj.description, obj.link) for obj in cls.query.all()]
         return news
 
-    @staticmethod
-    def new(title, description, link='#'):
-        news = News()
+    @classmethod
+    def new(cls, title, description, link='#'):
+        news = cls()
         news.title = title
         news.description = description
         news.link = link
@@ -34,7 +34,7 @@ class News(db.Model):
         session.commit()
 
 
-class Courses:
+class Courses(db.Model):
     __tablename__ = 'courses_table'
 
     id = db.Column(db.Integer,
@@ -46,14 +46,14 @@ class Courses:
     def __repr__(self):
         return '<News {}>'.format(self.title)
 
-    @staticmethod
-    def get_courses():
-        courses = [(obj.id, obj.title, obj.description, obj.image_link) for obj in News.query.all()]
+    @classmethod
+    def get_courses(cls):
+        courses = [(obj.id, obj.title, obj.description, obj.image_link) for obj in cls.query.all()]
         return courses
 
-    @staticmethod
-    def new(title, description, image_link):
-        course = Courses()
+    @classmethod
+    def new(cls, title, description, image_link):
+        course = cls()
         course.title = title
         course.description = description
         course.image_link = image_link

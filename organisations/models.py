@@ -1,6 +1,9 @@
-from app import db
+from app import db, create_session
 from sqlalchemy import orm
 from datetime import datetime
+from users.models import User
+
+session = create_session()
 
 
 class Organisation(db.Model):
@@ -15,3 +18,13 @@ class Organisation(db.Model):
 
     def __repr__(self):
         return f'<Organisation {self.name}>'
+
+    @classmethod
+    def new(cls, name, personnel_id, date=datetime.now):
+        org = cls()
+        org.name = name
+        org.personnel_id = personnel_id
+        org.personnel = session.query(User).filter(User.id == personnel_id).first()
+        org.date = date
+        session.add(org)
+        session.commit()

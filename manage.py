@@ -1,6 +1,6 @@
 from os import makedirs
 from os.path import exists
-from app import app, add_urls, global_init
+from app import app, add_urls
 from flask_migrate import MigrateCommand
 from flask_script import Manager
 from app.config import models
@@ -24,20 +24,18 @@ manager.add_command('db', MigrateCommand)
 for file in models:
     import_module(file)
 
-global_init('app.db')
-
 
 # Кто удалит - у того рак яичка
 # https://getbootstrap.com/2.3.2/components
 
 @manager.command
 def new_user_has_full_data(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex):
-    User.user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex)
+    User.new(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex)
 
 
 @manager.command
 def new_default_user(mail, password):
-    User.user_add('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'М')
+    User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'М')
 
 
 @manager.command

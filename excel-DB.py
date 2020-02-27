@@ -1,10 +1,6 @@
 import openpyxl
-from app import global_init
 from users.models import User
 from news.models import News, Courses
-
-
-global_init('app.db')
 
 
 def export_from_excel(file, add_func):
@@ -15,6 +11,7 @@ def export_from_excel(file, add_func):
         add_func(*params)
 
 
-export_from_excel('users.xlsx', User.user_add)
-export_from_excel('news.xlsx', News.new)
-export_from_excel('courses.xlsx', Courses.new)
+if __name__ == '__main__':
+    export_from_excel('test_models/users.xlsx', User.new)
+    export_from_excel('test_models/news.xlsx', News.new)
+    export_from_excel('test_models/courses.xlsx', Courses.new)

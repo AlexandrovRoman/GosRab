@@ -12,7 +12,7 @@ def load_user(user_id):
 @login_required
 def profile():
     user = current_user
-    return render_template('profile.html', **user.get_profile_info())
+    return render_template('profile.html', **user.get_profile_info)
 
 
 @login_required
@@ -35,7 +35,7 @@ def edit_profile():
         session.commit()
 
         return redirect(url_for('profile'))
-    return render_template('edit_profile.html', **user.get_profile_info())
+    return render_template('edit_profile.html', **user.get_profile_info)
 
 
 @login_required

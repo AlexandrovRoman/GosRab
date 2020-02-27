@@ -19,14 +19,11 @@ SqlAlchemyBase = dec.declarative_base()
 __factory = None
 
 
-def global_init(db_file):
+def global_init():
     global __factory
 
     if __factory:
         return
-
-    if not db_file or not db_file.strip():
-        raise Exception("Необходимо указать файл базы данных.")
 
     conn_str = f'{config.BaseConfig.SQLALCHEMY_DATABASE_URI}?check_same_thread=False'
     if app.debug:
@@ -39,8 +36,11 @@ def global_init(db_file):
 
 
 def create_session() -> Session:
-    global __factory
-    return __factory()
+    try:
+        return __factory()
+    except TypeError:
+        global_init()
+        return __factory()
 
 
 login_manager = LoginManager()

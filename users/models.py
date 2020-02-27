@@ -1,12 +1,10 @@
 import datetime
 from flask_login import UserMixin
-from app import create_session, global_init
+from app import create_session
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import orm
 
 role_list = ['standart_user', 'admin', 'organistaion', 'superuser']
-global_init('app.db')
 session = create_session()
 
 
@@ -47,6 +45,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
 
+    @property
     def get_profile_info(self):
         return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
                 'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,
@@ -70,7 +69,7 @@ class User(db.Model, UserMixin):
         return session.query(User).filter(User.id == user_id).first()
 
     @staticmethod
-    def user_add(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
+    def new(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
         user = User()
         user.surname = surname
         user.name = name
