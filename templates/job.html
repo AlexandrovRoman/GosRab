@@ -37,48 +37,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Хлебобулочный комбинат</td>
-                <td>Кондитер</td>
-                <td>30.000₽</td>
+            {% for i, job in jobs %}
+                <tr>
+                <th scope="row">{{ i }}</th>
+                <td>{{ job[0] }}</td>
+                <td>{{ job[1] }}</td>
+                <td>{{ job[2] }}₽</td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Хлебобулочный комбинат</td>
-                <td>Директор</td>
-                <td>50.000₽</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>ПФР промю района</td>
-                <td>Администратор</td>
-                <td>25.000₽</td>
-            </tr>
-            <tr>
-                <th scope="row">4</th>
-                <td>ПФР промю района</td>
-                <td>Сис.Админ</td>
-                <td>27.500₽</td>
-            </tr>
-            <tr>
-                <th scope="row">5</th>
-                <td>Автосервис Михаил-авто</td>
-                <td>Механик</td>
-                <td>27.500₽</td>
-            </tr>
-            <tr>
-                <th scope="row">6</th>
-                <td>Автосервис Михаил-авто</td>
-                <td>Моляр</td>
-                <td>33.000₽</td>
-            </tr>
-            <tr>
-                <th scope="row">7</th>
-                <td>Автосервис Михаил-авто</td>
-                <td>Главный механик</td>
-                <td>35.000₽</td>
-            </tr>
+
+            {% endfor %}
             </tbody>
         </table>
     <hr class="featurette-divider m-4">
