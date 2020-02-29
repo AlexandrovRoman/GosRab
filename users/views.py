@@ -12,7 +12,7 @@ def load_user(user_id):
 @login_required
 def profile():
     user = current_user
-    return render_template('profile.html', **user.get_profile_info)
+    return render_template('users/profile.html', **user.get_profile_info)
 
 
 @login_required
@@ -34,7 +34,7 @@ def edit_profile():
         session.commit()
 
         return redirect(url_for('profile'))
-    return render_template('edit_profile.html', **user.get_profile_info)
+    return render_template('users/edit_profile.html', **user.get_profile_info)
 
 
 @login_required
@@ -61,7 +61,7 @@ def login():
             login_user(user)
             return redirect('/')
 
-    return render_template('sign_in.html')
+    return render_template('users/sign_in.html')
 
 
 def logout():
@@ -74,12 +74,12 @@ def personnel():
     workers = sum((i[1] for i in organizations))
     vacancy = sum((i[2] for i in organizations))
 
-    return render_template('personnel.html', organizations=organizations,
+    return render_template('users/personnel.html', organizations=organizations,
                            stats=(workers, vacancy))
 
 
 def education():
-    return render_template("education.html", courses=[
+    return render_template("users/education.html", courses=[
         ('Курсы', 'Яндекс Лицей', 'Сентябрь 2018', 'Обучение програмированию на языке Python на базе компании Яндекс.',
          'icon/yandex.jpg'),
         ('Онлайн обучение', 'Super-English', 'Февраль 2020',
@@ -89,7 +89,7 @@ def education():
 
 
 def notification():
-    return render_template("notifications.html")
+    return render_template("users/notifications.html")
 
 
 def job():
@@ -99,17 +99,17 @@ def job():
         ('ПФР промю района', 'Администратор', 25000),
         ('ПФР промю района', 'Сис.Админ', 27500),
         ('Автосервис Михаил - авто', 'Механик', 27500),
-        ('Автосервис Михаил - авто', 'Моляр', 33000),
+        ('Автосервис Михаил - авто', 'Маляр', 33000),
         ('Автосервис Михаил - авто', 'Главный механик', 35000),
     ]
-    return render_template("job.html", jobs=enumerate(jobs, 1))
+    return render_template("users/job.html", jobs=enumerate(jobs, 1))
 
 
 def organization():
     organization_info = current_user.get_organization(request.args.get('organization'))
     if organization_info is None:
         return 'Нет доступа'
-    return render_template("organization.html", **organization_info)
+    return render_template("users/organization.html", **organization_info)
 
 
 def organizations():
