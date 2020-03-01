@@ -1,6 +1,5 @@
 import datetime
 from flask_login import UserMixin
-from app import create_session
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -20,20 +19,19 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String, nullable=True)
     birth_date = db.Column(db.Date)
     age = db.Column(db.Integer)
-    sex = db.Column(db.String(20), nullable=True)  # М/Ж
+    sex = db.Column(db.String(7), nullable=True)  # М/Ж
     status = db.Column(db.String, nullable=True,
                        default=role_list[0])
     grate = db.Column(db.String, default='Новичок')
-    education = db.Column(db.String, default='Нет')
-    foreign_languges = db.Column(db.String, default='Нет')
+    education = db.Column(db.String, default='Отсутствует')
+    foreign_languges = db.Column(db.String, default='Отсутствует')
     role = db.Column(db.String, default='user')
     start_place = db.Column(db.String)
     nationality = db.Column(db.String)
-    marriage = db.Column(db.String(10))
-    about_myself = db.Column(db.String)
+    marriage = db.Column(db.String(20))
+    about_myself = db.Column(db.String, default='Отсутствует')
 
     # organisation = orm.relation('Organisation', back_populates='organisation')
-    # about_myself = db.Column(db.String)
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -49,7 +47,8 @@ class User(db.Model, UserMixin):
         return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
                 'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,
                 'Education': self.education, 'Marital_status': self.marriage,
-                'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email}
+                'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
+                'About_myself': self.about_myself}
 
     def get_organizations(self):  # todo Наименование, Рабочие, Вакансии, id организации
         return [('Хлебобулочный комбинат', 0, 0, 1),
@@ -81,7 +80,8 @@ class User(db.Model, UserMixin):
         return session.query(User).filter(User.id == user_id).first()
 
     @staticmethod
-    def new(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, role='user'):
+    def new(surname, name, fathername, birth_year, birth_month, birth_day,
+            age, email, password, sex, marriage, role='user'):
         user = User()
         user.surname = surname
         user.name = name
@@ -91,6 +91,7 @@ class User(db.Model, UserMixin):
         user.sex = sex
         user.email = email
         user.role = role
+        user.marriage = marriage
         user.set_password(password)
         session.add(user)
         session.commit()

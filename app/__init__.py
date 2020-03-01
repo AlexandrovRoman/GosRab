@@ -25,7 +25,7 @@ def global_init():
     if __factory:
         return
 
-    conn_str = f'{config.BaseConfig.SQLALCHEMY_DATABASE_URI}?check_same_thread=False'
+    conn_str = f'{Config.SQLALCHEMY_DATABASE_URI}?check_same_thread=False'
     if app.debug:
         print(f"Подключение к базе данных по адресу {conn_str}")
 

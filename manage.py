@@ -29,13 +29,13 @@ for file in models:
 # https://getbootstrap.com/2.3.2/components
 
 @manager.command
-def new_user_has_full_data(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex):
-    User.new(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex)
+def new_user_has_full_data(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, marriage):
+    User.new(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, marriage)
 
 
 @manager.command
 def new_default_user(mail, password):
-    User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'М')
+    User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'Мужской', 'В браке')
 
 
 @manager.command
