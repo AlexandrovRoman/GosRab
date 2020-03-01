@@ -1,0 +1,44 @@
+{% set title = "Меню организации" %}
+{% extends "base.html" %}
+{% block content %}
+    <hr class="featurette-divider m-5">
+    <div class="container marketing">
+        <div class="row justify-content-center">
+              <div class="card col-11 col-sm-11 col-md-6 col-lg-5 col-xl-12 shadow-lg">
+                  <div class="row">
+                      <div class="order-md-2 mt-4 mb-4 col-12 col-sm-12 col-md-12 col-lg-11 col-xl-7 shadow-sm">
+                          <h4 class="d-flex justify-content-center mb-3">
+                              <span class="h1 mt-3">Автосервис Михаил-авто</span>
+                          </h4>
+                          <h4 class="mb-3">Вид организации: ИП</h4>
+                          <h4 class="mb-3">Дата регистрации на платформе: Ноябрь 2018</h4>
+                          <h4 class="mb-3">Описание: Тех. обслуживание; проверка авто перед покупкой; ремонтнык работы любой сложности.</h4>
+                      </div>
+                      <div class="order-md-1 mt-2 col-11 col-sm-11 col-md-11 col-lg-11 col-xl-4 ml-5 my-5 justify-content-center">
+                          <svg class="bd-placeholder-img card-img-top shadow-sm" xmlns="http://www.w3.org/2000/svg"
+                             preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder: Thumbnail" style="width: 300px; height: 300px">
+                            <rect fill="#55595c" width="100%" height="100%"/>
+                            <text fill="#eceeef" x="50%" y="50%">Логотип организации</text>
+                        </svg>
+                      </div>
+                  </div>
+
+                  <div class="row justify-content-around mx-5">
+                      <p  data-toggle="popover" data-content="Disabled popover"><a class="btn btn-lg btn-primary disabled col-12" href="#" role="button">Редактирование</a></p>
+                      <p><a class="btn btn-lg btn-primary disabled col-12" href="#" role="button">Сотрудники</a></p>
+                      <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/menu_organization/personnel_department" role="button">Отдел кадров</a></p>
+                      <p><a class="btn btn-lg btn-primary disabled col-12" href="#" role="button">Вакансии</a></p>
+                      <p><a class="btn btn-lg btn-primary disabled col-12" href="#" role="button">Уведомления</a></p>
+                      <p><a class="btn btn-lg btn-primary disabled col-12" href="#" role="button">Статистика</a></p>
+                  </div>
+
+                  <hr class="featurette-divider">
+
+                  <footer class="container">
+                      <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
+                      <p>&copy; SAMARA-CORPARATION</p>
+                  </footer>
+              </div>
+          </div>
+    </div>
+{% endblock %}

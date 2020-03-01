@@ -1,0 +1,125 @@
+{% set title = "Кадровый отдел" %}
+{% extends "base.html" %}
+{% block content %}
+    <hr class="featurette-divider m-5">
+    <div class="container marketing">
+        <div class="row justify-content-center">
+            <div class="card col-11 col-sm-11 col-md-11 col-lg-11 col-xl-12 shadow-lg">
+                <p class="mt-3"><a class="btn-sm btn-primary" href="/users/profile/menu_organization" role="button">&larr; Меню оганизации</a></p>
+                <h1 class="font-weight-normal text-center">Кадровый отдел организации</h1>
+                <div class="progress m-3">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%
+                    </div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar"
+                         style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%
+                    </div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
+                         style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%
+                    </div>
+                </div>
+                <div class="row mx-3">
+                        <h5 class="card-text font-weight-normal">Общее количество рабочих: 2</h5>
+                        <div class="progress mt-1" style="width: 20px">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                 style="width: 100%">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mx-3">
+                        <h5 class="card-text font-weight-normal">Общее количество кадровиков: 2</h5>
+                        <div class="progress mt-1" style="width: 20px">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                 role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="row mx-3">
+                        <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: 1</h5>
+                        <div class="progress mt-1" style="width: 20px">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+                                 role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+
+                   <hr class="featurette-divider">
+
+             <div class="row justify-content-around">
+               <details class="text-center col-md-6" open="">
+                   <summary class="h1 card-text font-weight-normal mb-3 mx-auto">Кадровики организации</summary>
+                   <table class="table table-hover table-bordered">
+                       <thead>
+                       <tr>
+                           <th scope="col">Фио</th>
+                           <th scope="col">Зарплата</th>
+                           <th scope="col">Профиль</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       <tr>
+                           <td>Васильев Оливер Юхимович</td>
+                           <td>25.000₽</td>
+                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Перейти</button></td>
+                       </tr>
+                       <tr>
+                           <td>Мамонтов Данила Михайлович</td>
+                           <td>25.000₽</td>
+                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Перейти</button></td>
+                       </tbody>
+                   </table>
+               </details>
+
+                 <details class="text-center col-md-6" open="">
+                     <summary class="h1 card-text font-weight-normal mb-3 mx-auto">Требуемые работники</summary>
+                     <table class="table table-hover table-bordered">
+                         <thead>
+                         <tr>
+                             <th scope="col">Должность</th>
+                             <th scope="col">Зарплата</th>
+                             <th scope="col">Поиск по фильтру</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <tr>
+                             <td>Механик</td>
+                             <td>25000₽</td>
+                             <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Поиск сотрудника</button></td>
+                         </tr>
+                         </tbody>
+                     </table>
+                 </details>
+                 <details class="text-center col-md-12" open="">
+                   <summary class="h1 card-text font-weight-normal mb-3 mx-auto">Работники организации</summary>
+                   <table class="table table-hover table-bordered">
+                       <thead>
+                       <tr>
+                           <th scope="col">Фио</th>
+                           <th scope="col">Должность</th>
+                           <th scope="col">Зарплата</th>
+                           <th scope="col">Т2</th>
+                           <th scope="col">Профиль</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       <tr>
+                           <td>Федункив Сава Богданович</td>
+                           <td>Управляющий</td>
+                           <td>30.000₽</td>
+                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Т2</button></td>
+                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Перейти</button></td>
+                       </tr>
+                       <tr>
+                           <td>Бирюков Мирослав Васильевич</td>
+                           <td>Главный механик</td>
+                           <td>35.000₽</td>
+                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Т2</button></td>
+                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Перейти</button></td>
+                       </tbody>
+                   </table>
+               </details>
+             </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+{% endblock %}

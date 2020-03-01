@@ -112,5 +112,17 @@ def organization():
     return render_template("users/organization.html", **organization_info)
 
 
+def organizations():
+    return render_template("organizations.html")
+
+
 def add_organization():
-    return render_template("users/add_organization.html")
+    return render_template("add_organization.html")
+
+
+def menu_organization():
+    return render_template("menu_organization.html")
+
+
+def personnel_department():
+    return render_template("personnel_department.html")
