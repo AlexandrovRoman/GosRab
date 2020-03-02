@@ -1,6 +1,7 @@
 from os import makedirs
 from os.path import exists
-from app import app, add_urls
+from app import app, add_urls, create_session, global_init
+from organisations.models import Organisation
 from flask_migrate import MigrateCommand
 from flask_script import Manager
 from app.config import models
@@ -28,14 +29,20 @@ for file in models:
 # Кто удалит - у того рак яичка
 # https://getbootstrap.com/2.3.2/components
 
+# Выводит ОБЪЕКТЫ юзеров участвующих в организации,не удолять)
+# session = create_session()
+# org = session.query(Organisation).first()
+# print(org.users)
+
 @manager.command
-def new_user_has_full_data(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, marriage):
+def new_user_has_full_data(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex,
+                           marriage):
     User.new(surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex, marriage)
 
 
 @manager.command
 def new_default_user(mail, password):
-    User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'Мужской', 'В браке')
+    User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, mail, password, 'Мужской', 'В браке', 1)
 
 
 @manager.command

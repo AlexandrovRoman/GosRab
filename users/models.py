@@ -30,8 +30,7 @@ class User(db.Model, UserMixin):
     nationality = db.Column(db.String)
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
-
-    # organisation = orm.relation('Organisation', back_populates='organisation')
+    organisation_foreign_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -63,9 +62,9 @@ class User(db.Model, UserMixin):
         # Вернуть в зависимость от org_id
         return {'required_employees': enumerate([('Кондитер', 30000), ('Директор', 50000)], 1),
                 'workers': [('Карпов Павел Андреевич', 'Кондитер', 30000),
-                           ('Денисов Шамиль Вадимович', 'Директор', 50000),
-                           ('Федункив Сава Богданович', 'Администратор', 25000),
-                           ('Бирюков Мирослав Васильевич', 'Кондитер', 30000)],
+                            ('Денисов Шамиль Вадимович', 'Директор', 50000),
+                            ('Федункив Сава Богданович', 'Администратор', 25000),
+                            ('Бирюков Мирослав Васильевич', 'Кондитер', 30000)],
                 'stats': (1000, 500)}
 
     @staticmethod
@@ -81,7 +80,7 @@ class User(db.Model, UserMixin):
 
     @staticmethod
     def new(surname, name, fathername, birth_year, birth_month, birth_day,
-            age, email, password, sex, marriage, role='user'):
+            age, email, password, sex, marriage, org_id, role='user'):
         user = User()
         user.surname = surname
         user.name = name
@@ -93,6 +92,7 @@ class User(db.Model, UserMixin):
         user.role = role
         user.marriage = marriage
         user.set_password(password)
+        user.organisation_id = org_id
         session.add(user)
         session.commit()
 
