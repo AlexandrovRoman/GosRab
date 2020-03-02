@@ -6,14 +6,14 @@ from sqlalchemy.orm import relationship
 
 
 class Organisation(db.Model):
-    __tablename__ = 'organisations'
+    __tablename__ = 'organization'
 
     id = db.Column(db.Integer,
                    primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=True)
     creation_date = db.Column(db.Date, default=datetime.now)
     # personnel_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    users = relationship("User", backref='organisations')
+    users = relationship("User", backref='organization')
 
     def __repr__(self):
         return f'<Organisation {self.name}>'

@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
     nationality = db.Column(db.String)
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
-    organisation_foreign_id = db.Column(db.Integer, db.ForeignKey('organisations.id'))
+    organisation_foreign_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
