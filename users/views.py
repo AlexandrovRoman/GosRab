@@ -92,37 +92,5 @@ def notification():
     return render_template("users/notifications.html")
 
 
-def job():
-    jobs = [
-        ('Хлебобулочный комбинат', 'Кондитер', 30000),
-        ('Хлебобулочный комбинат', 'Директор', 50000),
-        ('ПФР промю района', 'Администратор', 25000),
-        ('ПФР промю района', 'Сис.Админ', 27500),
-        ('Автосервис Михаил - авто', 'Механик', 27500),
-        ('Автосервис Михаил - авто', 'Маляр', 33000),
-        ('Автосервис Михаил - авто', 'Главный механик', 35000),
-    ]
-    return render_template("users/job.html", jobs=enumerate(jobs, 1))
-
-
-def organization():
-    organization_info = current_user.get_organization(request.args.get('organization'))
-    if organization_info is None:
-        return 'Нет доступа'
-    return render_template("users/organization.html", **organization_info)
-
-
-def organizations():
-    return render_template("organizations.html")
-
-
-def add_organization():
-    return render_template("add_organization.html")
-
-
-def menu_organization():
-    return render_template("menu_organization.html")
-
-
 def personnel_department():
     return render_template("personnel_department.html")
