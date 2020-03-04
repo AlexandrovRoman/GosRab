@@ -94,3 +94,7 @@ def notification():
 
 def personnel_department():
     return render_template("personnel_department.html")
+
+
+def registration():
+    return render_template("users/registration.html")
