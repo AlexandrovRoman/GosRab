@@ -30,7 +30,8 @@ class User(db.Model, UserMixin):
     nationality = db.Column(db.String)
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
-    organisation_foreign_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    organization_foreign_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
+    personnel_foreign_id = db.Column(db.Integer, db.ForeignKey('personnel.id'), nullable=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -92,7 +93,7 @@ class User(db.Model, UserMixin):
         user.role = role
         user.marriage = marriage
         user.set_password(password)
-        user.organisation_id = org_id
+        user.organization_foreign_id = org_id
         session.add(user)
         session.commit()
 

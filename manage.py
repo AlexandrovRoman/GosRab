@@ -1,10 +1,11 @@
 from os import makedirs
 from os.path import exists
-from app import app, add_urls
+from app import app, add_urls, create_session
 from flask_migrate import MigrateCommand
 from flask_script import Manager
 from app.config import models
 from importlib import import_module
+from organization.models import Organization
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
@@ -29,7 +30,7 @@ for file in models:
 
 # Выводит ОБЪЕКТЫ юзеров участвующих в организации,не удолять)
 # session = create_session()
-# org = session.query(Organisation).first()
+# org = session.query(Organization).first()
 # print(org.users)
 
 

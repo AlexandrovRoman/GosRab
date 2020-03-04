@@ -5,7 +5,7 @@ from users.models import User
 from sqlalchemy.orm import relationship
 
 
-class Organisation(db.Model):
+class Organization(db.Model):
     __tablename__ = 'organization'
 
     id = db.Column(db.Integer,
