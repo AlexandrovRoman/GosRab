@@ -10,4 +10,4 @@ manager.add_command('db', MigrateCommand)
 for file in models:
     import_module(file)
 
-User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'example@email.ru', 'qwertyuiop', 'Мужской', 'admin')
+User.new('Олегов', 'Исач', 'Олегович', 2000, 3, 15, 10, 'admin@e.ru', 'aaa', 'Мужской', 'Женат', 1, 'user admin')
