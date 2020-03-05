@@ -4,15 +4,14 @@ from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 roles_relationship = db.Table('roles_relationship',
-                 db.Column('user_id', db.Integer, db.ForeignKey('users_list.id')),
-                 db.Column('role_id', db.Integer, db.ForeignKey('roles_list.role_id')))
+                              db.Column('user_id', db.Integer, db.ForeignKey('users_list.id')),
+                              db.Column('role_id', db.Integer, db.ForeignKey('roles_list.role_id')))
 
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users_list'
 
-    id = db.Column(db.Integer,
-                   primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=True)
     surname = db.Column(db.String(80), nullable=True)
     fathername = db.Column(db.String(80), nullable=True)
@@ -30,8 +29,10 @@ class User(db.Model, UserMixin):
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
     organization_foreign_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
+    users = db.relationship("User", remote_side=[id])
+    personnel_id = db.Column(db.Integer, db.ForeignKey('users_list.id'))
+    personnel = db.relation('User', remote_side=[id])
     roles = db.relationship('Role', secondary=roles_relationship, backref=db.backref('users', lazy='dynamic'))
-    # personnel_foreign_id = db.Column(db.Integer, db.ForeignKey('personnel.id'), nullable=True)
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -97,7 +98,6 @@ class User(db.Model, UserMixin):
         session.add(user)
         session.commit()
 
-
     @staticmethod
     def add_roles(user, role_names):
         for role_name in role_names.split():
@@ -111,7 +111,7 @@ class Role(db.Model):
     __tablename__ = 'roles_list'
 
     role_id = db.Column(db.Integer,
-                   primary_key=True, autoincrement=True)
+                        primary_key=True, autoincrement=True)
     role_name = db.Column(db.String(20), unique=True)
     description = db.Column(db.String(200))
 
