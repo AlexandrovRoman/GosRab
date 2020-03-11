@@ -3,7 +3,9 @@ from flask_login import current_user
 
 
 def organizations():
-    return render_template("organization/organizations.html")
+    orgs = current_user.get_organization_list()
+
+    return render_template("organization/organizations.html", orgs=orgs)
 
 
 def add_organization():
@@ -11,7 +13,19 @@ def add_organization():
 
 
 def menu_organization():
-    return render_template("organization/menu_organization.html")
+    organization_info = current_user.get_organization(request.args.get('org_id'))
+    if organization_info is None:
+        return 'Нет доступа'
+
+    return render_template("organization/menu_organization.html", org=organization_info)
+
+
+def personnel_department():
+    organization_info = current_user.get_organization_department(request.args.get('org_id'))
+    if organization_info is None:
+        return 'Нет доступа'
+
+    return render_template("personnel_department.html", **organization_info)
 
 
 def job():

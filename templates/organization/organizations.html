@@ -14,21 +14,24 @@
             </div>
         </div>
         <h1 class="display-4 text-center m-5">Список ваших организаций:</h1>
-    <div class="row mb-2 justify-content-center ml-5">
-        <div class="col-md-5">
-            <div href="#" type="button" class="card flex-md-row mb-4 box-shadow h-md-250 card-link" data-toggle="modal" data-target="#exampleModalLong1" style="height: 252px">
-                <div class="card-body d-flex flex-column align-items-start bg-light">
-                    <strong class="d-inline-block mb-2 text-primary">ИП</strong>
-                    <h3 class="mb-0">
-                        <a class="text-dark">Автосервис Михаил-авто</a>
-                    </h3>
-                    <div class="mb-2 text-muted">Ноябрь 2018</div>
-                    <p class="card-text mb-auto">Тех. обслуживание; проверка авто перед покупкой; ремонтнык работы любой сложности.</p>
+
+    {% for org in orgs %}
+        <div class="row mb-2 justify-content-center ml-5">
+            <div class="col-md-5">
+                <div onclick="location.href='/organization/profile/menu_organization/?org_id={{ org[0] }}'" type="button" class="card flex-md-row mb-4 box-shadow h-md-250 card-link" style="height: 252px">
+                    <div class="card-body d-flex flex-column align-items-start bg-light">
+                        <strong class="d-inline-block mb-2 text-primary">{{ org[1] }}</strong>
+                        <h3 class="mb-0">
+                            <a class="text-dark">{{ org[2] }}</a>
+                        </h3>
+                        <div class="mb-2 text-muted">{{ org[3] }}</div>
+                        <p class="card-text mb-auto">{{ org[4] }}</p>
+                    </div>
+                    <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" style="max-width: 200px" alt="Card image cap">
                 </div>
-                <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" style="max-width: 200px" alt="Card image cap">
             </div>
         </div>
-    </div>
+    {% endfor %}
 
     <hr class="featurette-divider m-4">
 
@@ -50,20 +53,20 @@
             </div>
         </div>
     </div>
-    <div class="modal fade bd-example-modal-lg" id="exampleModalLong1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Костыль</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <p>Бекэнд - нужно перехватит нажатие на карточку и кидать на эту вот ссылку:</p>
-                    <p><a class="btn btn-lg btn-primary col-md-9" href="/organization/profile/menu_organization" role="button">Ссылка на меню организации</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
+{#    <div class="modal fade bd-example-modal-lg" id="exampleModalLong1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">#}
+{#        <div class="modal-dialog" role="document">#}
+{#            <div class="modal-content">#}
+{#                <div class="modal-header">#}
+{#                    <h5 class="modal-title" id="exampleModalLongTitle">Костыль</h5>#}
+{#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                        <span aria-hidden="true">&times;</span>#}
+{#                    </button>#}
+{#                </div>#}
+{#                <div class="modal-body text-center">#}
+{#                    <p>Бекэнд - нужно перехватит нажатие на карточку и кидать на эту вот ссылку:</p>#}
+{#                    <p><a class="btn btn-lg btn-primary col-md-9" href="/organization/profile/menu_organization" role="button">Ссылка на меню организации</a></p>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 {% endblock %}
