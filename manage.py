@@ -1,11 +1,12 @@
 from os import makedirs
 from os.path import exists
-from app import app, add_urls, create_session
+from app import app, add_urls, create_session, global_init
 from flask_migrate import MigrateCommand
 from flask_script import Manager
 from app.config import models
 from importlib import import_module
 from organization.models import Organization
+from users.models import User
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
@@ -28,10 +29,11 @@ for file in models:
 # Кто удалит - у того рак яичка
 # https://getbootstrap.com/2.3.2/components
 
-# Выводит ОБЪЕКТЫ юзеров участвующих в организации,не удолять)
+# Выводит ОБЪЕКТЫ кадровиков и их пользователей,не удолять)
+# global_init()
 # session = create_session()
-# org = session.query(Organization).first()
-# print(org.users)
+# user = session.query(User).filter(User.id == 2).first()
+# print(user, user.personnel, user.users)
 
 
 @manager.command

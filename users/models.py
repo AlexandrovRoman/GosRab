@@ -29,9 +29,9 @@ class User(db.Model, UserMixin):
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
     organization_foreign_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
-    users = db.relationship("User", remote_side=[id])
+    users = db.relationship('User', backref=db.backref('users_list', remote_side=[id]))
     personnel_id = db.Column(db.Integer, db.ForeignKey('users_list.id'))
-    personnel = db.relation('User', remote_side=[id])
+    personnel = db.relationship("User", remote_side=[id])
     roles = db.relationship('Role', secondary=roles_relationship, backref=db.backref('users', lazy='dynamic'))
 
     def __repr__(self):
