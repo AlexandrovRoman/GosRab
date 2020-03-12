@@ -83,7 +83,6 @@ class User(db.Model, UserMixin):
             'required_workers': [
                 ('Механик', 30000),  # Должность, Зарплата
             ],
-            'stats': (2, 2, 1)  # Рабочие, Кадровики, Свободные вакансии
         }
 
     def get_organization_list(self):  # todo Поменять заглушки на что-то рабочее

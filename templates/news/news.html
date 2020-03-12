@@ -4,22 +4,22 @@
     <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel">
         <ol class="carousel-indicators">
             {% for i in news %}
-                <li data-target="#myCarousel" data-slide-to="{{ i[0] }}"
-                    {% if i[0] == 0 %}class="active"{% endif %}></li>
+                <li data-target="#myCarousel" data-slide-to="{{ loop.index0 }}"
+                    {% if loop.first %}class="active"{% endif %}></li>
             {% endfor %}
         </ol>
         <div class="carousel-inner">
             {% for i in news %}
-                <div class="carousel-item {% if i[0] == 0 %} active {% endif %}">
+                <div class="carousel-item {% if loop.first %} active {% endif %}">
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                          preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                         <rect width="100%" height="100%" fill="#777"/>
                     </svg>
                     <div class="container">
                         <div class="carousel-caption text-left">
-                            <h1>{{ i[1] }}</h1>
-                            <p>{{ i[2] }}</p>
-                            <p><a class="btn btn-lg btn-primary" href="{{ i[3] }}" role="button">Узнать подробнее</a>
+                            <h1>{{ i[0] }}</h1>
+                            <p>{{ i[1] }}</p>
+                            <p><a class="btn btn-lg btn-primary" href="{{ i[2] }}" role="button">Узнать подробнее</a>
                             </p>
                         </div>
                     </div>
@@ -78,9 +78,9 @@
 
         <hr class="featurette-divider">
 
-        {% for i, course in courses %}
+        {% for course in courses %}
             <div class="row featurette">
-                <div class="col-md-7{% if i % 2 == 1 %} order-md-2 {% endif %}">
+                <div class="col-md-7{% if loop.index0 % 2 == 1 %} order-md-2 {% endif %}">
                     <h2 class="featurette-heading">{{ course[0] }}</h2>
                     <p class="lead">{{ course[1] }}</p>
                 </div>

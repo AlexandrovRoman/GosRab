@@ -10,14 +10,14 @@
                 <h1 class="font-weight-normal text-center">{{ desc[1] }}</h1>
                 <h3 class="font-weight-normal text-center">Кадровый отдел организации</h3>
                 <div class="progress m-3">
-                    {% set stats_sum = stats[0] + stats[1] + stats[2] %}
+                    {% set stats_sum = len(workers) + len(personnel) + len(required_workers) %}
                     {% if stats_sum != 0 %}
-                        {% set percent1 = stats[0] * 100 // stats_sum %}
+                        {% set percent1 = len(workers) * 100 // stats_sum %}
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                              style="width: {{ percent1 }}%" aria-valuenow="{{ percent1 }}" aria-valuemin="0"
                              aria-valuemax="100">{{ percent1 }}%
                         </div>
-                        {% set percent2 = stats[1] * 100 // stats_sum %}
+                        {% set percent2 = len(personnel) * 100 // stats_sum %}
                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                              role="progressbar"
                              style="width: {{ percent2 }}%" aria-valuenow="{{ percent2 }}" aria-valuemin="0"
@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="column col-md-6">
                         <div class="row mx-3">
-                            <h5 class="card-text font-weight-normal">Общее количество рабочих: {{ stats[0] }}</h5>
+                            <h5 class="card-text font-weight-normal">Общее количество рабочих: {{ len(workers) }}</h5>
                             <div class="progress mt-1" style="width: 20px">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                                      style="width: 100%">
@@ -43,14 +43,13 @@
                             </div>
                         </div>
                         <div class="row mx-3">
-                            <h5 class="card-text font-weight-normal">Общее количество кадровиков: {{ stats[1] }}</h5>
+                            <h5 class="card-text font-weight-normal">Общее количество кадровиков: {{ len(personnel) }}</h5>
                             <div class="progress mt-1" style="width: 20px">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                                      role="progressbar" style="width: 100%"></div>
                             </div>
                         </div>
                         <div class="row mx-3">
-                            <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: {{ stats[2] }}</h5>
                             <div class="progress mt-1" style="width: 20px">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
                                      role="progressbar" style="width: 100%"></div>

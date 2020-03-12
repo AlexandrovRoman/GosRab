@@ -25,7 +25,7 @@ def personnel_department():
     if organization_info is None:
         return 'Нет доступа'
 
-    return render_template("personnel_department.html", **organization_info)
+    return render_template("personnel_department.html", **organization_info, len=len)
 
 
 def job():
