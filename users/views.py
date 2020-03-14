@@ -94,3 +94,7 @@ def notification():
 
 def registration():
     return render_template("users/registration.html")
+
+
+def t2():
+    return render_template("users/T2.html")
