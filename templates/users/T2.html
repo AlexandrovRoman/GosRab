@@ -100,7 +100,7 @@
                     </tbody>
                     </table>
                 </div>
-                <div class="row mx-3 mb-5">
+                <div class="row mx-3 mb-5 text-left">
                     <h5>1. Фамилия</h5>
                     <div class="input-group input-group-sm col-3">
                         <input type="text" class="form-control">
@@ -114,19 +114,54 @@
                         <input type="text" class="form-control">
                     </div>
                 </div>
-                <div class="row mx-3 mb-5">
-                    <div class="column col-10">
-                        <div class="row mb-5">
+                <div class="row mb-5">
+                    <div class="column col-10 mt-5">
+                        <div class="row mb-4 mt-4 text-left">
                             <h5 class="col-3">2. Дата рождения</h5>
                             <div class="input-group input-group-sm col-9">
                                 <input type="text" class="form-control" placeholder="день, месяц, год">
                             </div>
                         </div>
+                        <div class="row mb-4 mt-4 text-left">
+                            <h5 class="col-3">3. Место рождения</h5>
+                            <div class="input-group input-group-sm col-7">
+                                <input type="text" class="form-control">
+                            </div>
+                            <h5 class="col-2">по ОКАТО</h5>
+                        </div>
+                        <div class="row mb-4 mt-4 text-left">
+                            <h5 class="col-3">4. Гражданство</h5>
+                            <div class="input-group input-group-sm col-7">
+                                <input type="text" class="form-control">
+                            </div>
+                            <h5 class="col-2">по ОКИН</h5>
+                        </div>
+                        <div class="row mb-4 mt-4 text-left">
+                            <h5 class="col-5">5. Знание иностранного языка</h5>
+                            <div class="input-group input-group-sm col-5">
+                                <input type="text" class="form-control" placeholder="	(наименование)	(степень знания)		">
+                            </div>
+                            <h5 class="col-2">по ОКИН</h5>
+                        </div>
+                        <div class="row mb-4 mt-4 text-left">
+                            <h5 class="col-5"></h5>
+                            <div class="input-group input-group-sm col-5">
+                                <input type="text" class="form-control" placeholder="	(наименование)	(степень знания)		">
+                            </div>
+                            <h5 class="col-2">по ОКИН</h5>
+                        </div>
+                        <div class="row mt-4 text-left">
+                            <h5 class="col-3">6. Образование</h5>
+                            <div class="input-group input-group-sm col-7">
+                                <input type="text" class="form-control" placeholder="(среднее (полное) общее, начальное профессиональное, среднее профессиональное, высшее профессиональное)">
+                            </div>
+                            <h5 class="col-2">по ОКИН</h5>
+                        </div>
                     </div>
                     <table class="table table-bordered col-2">
                     <thead>
                     <tr>
-                        <th scope="col"><h6>Код</h6></th>
+                        <th scope="col"><h4>Код</h4></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -151,7 +186,305 @@
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
+                    </table>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col"><h5>Наименование образовательного учреждения</h5></th>
+                        <th scope="col" colspan="3"><h5>Документ об образовании, о квалифи-кации или наличии специальных знаний</h5></th>
+                        <th scope="col"><h5>Год окончания</h5></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>наименование</td>
+                        <td>серия</td>
+                        <td>номер</td>
+                        <td rowspan="2">
+                            <div class="input-group input-group-lg mt-3">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Квалификация по документу об образовании</td>
+                        <td colspan="4">Направление или специальность по документу</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td colspan="4" rowspan="2">
+                            <div class="row">
+                                <div class="input-group input-group-lg col-9 mt-1">
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-3 mt-3">Код по ОКСО</div>
+                            </div>
+                        </td>
+                        <td rowspan="2">
+                            <div class="input-group input-group-lg mt-1">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col"><h5>Наименование образовательного учреждения</h5></th>
+                        <th scope="col" colspan="3"><h5>Документ об образовании, о квалифи-кации или наличии специальных знаний</h5></th>
+                        <th scope="col"><h5>Год окончания</h5></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>наименование</td>
+                        <td>серия</td>
+                        <td>номер</td>
+                        <td rowspan="2">
+                            <div class="input-group input-group-lg mt-3">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Квалификация по документу об образовании</td>
+                        <td colspan="4">Направление или специальность по документу</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td colspan="4" rowspan="2">
+                            <div class="row">
+                                <div class="input-group input-group-lg col-9 mt-1">
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-3 mt-3">Код по ОКСО</div>
+                            </div>
+                        </td>
+                        <td rowspan="2">
+                            <div class="input-group input-group-lg mt-1">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row mt-4 text-left">
+                    <h5 class="col-6">Послевузовское профессиональное образование</h5>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control" placeholder="(аспирантура, адъюнктура, докторантура)">
+                    </div>
+                    <h5 class="col-2">Код по ОКИН</h5>
+                    <div class="input-group input-group-sm col-1">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col"><h5>Наименование образовательного, научного учреждения</h5></th>
+                        <th scope="col"><h5>Документ об образовании, номер, дата выдачи</h5></th>
+                        <th scope="col"><h5>Год окончания</h5></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2">Направление или специальность по документу</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                        <td colspan="4" rowspan="2">
+                            <div class="row">
+                                <div class="input-group input-group-lg col-8 mt-1">
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-4 mt-3">Код по ОКСО</div>
+                            </div>
+                        </td>
+                        <td rowspan="2">
+                            <div class="input-group input-group-lg mt-1">
+                                <input type="text" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="column col-10 mt-5">
+                        <div class="row mt-4 text-left">
+                            <h5 class="col-3">7. Профессия</h5>
+                            <div class="input-group input-group-sm col-7">
+                                <input type="text" class="form-control" placeholder="(основная)">
+                            </div>
+                            <h5 class="col-2">по ОКПДТР</h5>
+                        </div>
+                        <div class="row mt-4 text-left">
+                            <h5 class="col-3"></h5>
+                            <div class="input-group input-group-sm col-7">
+                                <input type="text" class="form-control" placeholder="(другая)">
+                            </div>
+                            <h5 class="col-2">по ОКПДТР</h5>
+                        </div>
+                    </div>
+                    <table class="table table-bordered col-2">
+                        <thead>
+                        <tr>
+                            <th scope="col"><h4>Код</h4></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control">
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
                 <hr class="featurette-divider">
@@ -163,39 +496,4 @@
         </div>
     </div>
     <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
-
-    <div class="modal fade" id="job" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Новая вакансия</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body row text-center">
-                    <div class="col-md-6">
-                        <label for="Фамилия">Должность</label>
-                        <input type="text" class="form-control" id="Фамилия" name="surname" placeholder="Должность"
-                               required>
-                        <div class="invalid-feedback">
-                            Укажите должность
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="age">Зарплата</label>
-                        <input type="number" min="0" class="form-control" id="age" name="age" placeholder="Зарплата"
-                               required>
-                        <div class="invalid-feedback">
-                            Укажите зарплату
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-lg btn-block mx-5 mt-3 mb-2" type="submit" disabled>Добавить
-                        вакансию
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
