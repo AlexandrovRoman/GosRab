@@ -2,6 +2,7 @@ import datetime
 from flask_login import UserMixin
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.models import base_new
 
 roles_relationship = db.Table('roles_relationship',
                               db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -104,20 +105,12 @@ class User(db.Model, UserMixin):
     @staticmethod
     def new(surname, name, fathername, birth_year, birth_month, birth_day,
             age, email, password, sex, marriage, org_id, roles='user'):
-        user = User()
-        user.surname = surname
-        user.name = name
-        user.age = age
-        user.fathername = fathername
-        user.birth_date = datetime.date(birth_year, birth_month, birth_day)
-        user.sex = sex
-        user.email = email
-        user.marriage = marriage
-        user.set_password(password)
-        user.organization_foreign_id = org_id
-        User.add_roles(user, roles)
-        session.add(user)
-        session.commit()
+        kwargs = {"surname": surname, "name": name, "fathername": fathername,
+                  "birth_date": datetime.date(birth_year, birth_month, birth_day),
+                  "age": age, "email": email, "hashed_password": generate_password_hash(password),
+                  "sex": sex, "marriage": marriage, "organization_foreign_id": org_id}
+        special_commands = (f"cls.add_roles(obj, '{roles}')",)
+        base_new(User, special_commands, **kwargs)
 
     @staticmethod
     def add_roles(user, role_names):
@@ -138,11 +131,8 @@ class Role(db.Model):
 
     @staticmethod
     def new(name, description):
-        role = Role()
-        role.role_name = name
-        role.description = description
-        session.add(role)
-        session.commit()
+        kwargs = {"role_name": name, "description": description}
+        base_new(Role, **kwargs)
 
     def __repr__(self):
         return '<Role {}, Возможности:{}>'.format(self.role_name, self.description)
