@@ -1,5 +1,5 @@
 from users.models import Role
-from app import db, session
+from app import session
 
 session.query(Role).delete()
 Role.new('user', 'peasant')

@@ -1,11 +1,11 @@
-from utils.urls import path
+from utils.urls import relative_path
 from .views import organization, add_organization, organizations, menu_organization, job
 
 # Add your urls
 urlpatterns = [
-    path('job/', job),
-    path('profile/personnel/organization/', organization),
-    path('profile/organizations/', organizations),
-    path('profile/redact/add_organization/', add_organization),
-    path('profile/menu_organization/', menu_organization),
+    relative_path('job/', job),
+    relative_path('profile/personnel/organization/', organization),
+    relative_path('profile/organizations/', organizations),
+    relative_path('profile/redact/add_organization/', add_organization),
+    relative_path('profile/menu_organization/', menu_organization),
 ]

@@ -1,7 +1,7 @@
 from news.views import index
-from utils.urls import path
+from utils.urls import relative_path
 
 # Add your urls
 urlpatterns = [
-    path('', index),
+    relative_path('', index),
 ]

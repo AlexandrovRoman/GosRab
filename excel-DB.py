@@ -1,3 +1,5 @@
+# TODO: Move to scripts
+
 import openpyxl
 from users.models import User
 from news.models import News, Courses

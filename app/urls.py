@@ -1,7 +1,7 @@
-from utils.urls import path, include
+from utils.urls import add_relative_path, include
 
 urlpatterns = [
-    path('/users/', include('users.urls')),
-    path('/', include('news.urls')),
-    path('/organization/', include('organization.urls'))
+    add_relative_path('/users/', include('users.urls')),
+    add_relative_path('/', include('news.urls')),
+    add_relative_path('/organization/', include('organization.urls'))
 ]
