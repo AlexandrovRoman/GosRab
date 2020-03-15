@@ -1,5 +1,6 @@
-from app import db, session
+from app import db
 import datetime
+from app.models import base_new
 
 
 class News(db.Model):
@@ -23,12 +24,8 @@ class News(db.Model):
 
     @classmethod
     def new(cls, title, description, link='#'):
-        news = cls()
-        news.title = title
-        news.description = description
-        news.link = link
-        session.add(news)
-        session.commit()
+        kwargs = {"title": title, "description": description, "link": link}
+        base_new(cls, **kwargs)
 
 
 class Courses(db.Model):
@@ -50,9 +47,5 @@ class Courses(db.Model):
 
     @classmethod
     def new(cls, title, description, image_link):
-        course = cls()
-        course.title = title
-        course.description = description
-        course.image_link = image_link
-        session.add(course)
-        session.commit()
+        kwargs = {"title": title, "description": description, "image_link": image_link}
+        base_new(cls, **kwargs)

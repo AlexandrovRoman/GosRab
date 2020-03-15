@@ -1,6 +1,7 @@
-from app import db, session
+from app import db
 from datetime import datetime
 from sqlalchemy.orm import relationship
+from app.models import base_new
 
 
 class Organization(db.Model):
@@ -17,8 +18,5 @@ class Organization(db.Model):
 
     @classmethod
     def new(cls, name, date=datetime.now):
-        org = cls()
-        org.name = name
-        org.date = date
-        session.add(org)
-        session.commit()
+        kwargs = {"name": name, "date": date}
+        base_new(cls, **kwargs)
