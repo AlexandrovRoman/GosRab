@@ -2,6 +2,7 @@ from app import db, session
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from app.models import base_new
+from users.models import User
 
 
 class Organization(db.Model):
@@ -32,6 +33,13 @@ class Organization(db.Model):
         user.add_roles(['hr manager'])
         self.hr_managers.append(user)
 
+    def add_user(self, new_user_id):   # добавляет пользователя в организацию\
+        user = session.query(User).filter(User.id == new_user_id).first()
+        user.work_place_id = self.id
+
+    def delete_user(self, delete_user_id):   # удаляет пользователя из организации
+        user = session.query(User).filter(User.id == delete_user_id).first()
+        user.work_place_id = None
 
 class Department(db.Model):
     __tablename__ = 'departments'
