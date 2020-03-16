@@ -4,7 +4,7 @@ from app import app, config
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
-db migrate - миграция бд
+db migrate - миграция бды
 db upgrade - обновление бд
 db downgrade - откат миграции
 some methods:
@@ -18,12 +18,6 @@ new_default_user mail, password - создание пользователя с �
 
 # Кто удалит - у того рак яичка
 # https://getbootstrap.com/2.3.2/components
-
-# Выводит ОБЪЕКТЫ кадровиков и их пользователей, не удалять)
-# global_init()
-# session = create_session()
-# user = session.query(User).filter(User.id == 2).first()
-# print(user, user.personnel, user.users)
 
 manage.init_manage_and_app(app)
 manage.init_db_commands(config.models)
