@@ -9,10 +9,7 @@ db upgrade - обновление бд
 db downgrade - откат миграции
 some methods:
 runserver - запуск сервера
-startapp name - создание приложения name
-new_user_has_full_data surname, name, fathername, birth_year, birth_month, birth_day, age, email, password, sex - 
-создание пользователя с заданными параметрами
-new_default_user mail, password - создание пользователя с дефолтными параметрами
+startapp name - создание приложения name, возможно создания папки приложения с помощью флагов -t и -st
 """
 
 
