@@ -1,5 +1,5 @@
-from Flask_DJ import manage
-from Flask_DJ.app_init import add_urls
+from flask_dj import manage
+from flask_dj.app_init import add_urls
 from app import app, config
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/

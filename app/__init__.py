@@ -3,7 +3,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from Flask_DJ.app_init import create_session
+from flask_dj.app_init import create_session
 from .config import Config
 
 app = Flask('__main__')

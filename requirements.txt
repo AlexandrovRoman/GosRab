@@ -14,4 +14,4 @@ Flask-Login==0.5.0
 Flask-Admin==1.5.5
 openpyxl==3.0.3
 waitress==1.4.3
-Flask-DJ==1.0.0
+Flask-DJ==1.0.3

@@ -1,6 +1,6 @@
 # View only file
 from app import app
-from Flask_DJ import urls
+from flask_dj import urls
 
 _path = urls.Path(app)
 add_absolute_path = _path.add_absolute_path
