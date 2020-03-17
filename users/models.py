@@ -52,45 +52,6 @@ class User(db.Model, UserMixin):
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
                 'About_myself': self.about_myself}
 
-    def get_organizations(self):  # Наименование, Рабочие, Вакансии, id организации
-        return [('Хлебобулочный комбинат', 0, 0, 1),
-                ('ПФР пром. района', 1000, 500, 2),
-                ('Автосервис Михаил-авто', 666, 69, 3)]
-
-    def get_organization(self, org_id):  # todo Поменять заглушки на что-то рабочее
-        if org_id is None:
-            return None
-        if org_id not in ['1', '2', '3']:  # Если пользователь не состоит в этой организации
-            return None
-        # Вернуть в зависимость от org_id
-        return 1, 'ИП', 'Автосервис Михаил-авто', 'Ноябрь 2018', 'Тех. обслуживание; проверка авто перед покупкой; ремонтнык работы любой сложности.', 'Путь к картинке'
-
-    def get_organization_department(self, org_id):  # todo Поменять заглушки на что-то рабочее
-        if org_id is None:
-            return None
-        if org_id not in ['1', '2', '3']:  # Если пользователь не состоит в этой организации
-            return None
-        # Вернуть в зависимость от org_id
-        return {
-            'desc': (1, 'Автосервис Михаил-авто'),
-            'personnel': [
-                ('Васильев Оливер Юхимович', 25000, -1),  # ФИО, Зарплата, user_id
-                ('Мамонтов Данила Михайлович', 26000, -1),
-            ],
-            'workers': [
-                ('Федункив Сава Богданович', 'Управляющий', 30000, -1),  # ФИО, Должность, Зарплата, user_id
-                ('Бирюков Мирослав Васильевич', 'Главный механик', 35000, -1),
-            ],
-            'required_workers': [
-                ('Механик', 30000),  # Должность, Зарплата
-            ],
-        }
-
-    def get_organization_list(self):  # todo Поменять заглушки на что-то рабочее
-        return [
-            (1, 'ИП', 'Автосервис Михаил-авто', 'Ноябрь 2018', 'Тех. обслуживание; проверка авто перед покупкой; ремонтнык работы любой сложности.', 'Путь к картинке')
-        ]
-
     @staticmethod
     def get_logged(login, password):
         user = session.query(User).filter(User.email == login).first()

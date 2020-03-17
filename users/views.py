@@ -1,6 +1,7 @@
 from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
+from organization.models import Organization
 from users.models import User
 
 
@@ -70,12 +71,16 @@ def logout():
 
 
 def personnel():
-    organizations = current_user.get_organizations()
-    workers = sum((i[1] for i in organizations))
-    vacancy = sum((i[2] for i in organizations))
+    org = Organization.get_attached_to_personnel(current_user)
+    if org is None:
+        return 'Не привязан ни к одной'
+    organization_info = {
+        'desc': org.get_base_info(),
+        'workers': org.get_workers(),
+        'required_workers': org.get_required_workers(),
+    }
 
-    return render_template('users/personnel.html', organizations=organizations,
-                           stats=(workers, vacancy))
+    return render_template('users/personnel.html', **organization_info, len=len)
 
 
 def education():
@@ -97,4 +102,9 @@ def registration():
 
 
 def t2():
+    user_id = request.args['user_id']
+    user = current_user
+    if False:  # Если не обладает правами кадровика над человеком с user_id
+        return 'Нет доступа к форме этого пользователя'
+
     return render_template("users/T2.html")

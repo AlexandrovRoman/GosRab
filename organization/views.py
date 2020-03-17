@@ -1,11 +1,15 @@
 from flask import render_template, request
 from flask_login import current_user
 
+from app import session
+from organization.models import Organization
+
 
 def organizations():
-    orgs = current_user.get_organization_list()
+    orgs = Organization.get_attached_to_user(current_user)
+    org_list = [org.get_full_info() for org in orgs]
 
-    return render_template("organization/organizations.html", orgs=orgs)
+    return render_template("organization/organizations.html", orgs=org_list)
 
 
 def add_organization():
@@ -13,17 +17,32 @@ def add_organization():
 
 
 def menu_organization():
-    organization_info = current_user.get_organization(request.args.get('org_id'))
-    if organization_info is None:
+    org_id = request.args.get('org_id')
+    if not org_id.isdigit():
+        return 'org_id должен быть числом'
+    org = Organization.get_by_id(current_user, int(org_id))
+    if org is None:
         return 'Нет доступа'
 
-    return render_template("organization/menu_organization.html", org=organization_info)
+    org_info = org.get_full_info()
+
+    return render_template("organization/menu_organization.html", org=org_info)
 
 
 def personnel_department():
-    organization_info = current_user.get_organization_department(request.args.get('org_id'))
-    if organization_info is None:
+    org_id = request.args.get('org_id')
+    if not org_id.isdigit():
+        return 'org_id должен быть числом'
+    org = Organization.get_by_id(current_user, int(org_id))
+    if org is None:
         return 'Нет доступа'
+
+    organization_info = {
+        'desc': org.get_base_info(),
+        'personnel': org.get_personnel(),
+        'workers': org.get_workers(),
+        'required_workers': org.get_required_workers(),
+    }
 
     return render_template("personnel_department.html", **organization_info, len=len)
 
@@ -40,9 +59,9 @@ def job():
     ]
     return render_template("organization/job.html", jobs=enumerate(jobs, 1))
 
-
-def organization():
-    organization_info = current_user.get_organization(request.args.get('organization'))
-    if organization_info is None:
-        return 'Нет доступа'
-    return render_template("organization/organization.html", **organization_info)
+#
+# def organization():
+#     organization_info = current_user.get_organization(request.args.get('organization'))
+#     if organization_info is None:
+#         return 'Нет доступа'
+#     return render_template("organization/organization.html", **organization_info)
