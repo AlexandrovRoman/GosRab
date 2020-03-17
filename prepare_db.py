@@ -1,9 +1,9 @@
 import os
 import argparse
 import sys
-from news.models import News, Courses
+from news.models import HotNews, News
 from organization.models import Organization
-from users.models import User
+from users.models import User, Course
 from utils.excel_DB import export_from_excel
 from utils.set_roles import create_roles
 
@@ -18,8 +18,9 @@ def confirm(msg):
 def create_test_models():
     export_from_excel('test_models/orgs.xlsx', Organization.new)
     export_from_excel('test_models/users.xlsx', User.new)
+    export_from_excel('test_models/hot_news.xlsx', HotNews.new)
     export_from_excel('test_models/news.xlsx', News.new)
-    export_from_excel('test_models/courses.xlsx', Courses.new)
+    export_from_excel('test_models/courses.xlsx', Course.new)
 
 
 parser = argparse.ArgumentParser()

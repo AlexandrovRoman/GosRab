@@ -3,8 +3,8 @@ import datetime
 from app.models import base_new
 
 
-class News(db.Model):
-    __tablename__ = 'news_table'
+class HotNews(db.Model):
+    __tablename__ = 'hot_news'
 
     id = db.Column(db.Integer,
                    primary_key=True, autoincrement=True)
@@ -28,8 +28,8 @@ class News(db.Model):
         base_new(cls, **kwargs)
 
 
-class Courses(db.Model):
-    __tablename__ = 'courses_table'
+class News(db.Model):
+    __tablename__ = 'news'
 
     id = db.Column(db.Integer,
                    primary_key=True, autoincrement=True)

@@ -52,31 +52,31 @@ class User(db.Model, UserMixin):
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
                 'About_myself': self.about_myself}
 
-    @staticmethod
-    def get_logged(login, password):
-        user = session.query(User).filter(User.email == login).first()
+    @classmethod
+    def get_logged(cls, login, password):
+        user = session.query(cls).filter(cls.email == login).first()
         if user and user.check_password(password):
             return user
         return None
 
-    @staticmethod
-    def get(user_id):
-        return session.query(User).filter(User.id == user_id).first()
+    @classmethod
+    def get(cls, user_id):
+        return session.query(cls).filter(cls.id == user_id).first()
 
-    @staticmethod
-    def new(surname, name, fathername, birth_year, birth_month, birth_day,
+    @classmethod
+    def new(cls, surname, name, fathername, birth_year, birth_month, birth_day,
             age, email, password, sex, marriage, org_id, roles='user'):
         kwargs = {"surname": surname, "name": name, "fathername": fathername,
                   "birth_date": datetime.date(birth_year, birth_month, birth_day),
                   "age": age, "email": email, "hashed_password": generate_password_hash(password),
                   "sex": sex, "marriage": marriage, "organization_foreign_id": org_id}
         special_commands = (f"cls.add_roles(obj, '{roles}')",)
-        base_new(User, special_commands, **kwargs)
+        base_new(cls, special_commands, **kwargs)
 
     @staticmethod
     def add_roles(user, role_names):
         for role_name in role_names.split():
-            role = Role.query.filter_by(role_name=role_name).first()
+            role = Role.get_role_for_name(role_name)
             local_session_role = session.merge(role)
             user.roles.append(local_session_role)
         session.commit()
@@ -90,13 +90,39 @@ class Role(db.Model):
     role_name = db.Column(db.String(20), unique=True)
     description = db.Column(db.String(200))
 
-    @staticmethod
-    def new(name, description):
+    @classmethod
+    def new(cls, name, description):
         kwargs = {"role_name": name, "description": description}
-        base_new(Role, **kwargs)
+        base_new(cls, **kwargs)
 
     def __repr__(self):
         return '<Role {}, Возможности:{}>'.format(self.role_name, self.description)
+
+    @classmethod
+    def get_role_for_name(cls, role_name):
+        return cls.query.filter_by(role_name=role_name).first()
+
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    course_type = db.Column(db.String(20))
+    course_name = db.Column(db.String(70))
+    data = db.Column(db.String(20))  # TODO: сделать в формате начало - конец
+    description = db.Column(db.String)
+    image = db.Column(db.String(20))  # TODO: хранить картинку в юазе данных
+
+    @classmethod
+    def new(cls, course_type, name, data, description, image):
+        kwargs = {"course_type": course_type, "course_name": name,
+                  "data": data, "description": description, "image": image}
+        base_new(cls, **kwargs)
+
+    @classmethod
+    def get_courses(cls):
+        courses = [(obj.course_type, obj.course_name, obj.data, obj.description, obj.image) for obj in cls.query.all()]
+        return courses
 
 
 # ЭТО ЗАГЛУШКА НЕ УДАЛЯТЬ

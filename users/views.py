@@ -2,7 +2,7 @@ from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
-from users.models import User
+from users.models import User, Course
 
 
 @login_manager.user_loader
@@ -84,13 +84,7 @@ def personnel():
 
 
 def education():
-    return render_template("users/education.html", courses=[
-        ('Курсы', 'Яндекс Лицей', 'Сентябрь 2018', 'Обучение програмированию на языке Python на базе компании Яндекс.',
-         'icon/yandex.jpg'),
-        ('Онлайн обучение', 'Super-English', 'Февраль 2020',
-         'Изучение английского языка с нуля, до свободного общения вместе с Петровой Оксаной Сергеевной.',
-         'icon/English.jpg'),
-    ])
+    return render_template("users/education.html", courses=Course.get_courses())
 
 
 def notification():
