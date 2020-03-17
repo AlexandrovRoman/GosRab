@@ -70,12 +70,18 @@ def logout():
 
 
 def personnel():
-    organizations = current_user.get_organizations()
-    workers = sum((i[1] for i in organizations))
-    vacancy = sum((i[2] for i in organizations))
+    organizations = {
+            'desc': (1, 'Автосервис Михаил-авто'),
+            'workers': [
+                ('Федункив Сава Богданович', 'Управляющий', 30000, -1),  # ФИО, Должность, Зарплата, user_id
+                ('Бирюков Мирослав Васильевич', 'Главный механик', 35000, -1),
+            ],
+            'required_workers': [
+                ('Механик', 30000),  # Должность, Зарплата
+            ],
+        }
 
-    return render_template('users/personnel.html', organizations=organizations,
-                           stats=(workers, vacancy))
+    return render_template('users/personnel.html', **organizations, len=len)
 
 
 def education():
@@ -97,4 +103,9 @@ def registration():
 
 
 def t2():
+    user_id = request.args['user_id']
+    user = current_user
+    if False:  # Если не обладает правами кадровика над человеком с user_id
+        return 'Нет доступа к форме этого пользователя'
+
     return render_template("users/T2.html")

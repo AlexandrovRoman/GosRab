@@ -6,18 +6,22 @@
         <div class="row justify-content-center">
             <div class="card col-11 col-sm-11 col-md-11 col-lg-11 col-xl-12 shadow-lg">
                 <h1 class="font-weight-normal text-center mt-3">Кадровый отдел организации</h1>
-                <div class="progress m-3">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                         style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">66%
+                {% set stats_sum = len(workers) + len(required_workers) %}
+                {% if stats_sum != 0 %}
+                    {% set percent = len(workers) * 100 // stats_sum %}
+                    <div class="progress m-3">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                             style="width: {{ percent }}%" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">{{ percent }}%
+                        </div>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
+                             style="width: {{ 100 - percent }}%" aria-valuenow="{{ 100 - percent }}" aria-valuemin="0" aria-valuemax="100">{{ 100 - percent }}%
+                        </div>
                     </div>
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar"
-                         style="width: 34%" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100">34%
-                    </div>
-                </div>
+                {% endif %}
                 <div class="row">
                     <div class="column col-md-6">
                         <div class="row mx-3">
-                        <h5 class="card-text font-weight-normal">Общее количество рабочих: 2</h5>
+                        <h5 class="card-text font-weight-normal">Общее количество рабочих: {{ len(workers) }}</h5>
                         <div class="progress mt-1" style="width: 20px">
                             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                                  style="width: 100%">
@@ -25,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row mx-3">
-                        <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: 1</h5>
+                        <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: {{ len(required_workers) }}</h5>
                         <div class="progress mt-1" style="width: 20px">
                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
                                  role="progressbar" style="width: 100%"></div>
@@ -51,19 +55,16 @@
                        </tr>
                        </thead>
                        <tbody>
-                       <tr>
-                           <td>Федункив Сава Богданович</td>
-                           <td>Управляющий</td>
-                           <td>30.000₽</td>
+                       {% for employ in workers %}
+                           <tr>
+                           <td>{{ employ[0] }}</td>
+                           <td>{{ employ[1] }}</td>
+                           <td>{{ employ[2] }}₽</td>
                            <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Т2</button></td>
                            <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Перейти</button></td>
-                       </tr>
-                       <tr>
-                           <td>Бирюков Мирослав Васильевич</td>
-                           <td>Главный механик</td>
-                           <td>35.000₽</td>
-                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Т2</button></td>
-                           <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Перейти</button></td>
+                           </tr>
+
+                       {% endfor %}
                        </tbody>
                    </table>
                </details>
@@ -78,11 +79,11 @@
                          </tr>
                          </thead>
                          <tbody>
-                         <tr>
-                             <td>Механик</td>
-                             <td>25000₽</td>
+                         {% for employ in required_workers %}
+                             <td>{{ employ[0] }}</td>
+                             <td>{{ employ[1] }}₽</td>
                              <td><button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>Поиск сотрудника</button></td>
-                         </tr>
+                         {% endfor %}
                          </tbody>
                      </table>
                  </details>
