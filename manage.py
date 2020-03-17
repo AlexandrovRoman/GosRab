@@ -27,6 +27,8 @@ manage.manager.option("--templates", "-t", action="store_true")(
 @manage.manager.command
 def runserver():
     add_urls(config.urlpatterns)
+    if not app.debug:
+        print(f"Correct url: http://{config.HOST}:{config.PORT}/")
     manage.runserver(config.HOST, config.PORT)
 
 
