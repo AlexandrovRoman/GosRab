@@ -901,6 +901,311 @@
                     </div>
                     <h5>г.</h5>
                 </div>
+                <h3 class="mt-3">III. ПРИЕМ НА РАБОТУ</h3>
+                <h3> И ПЕРЕВОДЫ НА ДРУГУЮ РАБОТУ</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tr>
+                        <th scope="col"><h5>Дата</h5></th>
+                        <th scope="col"><h5>Структурное подразделение</h5></th>
+                        <th scope="col"><h5>Должность (специальность, профессия), разряд, класс (категория) квалификации</h5></th>
+                        <th scope="col"><h5>Тарифная ставка (оклад), надбавка, руб.</h5></th>
+                        <th scope="col"><h5>Основание</h5></th>
+                        <th scope="col"><h5>Личная подпись владельца трудовой книжки</h5></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                    </tr>
+                    {% for i in range(13) %}
+                        <tr>
+                            {% for i in range(6) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">IV. АТТЕСТАЦИЯ</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="2"><h5 class="mt-5">Дата аттестации</h5></td>
+                        <td rowspan="2"><h5 class="mt-4">Решение комиссии</h5></td>
+                        <td colspan="2"><h5>Документ (протокол)</h5></td>
+                        <td rowspan="2"><h5 class="mt-3">Основание</h5></td>
+                    </tr>
+                    <tr>
+                        <td>номер</td>
+                        <td>дата</td>
+                    </tr>
+                    <tr>
+                        {% for i in range(5) %}
+                            <td>{{ i + 1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for i in range(6) %}
+                        <tr>
+                            {% for i in range(5) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">V. ПОВЫШЕНИЕ КВАЛИФИКАЦИИ</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="2"><h5>Дата</h5></td>
+                        <td rowspan="2"><h5>Вид повышения квалификации</h5></td>
+                        <td rowspan="2"><h5>Наименование образовательного учреждения, место его нахождения</h5></td>
+                        <td colspan="3"><h5>Документ (удостоверение, свидетельство)</h5></td>
+                        <td rowspan="2"><h5>Основание</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>начала обучения</h5></td>
+                        <td><h5>окончания обучения</h5></td>
+                        <td><h5>наименование</h5></td>
+                        <td><h5>серия, номер</h5></td>
+                        <td><h5>дата</h5></td>
+                    </tr>
+                    <tr>
+                        {% for i in range(8) %}
+                            <td>{{ i + 1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for i in range(6) %}
+                        <tr>
+                            {% for i in range(8) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">VI. ПРОФЕССИОНАЛЬНАЯ ПЕРЕПОДГОТОВКА</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="2"><h5>Дата</h5></td>
+                        <td rowspan="2"><h5>Специальность (направление, профессия)</h5></td>
+                        <td colspan="3"><h5>Документ (удостоверение, свидетельство)</h5></td>
+                        <td rowspan="2"><h5>Основание</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>начала переподготовки</h5></td>
+                        <td><h5>окончания переподготовки</h5></td>
+                        <td><h5>наименование</h5></td>
+                        <td><h5>номер</h5></td>
+                        <td><h5>дата</h5></td>
+                    </tr>
+                    <tr>
+                        {% for i in range(7) %}
+                            <td>{{ i + 1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for i in range(4) %}
+                        <tr>
+                            {% for i in range(7) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">VII. НАГРАДЫ (ПООЩРЕНИЯ), ПОЧЕТНЫЕ ЗВАНИЯ</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="2"><h5>Наименование награды (поощрения)</h5></td>
+                        <td colspan="3"><h5>Документ</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>наименование</h5></td>
+                        <td><h5>номер</h5></td>
+                        <td><h5>дата</h5></td>
+                    </tr>
+                    <tr>
+                        {% for i in range(4) %}
+                            <td>{{ i + 1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for i in range(4) %}
+                        <tr>
+                            {% for i in range(4) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">VIII. ОТПУСК</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="2"><h5>Вид отпуска (ежегодный, учебный, без сохранения заработной платы и др.)</h5></td>
+                        <td colspan="2"><h5>Период работы</h5></td>
+                        <td rowspan="2"><h5>Количество календарных дней отпуска</h5></td>
+                        <td colspan="2"><h5>Дата</h5></td>
+                        <td rowspan="2"><h5>Основание</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>с</h5></td>
+                        <td><h5>по</h5></td>
+                        <td><h5>начала</h5></td>
+                        <td><h5>окончания</h5></td>
+                    </tr>
+                    <tr>
+                        {% for i in range(7) %}
+                            <td>{{ i + 1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for i in range(4) %}
+                        <tr>
+                            {% for i in range(7) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">IX. СОЦИАЛЬНЫЕ ЛЬГОТЫ</h3>
+                <h3>на которые работник имеет право в соответствии с законодательством</h3>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                    <tbody>
+                    <tr>
+                        <td rowspan="2"><h5>Наименование льготы</h5></td>
+                        <td colspan="2"><h5>Документ</h5></td>
+                        <td rowspan="2"><h5>Основание</h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>номер</h5></td>
+                        <td><h5>дата выдачи</h5></td>
+                    </tr>
+                    <tr>
+                        {% for i in range(4) %}
+                            <td>{{ i + 1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% for i in range(6) %}
+                        <tr>
+                            {% for i in range(4) %}
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <h3 class="mt-3">X. ДОПОЛНИТЕЛЬНЫЕ СВЕДЕНИЯ</h3>
+                <div class="column">
+                {% for i in range(5) %}
+                    <div class="input-group input-group-sm my-1">
+                        <input type="text" class="form-control">
+                    </div>
+                {% endfor %}
+                </div>
+                <h5 class="text-left font-weight-bold mt-3">XI. Основание прекращения</h5>
+                <div class="row mt-1">
+                    <h5 class="text-left font-weight-bold col-4">трудового договора (увольнения)</h5>
+                    <div class="input-group input-group-sm col-8">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="row mt-3 text-left ml-1">
+                    <h5>Дата увольнения “</h5>
+                    <div class="input-group input-group-sm col-1">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>”</h5>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>20</h5>
+                    <div class="input-group input-group-sm col-1">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>г.</h5>
+                </div>
+                <div class="row mt-3 text-left ml-1">
+                    <h5>Приказ (распоряжение) №</h5>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>от “</h5>
+                    <div class="input-group input-group-sm col-1">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>”</h5>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>20</h5>
+                    <div class="input-group input-group-sm col-1">
+                        <input type="text" class="form-control">
+                    </div>
+                    <h5>г.</h5>
+                </div>
+                <div class="row mt-3">
+                    <h5 class="text-left font-weight-bold col-4">Работник кадровой службы</h5>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control" placeholder="(должность)">
+                    </div>
+                    <div class="input-group input-group-sm col-2">
+                        <input type="text" class="form-control" placeholder="(личная подпись)">
+                    </div>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control" placeholder="(расшифровка подписи)">
+                    </div>
+                </div>
+                <div class="row mt-3 ml-1">
+                    <h5 class="text-left font-weight-bold">Работник</h5>
+                    <div class="input-group input-group-sm col-3">
+                        <input type="text" class="form-control" placeholder="(личная подпись)">
+                    </div>
+                </div>
+                <hr class="featurette-divider">
+                <button class="btn btn-primary btn-lg btn-block my-3" type="submit">Приенить изменения</button>
                 <hr class="featurette-divider">
                 <footer class="container text-left">
                     <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
