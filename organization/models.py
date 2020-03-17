@@ -17,17 +17,18 @@ class Organization(db.Model):
     hr_managers = relationship("User", backref='hr_department')
 
     def __repr__(self):
-        return f'<Organisation {self.name}>'
+        return f'<Organization {self.name}>'
 
     @classmethod
-    def get_attached_to_personnel(cls, user):  # todo Вернуть организацию, к которой привязан кадровик
-        return session.query(cls).all().pop()
+    def get_attached_to_personnel(cls, user):  # Возвращает организацию, к которой привязан кадровик
+        return session.query(cls).filter(cls.id == user.work_place_id).first()
 
     @classmethod
-    def get_by_id(cls, user, org_id: int):  # todo Вернуть организацию под org_id,
+    def get_by_id(cls, user, org_id: int):  # Возвращает организацию под org_id,
+        org = session.query(cls).filter(cls.id == org_id).first()
         if False:  # todo если пользователь ею не владеет
             return None
-        return session.query(cls).all().pop()
+        return org
 
     @classmethod
     def get_attached_to_user(cls, user):  # todo Вернуть организации, которыми обладает пользователь
@@ -47,33 +48,28 @@ class Organization(db.Model):
         user.add_roles(['hr manager'])
         self.hr_managers.append(user)
 
-    def add_user(self, new_user_id):  # добавляет пользователя в организацию\
+    def add_user(self, new_user_id):  # добавляет пользователя в организацию
         user = session.query(User).filter(User.id == new_user_id).first()
         user.work_place_id = self.id
 
-    def get_base_info(self):  # id, название
-        return 1, 'Автосервис Михаил-авто'
+    def get_base_info(self):
+        return self.id, self.name
 
-    def get_full_info(self):  # id, название
-        return 1, 'ИП', 'Автосервис Михаил-авто', 'Ноябрь 2018', \
-               'Тех. обслуживание; проверка авто перед покупкой; ремонтнык работы любой сложности.', 'Путь к картинке'
+    def get_full_info(self):
+        return self.id, 'Не поддерживается тип организаций', self.name, self.creation_date, 'Описание', 'Путь к картинке'
 
-    def get_required_workers(self):
+    def get_required_workers(self): # todo Добавить список требуемых работников организации
         return [
-            ('Механик', 30000),  # Должность, Зарплата
+            ('Механик', 30000),  
         ]
 
-    def get_personnel(self):
-        return [
-            ('Васильев Оливер Юхимович', 25000, -1),  # ФИО, Зарплата, user_id
-            ('Мамонтов Данила Михайлович', 26000, -1),
-        ]
+    def get_personnel(self): # todo Добавить зарплату и должность в юзера
+        return [(hr.surname + hr.name + hr.fathername,
+                 'Не поддерживается зарплата', hr.id) for hr in self.hr_managers]
 
     def get_workers(self):
-        return [
-            ('Федункив Сава Богданович', 'Управляющий', 30000, -1),  # ФИО, Должность, Зарплата, user_id
-            ('Бирюков Мирослав Васильевич', 'Главный механик', 35000, -1),
-        ]
+        return [(worker.surname + worker.name + worker.fathername, 'Не поддерживается должность',
+                 'Не поддерживается зарплата', worker.id) for worker in self.employees]
 
     def delete_user(self, delete_user_id):  # удаляет пользователя из организации
         user = session.query(User).filter(User.id == delete_user_id).first()
