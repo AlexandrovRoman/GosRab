@@ -19,19 +19,19 @@ class Organization(db.Model):
     def __repr__(self):
         return f'<Organisation {self.name}>'
 
-    @staticmethod
-    def get_attached_to_personnel(user):  # todo Вернуть организацию, к которой привязан кадровик
-        return session.query(Organization).all().pop()
+    @classmethod
+    def get_attached_to_personnel(cls, user):  # todo Вернуть организацию, к которой привязан кадровик
+        return session.query(cls).all().pop()
 
-    @staticmethod
-    def get_by_id(user, org_id: int):  # todo Вернуть организацию под org_id,
+    @classmethod
+    def get_by_id(cls, user, org_id: int):  # todo Вернуть организацию под org_id,
         if False:  # todo если пользователь ею не владеет
             return None
-        return session.query(Organization).all().pop()
+        return session.query(cls).all().pop()
 
-    @staticmethod
-    def get_attached_to_user(user):  # todo Вернуть организации, которыми обладает пользователь
-        return session.query(Organization).all()
+    @classmethod
+    def get_attached_to_user(cls, user):  # todo Вернуть организации, которыми обладает пользователь
+        return session.query(cls).all()
 
     @classmethod
     def new(cls, name, date=datetime.now):
