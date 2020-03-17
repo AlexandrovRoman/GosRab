@@ -1,6 +1,7 @@
 from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
+from organization.models import Organization
 from users.models import User
 
 
@@ -70,18 +71,16 @@ def logout():
 
 
 def personnel():
-    organizations = {
-            'desc': (1, 'Автосервис Михаил-авто'),
-            'workers': [
-                ('Федункив Сава Богданович', 'Управляющий', 30000, -1),  # ФИО, Должность, Зарплата, user_id
-                ('Бирюков Мирослав Васильевич', 'Главный механик', 35000, -1),
-            ],
-            'required_workers': [
-                ('Механик', 30000),  # Должность, Зарплата
-            ],
-        }
+    org = Organization.get_attached_to_personnel(current_user)
+    if org is None:
+        return 'Не привязан ни к одной'
+    organization_info = {
+        'desc': org.get_base_info(),
+        'workers': org.get_workers(),
+        'required_workers': org.get_required_workers(),
+    }
 
-    return render_template('users/personnel.html', **organizations, len=len)
+    return render_template('users/personnel.html', **organization_info, len=len)
 
 
 def education():
