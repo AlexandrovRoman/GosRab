@@ -9,7 +9,7 @@
             {% endfor %}
         </ol>
         <div class="carousel-inner">
-            {% for i in news %}
+            {% for i in hot_news %}
                 <div class="carousel-item {% if loop.first %} active {% endif %}">
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                          preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
@@ -78,13 +78,13 @@
 
         <hr class="featurette-divider">
 
-        {% for course in courses %}
+        {% for new in news %}
             <div class="row featurette">
                 <div class="col-md-7{% if loop.index0 % 2 == 1 %} order-md-2 {% endif %}">
-                    <h2 class="featurette-heading">{{ course[0] }}</h2>
-                    <p class="lead">{{ course[1] }}</p>
+                    <h2 class="featurette-heading">{{ new[0] }}</h2>
+                    <p class="lead">{{ new[1] }}</p>
                 </div>
-                <div class="col"><img src="{{ course[2] }}" alt="" class="w-100">
+                <div class="col"><img src="{{ new[2] }}" alt="" class="w-100">
                 </div>
             </div>
 
