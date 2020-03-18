@@ -31,7 +31,7 @@ def edit_profile():
         current_user.email = request.form['email']
         current_user.sex = request.form['gender']
         current_user.marriage = request.form['maritalstatus']
-        # current_user.about = request.form['aboutmyself'] Отсутствует столбец
+        current_user.about_myself = request.form['aboutmyself']
 
         session.merge(current_user)
         session.commit()

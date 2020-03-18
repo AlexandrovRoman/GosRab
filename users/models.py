@@ -31,7 +31,7 @@ class User(db.Model, UserMixin):
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
     # organization info
-    salary =  db.Column(db.Integer, nullable=True)
+    salary = db.Column(db.Integer, nullable=True)
     post = db.Column(db.String, nullable=True)
     work_place_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
     work_department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=True)
@@ -52,7 +52,7 @@ class User(db.Model, UserMixin):
                 'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,
                 'Education': self.education, 'Marital_status': self.marriage,
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
-                'About_myself': self.about_myself}
+                'About_myself': self.about_myself, 'Workplace': 'Автосервис Михаил-авто(отдел продаж) - Глав.Менеджер'}
 
     @classmethod
     def get_logged(cls, login, password):
