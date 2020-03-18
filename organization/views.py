@@ -57,7 +57,20 @@ def job():
         ('Автосервис Михаил - авто', 'Маляр', 33000),
         ('Автосервис Михаил - авто', 'Главный механик', 35000),
     ]
-    return render_template("organization/job.html", jobs=enumerate(jobs, 1))
+    res = []
+    filters = {
+        'organization': 0,
+        'position': 1,
+        'salary': 2,
+    }
+    for _job in jobs:
+        for param, index in filters.items():
+            p = request.args.get(param)
+            if p and str(_job[index]) != p:
+                break
+        else:
+            res.append(_job)
+    return render_template("organization/job.html", jobs=res, filters=request.args)
 
 #
 # def organization():
