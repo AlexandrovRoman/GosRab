@@ -1,23 +1,6 @@
 {% set title = "Личный профиль" %}
-{% extends "base.html" %}
-{% block content %}
-  <hr class="featurette-divider m-5">
-
-  <div class="container marketing">
-    <div class="row justify-content-center">
-              <div class="column mt-5 col-9 col-sm-9 col-md-4 col-lg-3 col-xl-3">
-                  <p><a class="btn btn-lg btn-primary col-12" href="/users/profile" role="button">Профиль</a></p>
-                  <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/redact" role="button">Редактирование</a></p>
-                  <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/notification/" role="button">Уведомления</a></p>
-                  <hr class="featurette-divider my-4">
-                  <p><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти</a></p>
-                  <p><a class="btn btn-lg btn-primary disabled col-12" href=# role="button">Удалить</a></p>
-                  <hr class="featurette-divider my-4">
-                  {% if hasAttached %}
-                      <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/personnel" role="button">Отдел кадров</a></p>
-                  {% endif %}
-                  <p><a class="btn btn-lg btn-primary col-12" href="/organization/profile/organizations" role="button">Организации</a></p>
-              </div>
+{% extends "users/user_button.html" %}
+{% block user_content %}
               <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9" style="background-color: whitesmoke">
                   <div class="row">
                       <div class="order-md-2 mt-4 mb-4 col-12 col-sm-12 col-md-12 col-lg-11 col-xl-7">
@@ -40,14 +23,4 @@
                   <h4 class="mb-3">Работа: Автосервис Михаил-авто(отдел продаж) - Глав.Менеджер</h4>
                   <h4 class="mb-3">Знание иностранных язаков: {{ Knowledge_of_foreign_language }}</h4>
                   <h4 class="mb-3">Информация о себе: {{ About_myself }}</h4>
-                  <hr class="featurette-divider">
-                  <footer class="row justify-content-between m-4">
-                      <p>&copy; SAMARA-CORPARATION</p>
-                      <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
-                  </footer>
-                  </div>
-                  </div><!-- /.container -->
-              </div>
-          </div>
-  </div>
 {% endblock %}
