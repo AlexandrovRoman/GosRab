@@ -13,7 +13,9 @@ def load_user(user_id):
 @login_required
 def profile():
     user = current_user
-    return render_template('users/profile.html', **user.get_profile_info)
+    info = user.get_profile_info
+    info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
+    return render_template('users/profile.html', **info)
 
 
 @login_required
