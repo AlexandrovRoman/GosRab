@@ -37,7 +37,10 @@ def edit_profile():
         session.commit()
 
         return redirect(url_for('profile'))
-    return render_template('users/edit_profile.html', **user.get_profile_info)
+    info = user.get_profile_info
+    info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
+
+    return render_template('users/edit_profile.html', **info)
 
 
 @login_required
@@ -90,7 +93,11 @@ def education():
 
 
 def notification():
-    return render_template("users/notifications.html")
+    user = current_user
+    info = user.get_profile_info
+    info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
+
+    return render_template('users/notifications.html', **info)
 
 
 def registration():
