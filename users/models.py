@@ -31,6 +31,9 @@ class User(db.Model, UserMixin):
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
     # organization info
+    salary =  db.Column(db.Integer, nullable=True)
+    post = db.Column(db.String, nullable=True)
+    your_organizations = db.relationship("Organization", backref='users')
     work_place_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
     work_department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=True)
     roles = db.relationship('Role', secondary=roles_relationship, backref=db.backref('users', lazy='dynamic'))
