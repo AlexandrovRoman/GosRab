@@ -96,9 +96,9 @@ def registration():
 
 
 def t2():
-    user_id = request.args['user_id']
-    user = current_user
-    if False:  # Если не обладает правами кадровика над человеком с user_id
-        return 'Нет доступа к форме этого пользователя'
+    # user_id = request.args['user_id']
+    # user = current_user
+    # if False:  # Если не обладает правами кадровика над человеком с user_id
+    #     return 'Нет доступа к форме этого пользователя'
 
     return render_template("users/T2.html")
