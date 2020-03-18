@@ -58,18 +58,18 @@ class Organization(db.Model):
     def get_full_info(self):
         return self.id, 'Не поддерживается тип организаций', self.name, self.creation_date, 'Описание', 'Путь к картинке'
 
-    def get_required_workers(self): # todo Добавить список требуемых работников организации
+    def get_required_workers(self):  # todo Добавить список требуемых работников организации
         return [
-            ('Механик', 30000),  
+            ('Механик', 30000),
         ]
 
-    def get_personnel(self): # todo Добавить зарплату и должность в юзера
+    def get_personnel(self):
         return [(hr.surname + hr.name + hr.fathername,
-                 'Не поддерживается зарплата', hr.id) for hr in self.hr_managers]
+                 hr.salary, hr.id) for hr in self.hr_managers]
 
     def get_workers(self):
-        return [(worker.surname + worker.name + worker.fathername, 'Не поддерживается должность',
-                 'Не поддерживается зарплата', worker.id) for worker in self.employees]
+        return [(worker.surname + worker.name + worker.fathername, worker.post,
+                 worker.salary, worker.id) for worker in self.employees]
 
     def delete_user(self, delete_user_id):  # удаляет пользователя из организации
         user = session.query(User).filter(User.id == delete_user_id).first()
