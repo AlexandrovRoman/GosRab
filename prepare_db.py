@@ -1,5 +1,6 @@
 import os
 import argparse
+import shutil
 import sys
 from news.models import HotNews, News
 from organization.models import Organization
@@ -27,6 +28,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("pythonenv")
 
 args = parser.parse_args()
+
+confirm('Снести бд?')
+if os.access("app.db", os.F_OK):
+    os.remove('app.db')
+if os.path.exists('migrations'):
+    shutil.rmtree('migrations')
 
 os.system(f'{args.pythonenv} manage.py db init')
 confirm('manage.py db init завершено.')
