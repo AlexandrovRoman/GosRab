@@ -1,5 +1,7 @@
 import datetime
 from flask_login import UserMixin
+from sqlalchemy import orm
+
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import base_new
@@ -13,6 +15,7 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    t2_rel = orm.relation("T2Form", back_populates='linked_user')
 
     name = db.Column(db.String(80), nullable=True)
     surname = db.Column(db.String(80), nullable=True)
@@ -82,6 +85,43 @@ class User(db.Model, UserMixin):
             local_session_role = session.merge(role)
             user.roles.append(local_session_role)
         session.commit()
+
+
+class T2Form(db.Model):
+    __tablename__ = 't2'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    linked_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    linked_user = orm.relation('User')
+
+    compile_date = db.Column(db.Date, default=datetime.datetime.now)
+    service_number = db.Column(db.Integer, default=55)
+    taxpayer_id_number = db.Column(db.String, default='0123456789012')
+    pension_insurance_certificate = db.Column(db.String, default='123-456-789 12')
+
+    @property
+    def alphabet(self):
+        return self.linked_user.surname[0]
+
+    work_nature = db.Column(db.String, default='Постоянная')  # Характер работы
+    work_kind = db.Column(db.String, default='Основная')  # Вид работы
+
+    employment_contract_id = db.Column(db.Integer, default=0)
+    employment_contract_date = db.Column(db.Date, default=datetime.datetime.now())
+
+    birthdate = db.Column(db.Date, default=datetime.datetime.now())
+
+    birthplace = db.Column(db.String, default='Москва')
+    birthplace_okato = db.Column(db.String, default='42432712412')
+
+    nationality = db.Column(db.String, default='Россия')
+    nationality_okin = db.Column(db.String, default='1')
+
+    foreign_language_knowledge = db.Column(db.String,
+                                           default='Английский:владеет свободно,Французский:читает и может объясняться')
+    foreign_language_knowledge_okin = db.Column(db.String, default='016,017')
+    education = db.Column(db.String, default='Среднее')
+    education_okin = db.Column(db.String, default='07')
 
 
 class Role(db.Model):

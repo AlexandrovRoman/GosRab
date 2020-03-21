@@ -2,7 +2,7 @@ from flask import render_template, request, make_response, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
-from users.models import User, Course
+from users.models import User, Course, T2Form
 
 
 @login_manager.user_loader
@@ -109,5 +109,6 @@ def t2():
     # user = current_user
     # if False:  # Если не обладает правами кадровика над человеком с user_id
     #     return 'Нет доступа к форме этого пользователя'
+    t2form = session.query(T2Form).all().pop()
 
-    return render_template("users/T2.html")
+    return render_template("users/T2.html", form=t2form)
