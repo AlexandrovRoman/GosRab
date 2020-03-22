@@ -11,7 +11,7 @@
                     <h6>от 05.01.2004 № 1</h6>
                 </div>
                 <div class="column align-self-center">
-                    <h1>Автосервис Михаил-авто</h1>
+                    <h1>{{ form.org_name }}</h1>
                     <h6>(наименование организации)</h6>
                 </div>
                 <table class="table table-bordered">
@@ -227,6 +227,8 @@
                         </tbody>
                     </table>
                 </div>
+                {% for ed_entry in form.education_list.split(';') %}
+                {% set ed_list = ed_entry.split(',') %}
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -240,7 +242,7 @@
                     <tr>
                         <td>
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[0] }}">
                             </div>
                         </td>
                         <td>наименование</td>
@@ -248,7 +250,7 @@
                         <td>номер</td>
                         <td rowspan="2">
                             <div class="input-group input-group-lg mt-3">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[4] }}">
                             </div>
                         </td>
                     </tr>
@@ -256,17 +258,17 @@
                         <td>
                         <td>
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[1] }}">
                             </div>
                         </td>
                         <td>
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[2] }}">
                             </div>
                         </td>
                         <td>
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[3] }}">
                             </div>
                         </td>
                     </tr>
@@ -277,20 +279,20 @@
                     <tr>
                         <td>
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[5] }}">
                             </div>
                         </td>
                         <td colspan="4" rowspan="2">
                             <div class="row">
                                 <div class="input-group input-group-lg col-9 mt-1">
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" value="{{ ed_list[6] }}">
                                 </div>
                                 <div class="col-3 mt-3">Код по ОКСО</div>
                             </div>
                         </td>
                         <td rowspan="2">
                             <div class="input-group input-group-lg mt-1">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ ed_list[7] }}">
                             </div>
                         </td>
                     </tr>
@@ -299,6 +301,9 @@
                     </tr>
                     </tbody>
                 </table>
+
+                {% endfor %}
+            
                 <table class="table table-bordered mt-3">
                     <thead>
                     <tr>
@@ -470,14 +475,14 @@
                         <div class="row mt-4 text-left">
                             <h5 class="col-2">7. Профессия</h5>
                             <div class="input-group input-group-sm col-8">
-                                <input type="text" class="form-control" placeholder="(основная)">
+                                <input type="text" class="form-control" placeholder="(основная)" value="{{ form.profession }}">
                             </div>
                             <h5 class="col-2">по ОКПДТР</h5>
                         </div>
                         <div class="row mt-4 text-left">
                             <h5 class="col-2"></h5>
                             <div class="input-group input-group-sm col-8">
-                                <input type="text" class="form-control" placeholder="(другая)">
+                                <input type="text" class="form-control" placeholder="(другая)" value="{{ form.profession_other }}">
                             </div>
                             <h5 class="col-2">по ОКПДТР</h5>
                         </div>
@@ -492,14 +497,14 @@
                         <tr>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" value="{{ form.profession_code }}">
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" value="{{ form.profession_other_code }}">
                                 </div>
                             </td>
                         </tr>
@@ -508,16 +513,17 @@
                 </div>
                 <div class="row mt-4 text-left ml-1">
                     <h5>8. Стаж работы (по состоянию на “</h5>
+                    {% set experience = form.experience.split(',') %}
                     <div class="input-group input-group-sm col-1">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.experience_checked.day }}">
                     </div>
                     <h5>”</h5>
                     <div class="input-group input-group-sm col-2">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.experience_checked.month }}">
                     </div>
                     <h5>20</h5>
                     <div class="input-group input-group-sm col-1">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.experience_checked.year % 100 }}">
                     </div>
                     <h5>г.):</h5>
                 </div>
@@ -531,57 +537,57 @@
                     <div class="column text-left col-7">
                         <div class="row">
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[0] }}">
                             </div>
                             <h5>дней</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[1] }}">
                             </div>
                             <h5>месяцев</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[2] }}">
                             </div>
                             <h5>лет</h5>
                         </div>
                         <div class="row">
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[3] }}">
                             </div>
                             <h5>дней</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[4] }}">
                             </div>
                             <h5>месяцев</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[5] }}">
                             </div>
                             <h5>лет</h5>
                         </div>
                         <div class="row">
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[6] }}">
                             </div>
                             <h5>дней</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[7] }}">
                             </div>
                             <h5>месяцев</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[8] }}">
                             </div>
                             <h5>лет</h5>
                         </div>
                         <div class="row">
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[9] }}">
                             </div>
                             <h5>дней</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[10] }}">
                             </div>
                             <h5>месяцев</h5>
                             <div class="input-group input-group-sm col-2">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" value="{{ experience[11] }}">
                             </div>
                             <h5>лет</h5>
                         </div>
@@ -590,11 +596,11 @@
                 <div class="row mt-4 text-left  ml-1">
                     <h5>9. Состояние в браке</h5>
                     <div class="input-group input-group-sm col-6">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.linked_user.marriage }}">
                     </div>
                     <h5>Код по ОКИН</h5>
                     <div class="input-group input-group-sm col-2">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.marriage_okin }}">
                     </div>
                 </div>
                 <h5 class="text-left mt-3">10. Состав семьи:</h5>
@@ -612,91 +618,27 @@
                         <td>2</td>
                         <td>3</td>
                     </tr>
-                    <tr>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control">
-                            </div>
-                        </td>
-                    </tr>
+                    {% for entry in form.family.split(';') %}
+                        {% set family_list = entry.split(',') %}
+                        <tr>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" value="{{ family_list[0] }}">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" value="{{ family_list[1] }}">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" value="{{ family_list[2] }}">
+                                </div>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
                     <tr>
                         <td>
                             <div class="input-group input-group-sm">
@@ -719,19 +661,19 @@
                 <div class="row mt-4 text-left  ml-1">
                     <h5>11. Паспорт: №</h5>
                     <div class="input-group input-group-sm col-3">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.passport_id }}">
                     </div>
                     <h5>Дата выдачи “</h5>
                     <div class="input-group input-group-sm col-1">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.passport_given.day }}">
                     </div>
                     <h5>”</h5>
                     <div class="input-group input-group-sm col-3">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.passport_given.month }}">
                     </div>
                     <h5>20</h5>
                     <div class="input-group input-group-sm col-1">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" value="{{ form.passport_given.year }}">
                     </div>
                     <h5>г.</h5>
                 </div>

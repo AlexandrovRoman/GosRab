@@ -1,6 +1,7 @@
 import datetime
 from flask_login import UserMixin
 from sqlalchemy import orm
+from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -95,10 +96,17 @@ class T2Form(db.Model):
     __tablename__ = 't2'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    org_name_prop = db.Column(db.String)
+
+    @property
+    def org_name(self):
+        return self.org_name_prop
+
     linked_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     linked_user = orm.relation('User')
 
-    compile_date = db.Column(db.Date, default=datetime.datetime.now)
+    compile_date = db.Column(db.Date, default=datetime.datetime.now())
     service_number = db.Column(db.Integer, default=55)
     taxpayer_id_number = db.Column(db.String, default='0123456789012')
     pension_insurance_certificate = db.Column(db.String, default='123-456-789 12')
@@ -126,6 +134,66 @@ class T2Form(db.Model):
     foreign_language_knowledge_okin = db.Column(db.String, default='016,017')
     education = db.Column(db.String, default='Среднее')
     education_okin = db.Column(db.String, default='07')
+
+    education_list = db.Column(db.String,
+                               default='Московский государственный Университет(МГУ),Диплом,III-III,123456,2010,Маркетолог,Маркетинг,80111')  # Разделитель ;
+
+    profession = db.Column(db.String, default='Маркетолог')
+    profession_code = db.Column(db.String, default='23461')
+    profession_other = db.Column(db.String, default='')
+    profession_other_code = db.Column(db.String, default='')
+
+    experience_checked = db.Column(db.Date, default=datetime.datetime.now())
+    experience = db.Column(db.String, default='1,2,3,4,5,6,7,8,9,10,11,12')
+
+    marriage_okin = db.Column(db.String, default='2')
+
+    family = db.Column(db.String,
+                       default='Жена,Антонова Светлана Валерьевна,1986;Дочь,Антонова Виктория Алексеевна,2016')
+    passport_id = db.Column(db.String, default='1234 123456')
+    passport_given = db.Column(db.Date, default=datetime.datetime.now())
+
+    @classmethod
+    def new(cls, email, password, surname, name, fathername, gender, org_name, compile_date, service_number, taxpayer_id_number,
+            pension_insurance_certificate, work_nature, work_kind, employment_contract_id, employment_contract_date,
+            birthdate, birthplace, birthplace_okato, nationality, nationality_okin, foreign_language_knowledge,
+            foreign_language_knowledge_okin, education, education_okin, education_list, profession, profession_code,
+            profession_other, profession_other_code, experience_checked, experience, marriage_okin, family, passport_id,
+            passport_given, *_):
+        linked_user = session.query(User).filter(User.email == email).first()
+        kwargs = {
+            'org_name_prop': org_name,
+            'linked_user_id': linked_user.id,
+            'compile_date': compile_date,
+            'service_number': service_number,
+            'taxpayer_id_number': taxpayer_id_number,
+            'pension_insurance_certificate': pension_insurance_certificate,
+            'work_nature': work_nature,
+            'work_kind': work_kind,
+            'employment_contract_id': employment_contract_id,
+            'employment_contract_date': employment_contract_date,
+            'birthdate': birthdate,
+            'birthplace': birthplace,
+            'birthplace_okato': birthplace_okato,
+            'nationality': nationality,
+            'nationality_okin': nationality_okin,
+            'foreign_language_knowledge': foreign_language_knowledge,
+            'foreign_language_knowledge_okin': foreign_language_knowledge_okin,
+            'education': education,
+            'education_okin': education_okin,
+            'education_list': education_list,
+            'profession': profession,
+            'profession_code': profession_code,
+            'profession_other': profession_other,
+            'profession_other_code': profession_other_code,
+            'experience_checked': experience_checked,
+            'experience': experience,
+            'marriage_okin': marriage_okin,
+            'family': family,
+            'passport_id': passport_id,
+            'passport_given': passport_given
+        }
+        base_new(cls, debug=True, **kwargs)
 
 
 class Role(db.Model):
