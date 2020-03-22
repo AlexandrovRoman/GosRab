@@ -109,10 +109,14 @@ def registration():
 
 @login_required
 def t2():
-    # user_id = request.args['user_id']
-    # user = current_user
-    # if False:  # Если не обладает правами кадровика над человеком с user_id
-    #     return 'Нет доступа к форме этого пользователя'
-    t2form = session.query(T2Form).all().pop()
+    user_id = request.args['user_id']
+    user = current_user
+    if False:  # Если не обладает правами кадровика над человеком с user_id
+        return 'Нет доступа к форме этого пользователя'
+    target = session.query(User).filter(User.id == user_id).first()
+    if target is None:
+        return 'Нет пользователя'
+    if not target.t2_rel:  # Если не обладает формой T2
+        return 'Нет формы T2'
 
-    return render_template("users/T2.html", form=t2form)
+    return render_template("users/T2.html", form=target.t2_rel[0])

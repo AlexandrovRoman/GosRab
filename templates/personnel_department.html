@@ -134,9 +134,15 @@
                                     <td>{{ employ[0] }}</td>
                                     <td>{{ employ[1] }}</td>
                                     <td>{{ employ[2] }}₽</td>
-                                    <td>
-                                        <p class="mt-3"><a class="btn-sm btn-primary" href="/users/profile/t2" role="button">T2</a></p>
-                                    </td>
+                                    {% if employ[4] %}
+                                        <td>
+                                            <p class="mt-3"><a class="btn-sm btn-primary" href="/users/profile/t2?user_id={{ employ[3] }}" role="button">T2</a></p>
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            <p class="mt-3"><a class="btn-sm btn-primary" role="button">T2</a></p>
+                                        </td>
+                                    {% endif %}
                                     <td>
                                         <button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>
                                             Перейти

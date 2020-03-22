@@ -50,6 +50,10 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.hashed_password, password)
 
     @property
+    def full_name(self):
+        return f'{self.surname} {self.name} {self.fathername}'
+
+    @property
     def get_profile_info(self):
         return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
                 'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,

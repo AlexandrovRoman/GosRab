@@ -64,12 +64,11 @@ class Organization(db.Model):
         ]
 
     def get_personnel(self):
-        return [(hr.surname + hr.name + hr.fathername,
-                 hr.salary, hr.id) for hr in self.hr_managers]
+        return [(hr.full_name, hr.salary, hr.id, bool(hr.t2_rel)) for hr in session.query(User).all()]
 
     def get_workers(self):
-        return [(worker.surname + worker.name + worker.fathername, worker.post,
-                 worker.salary, worker.id) for worker in self.employees]
+        return [(worker.full_name, worker.post,
+                 worker.salary, worker.id, bool(worker.t2_rel)) for worker in session.query(User).all()]
 
     def delete_user(self, delete_user_id):  # удаляет пользователя из организации
         user = session.query(User).filter(User.id == delete_user_id).first()

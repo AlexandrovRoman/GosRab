@@ -51,4 +51,5 @@ print('\n\texcel_DB.py завершено.\n')
 form = T2Form()
 form.linked_user_id = 1
 session.add(form)
+
 session.commit()
