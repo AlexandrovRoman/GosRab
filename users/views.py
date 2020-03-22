@@ -70,11 +70,13 @@ def login():
     return render_template('users/sign_in.html')
 
 
+@login_required
 def logout():
     logout_user()
     return redirect('/')
 
 
+@login_required
 def personnel():
     org = Organization.get_attached_to_personnel(current_user)
     if org is None:
@@ -92,6 +94,7 @@ def education():
     return render_template("users/education.html", courses=Course.get_courses())
 
 
+@login_required
 def notification():
     user = current_user
     info = user.get_profile_info
@@ -104,6 +107,7 @@ def registration():
     return render_template("users/registration.html")
 
 
+@login_required
 def t2():
     # user_id = request.args['user_id']
     # user = current_user

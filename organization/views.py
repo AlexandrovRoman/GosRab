@@ -1,10 +1,11 @@
 from flask import render_template, request
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from app import session
 from organization.models import Organization
 
 
+@login_required
 def organizations():
     orgs = Organization.get_attached_to_user(current_user)
     org_list = [org.get_full_info() for org in orgs]
@@ -12,10 +13,12 @@ def organizations():
     return render_template("organization/organizations.html", orgs=org_list)
 
 
+@login_required
 def add_organization():
     return render_template("organization/add_organization.html")
 
 
+@login_required
 def menu_organization():
     org_id = request.args.get('org_id')
     if not org_id.isdigit():
@@ -29,6 +32,7 @@ def menu_organization():
     return render_template("organization/menu_organization.html", org=org_info)
 
 
+@login_required
 def personnel_department():
     org_id = request.args.get('org_id')
     if not org_id.isdigit():
