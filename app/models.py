@@ -9,3 +9,4 @@ def base_new(cls, special_commands=(), **kwargs):  # TODO: Сделать кла
         eval(command)
     session.add(obj)
     session.commit()
+    return obj

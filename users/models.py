@@ -154,13 +154,24 @@ class T2Form(db.Model):
     passport_given = db.Column(db.Date, default=datetime.datetime.now())
 
     @classmethod
-    def new(cls, email, password, surname, name, fathername, gender, org_name, compile_date, service_number, taxpayer_id_number,
+    def new(cls, email, password, surname, name, fathername, marriage, gender, org_name, compile_date, service_number, taxpayer_id_number,
             pension_insurance_certificate, work_nature, work_kind, employment_contract_id, employment_contract_date,
             birthdate, birthplace, birthplace_okato, nationality, nationality_okin, foreign_language_knowledge,
             foreign_language_knowledge_okin, education, education_okin, education_list, profession, profession_code,
             profession_other, profession_other_code, experience_checked, experience, marriage_okin, family, passport_id,
             passport_given, *_):
         linked_user = session.query(User).filter(User.email == email).first()
+
+        if linked_user is None:
+            kwargs = {"surname": surname, "name": name, "fathername": fathername,
+                      "birth_date": birthdate,
+                      "age": (datetime.datetime.now() - birthdate).days // 365, "email": email,
+                      "hashed_password": generate_password_hash(password),
+                      "sex": gender, "marriage": marriage,
+                      "organization_foreign_id": 1}  # todo Исправить organization_foreign_id
+            special_commands = (f"cls.add_roles(obj, '{'user'}')",)
+            linked_user = base_new(User, special_commands, **kwargs)
+            print('На основе Т2 создан пользователь', linked_user.full_name)
         kwargs = {
             'org_name_prop': org_name,
             'linked_user_id': linked_user.id,
