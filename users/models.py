@@ -21,8 +21,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(80), nullable=True)
     surname = db.Column(db.String(80), nullable=True)
     fathername = db.Column(db.String(80), nullable=True)
-    email = db.Column(db.String(40),
-                      index=True, unique=True, nullable=True)
+    email = db.Column(db.String(40), index=True, unique=True, nullable=True)
     hashed_password = db.Column(db.String, nullable=True)
     birth_date = db.Column(db.Date)
     age = db.Column(db.Integer)
@@ -35,11 +34,13 @@ class User(db.Model, UserMixin):
     marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
     # organization info
-    salary = db.Column(db.Integer, nullable=True)
     post = db.Column(db.String, nullable=True)
-    work_place_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
-    work_department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=True)
+
+    work_department_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
+    salary = db.Column(db.Integer, nullable=True)
+
     roles = db.relationship('Role', secondary=roles_relationship, backref=db.backref('users', lazy='dynamic'))
+    vacancies = db.relationship("Vacancy", backref='worker')
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
@@ -74,12 +75,14 @@ class User(db.Model, UserMixin):
         return session.query(cls).filter(cls.id == user_id).first()
 
     @classmethod
-    def new(cls, surname, name, fathername, birth_year, birth_month, birth_day,
-            age, email, password, sex, marriage, org_id, roles='user'):
+    def new(cls, surname, name, fathername, binded_org, salary, birth_year, birth_month, birth_day,
+            age, email, password, sex, marriage):
+        roles = 'user'
         kwargs = {"surname": surname, "name": name, "fathername": fathername,
+                  "work_department_id": binded_org, "salary": salary,
                   "birth_date": datetime.date(birth_year, birth_month, birth_day),
                   "age": age, "email": email, "hashed_password": generate_password_hash(password),
-                  "sex": sex, "marriage": marriage, "organization_foreign_id": org_id}
+                  "sex": sex, "marriage": marriage}
         special_commands = (f"cls.add_roles(obj, '{roles}')",)
         base_new(cls, special_commands, **kwargs)
 
@@ -154,21 +157,23 @@ class T2Form(db.Model):
     passport_given = db.Column(db.Date, default=datetime.datetime.now())
 
     @classmethod
-    def new(cls, email, password, surname, name, fathername, marriage, gender, org_name, compile_date, service_number, taxpayer_id_number,
+    def new(cls, email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name, compile_date, service_number,
+            taxpayer_id_number,
             pension_insurance_certificate, work_nature, work_kind, employment_contract_id, employment_contract_date,
             birthdate, birthplace, birthplace_okato, nationality, nationality_okin, foreign_language_knowledge,
             foreign_language_knowledge_okin, education, education_okin, education_list, profession, profession_code,
             profession_other, profession_other_code, experience_checked, experience, marriage_okin, family, passport_id,
-            passport_given, *_):
+            passport_given):
         linked_user = session.query(User).filter(User.email == email).first()
 
         if linked_user is None:
             kwargs = {"surname": surname, "name": name, "fathername": fathername,
                       "birth_date": birthdate,
+                      "work_department_id": binded_org, "salary": salary,
                       "age": (datetime.datetime.now() - birthdate).days // 365, "email": email,
                       "hashed_password": generate_password_hash(password),
                       "sex": gender, "marriage": marriage,
-                      "organization_foreign_id": 1}  # todo Исправить organization_foreign_id
+                      }
             special_commands = (f"cls.add_roles(obj, '{'user'}')",)
             linked_user = base_new(User, special_commands, **kwargs)
             print('На основе Т2 создан пользователь', linked_user.full_name)

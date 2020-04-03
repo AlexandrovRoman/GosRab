@@ -2,7 +2,7 @@ from flask import render_template, request
 from flask_login import current_user, login_required
 
 from app import session
-from organization.models import Organization
+from organization.models import Organization, Vacancy
 
 
 @login_required
@@ -40,9 +40,11 @@ def personnel_department():
     org = Organization.get_by_id(current_user, int(org_id))
     if org is None:
         return 'Нет доступа'
+    if request.method == 'POST':
+        session.add(Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']))
 
     organization_info = {
-        'desc': org.get_base_info(),
+        'org': org,
         'personnel': org.get_personnel(),
         'workers': org.get_workers(),
         'required_workers': org.get_required_workers(),
@@ -52,29 +54,23 @@ def personnel_department():
 
 
 def job():
-    jobs = [
-        ('Хлебобулочный комбинат', 'Кондитер', 30000),
-        ('Хлебобулочный комбинат', 'Директор', 50000),
-        ('ПФР промю района', 'Администратор', 25000),
-        ('ПФР промю района', 'Сис.Админ', 27500),
-        ('Автосервис Михаил - авто', 'Механик', 27500),
-        ('Автосервис Михаил - авто', 'Маляр', 33000),
-        ('Автосервис Михаил - авто', 'Главный механик', 35000),
-    ]
-    res = []
-    filters = {
-        'organization': 0,
-        'position': 1,
-        'salary': 2,
-    }
-    for _job in jobs:
-        for param, index in filters.items():
-            p = request.args.get(param)
-            if p and str(_job[index]) != p:
-                break
-        else:
-            res.append(_job)
-    return render_template("organization/job.html", jobs=res, filters=request.args)
+    def filter_vacancy(vacancy):
+        organization = request.args.get('organization')
+        if organization and organization not in vacancy.organization.name:
+            return False
+
+        position = request.args.get('position')
+        if position and position not in vacancy.title:
+            return False
+
+        salary = request.args.get('salary')
+        if salary and salary != str(vacancy.salary):
+            return False
+
+        return True
+
+    res = session.query(Vacancy).filter(Vacancy.worker_id == None).all()
+    return render_template("organization/job.html", vacancies=list(filter(filter_vacancy, res)), filters=request.args)
 
 #
 # def organization():
