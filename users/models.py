@@ -76,12 +76,12 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def new(cls, surname, name, fathername, binded_org, salary, birth_year, birth_month, birth_day,
-            age, email, password, sex, marriage, org_id, roles='user'):
+            age, email, password, sex, marriage, roles='user'):
         kwargs = {"surname": surname, "name": name, "fathername": fathername,
                   "work_department_id": binded_org, "salary": salary,
                   "birth_date": datetime.date(birth_year, birth_month, birth_day),
                   "age": age, "email": email, "hashed_password": generate_password_hash(password),
-                  "sex": sex, "marriage": marriage, "organization_foreign_id": org_id}
+                  "sex": sex, "marriage": marriage}
         special_commands = (f"cls.add_roles(obj, '{roles}')",)
         base_new(cls, special_commands, **kwargs)
 

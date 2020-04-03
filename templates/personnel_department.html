@@ -5,7 +5,8 @@
     <div class="container marketing">
         <div class="row justify-content-center">
             <div class="card col-11 col-sm-11 col-md-11 col-lg-11 col-xl-12 shadow-lg">
-                <p class="mt-3"><a class="btn-sm btn-primary" href="/organization/profile/menu_organization?org_id={{ org.id }}"
+                <p class="mt-3"><a class="btn-sm btn-primary"
+                                   href="/organization/profile/menu_organization?org_id={{ org.id }}"
                                    role="button">&larr; Меню организации</a></p>
                 <h1 class="font-weight-normal text-center">{{ org.name }}</h1>
                 <h3 class="font-weight-normal text-center">Кадровый отдел организации</h3>
@@ -43,14 +44,16 @@
                             </div>
                         </div>
                         <div class="row mx-3">
-                            <h5 class="card-text font-weight-normal">Общее количество кадровиков: {{ len(personnel) }}</h5>
+                            <h5 class="card-text font-weight-normal">Общее количество
+                                кадровиков: {{ len(personnel) }}</h5>
                             <div class="progress mt-1" style="width: 20px">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
                                      role="progressbar" style="width: 100%"></div>
                             </div>
                         </div>
                         <div class="row mx-3">
-                            <h5 class="card-text font-weight-normal mb-4">Общее количество свободных вакансий: {{ len(required_workers) }}</h5>
+                            <h5 class="card-text font-weight-normal mb-4">Общее количество свободных
+                                вакансий: {{ len(required_workers) }}</h5>
                             <div class="progress mt-1" style="width: 20px">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
                                      role="progressbar" style="width: 100%"></div>
@@ -136,7 +139,9 @@
                                     <td>{{ employ[2] }}₽</td>
                                     {% if employ[4] %}
                                         <td>
-                                            <p class="mt-3"><a class="btn-sm btn-primary" href="/users/profile/t2?user_id={{ employ[3] }}" role="button">T2</a></p>
+                                            <p class="mt-3"><a class="btn-sm btn-primary"
+                                                               href="/users/profile/t2?user_id={{ employ[3] }}"
+                                                               role="button">T2</a></p>
                                         </td>
                                     {% else %}
                                         <td>
@@ -175,27 +180,29 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body row text-center">
-                    <div class="col-md-6">
-                        <label for="Фамилия">Должность</label>
-                        <input type="text" class="form-control" id="Фамилия" name="surname" placeholder="Должность"
-                               required>
-                        <div class="invalid-feedback">
-                            Укажите должность
+                <form class="needs-validation" novalidate method="POST" action="">
+                    <div class="modal-body row text-center">
+                        <div class="col-md-6">
+                            <label for="Фамилия">Должность</label>
+                            <input type="text" class="form-control" id="Фамилия" name="title" placeholder="Должность"
+                                   required>
+                            <div class="invalid-feedback">
+                                Укажите должность
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="age">Зарплата</label>
-                        <input type="number" min="0" class="form-control" id="age" name="age" placeholder="Зарплата"
-                               required>
-                        <div class="invalid-feedback">
-                            Укажите зарплату
+                        <div class="col-md-6">
+                            <label for="age">Зарплата</label>
+                            <input type="number" min="0" class="form-control" id="age" name="salary" placeholder="Зарплата"
+                                   required>
+                            <div class="invalid-feedback">
+                                Укажите зарплату
+                            </div>
                         </div>
+                        <button class="btn btn-primary btn-lg btn-block mx-5 mt-3 mb-2" type="submit">Добавить
+                            вакансию
+                        </button>
                     </div>
-                    <button class="btn btn-primary btn-lg btn-block mx-5 mt-3 mb-2" type="submit" disabled>Добавить
-                        вакансию
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -40,6 +40,8 @@ def personnel_department():
     org = Organization.get_by_id(current_user, int(org_id))
     if org is None:
         return 'Нет доступа'
+    if request.method == 'POST':
+        session.add(Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']))
 
     organization_info = {
         'org': org,
