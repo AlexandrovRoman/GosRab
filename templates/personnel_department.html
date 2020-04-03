@@ -5,9 +5,9 @@
     <div class="container marketing">
         <div class="row justify-content-center">
             <div class="card col-11 col-sm-11 col-md-11 col-lg-11 col-xl-12 shadow-lg">
-                <p class="mt-3"><a class="btn-sm btn-primary" href="/organization/profile/menu_organization?org_id={{ desc[0] }}"
+                <p class="mt-3"><a class="btn-sm btn-primary" href="/organization/profile/menu_organization?org_id={{ org.id }}"
                                    role="button">&larr; Меню организации</a></p>
-                <h1 class="font-weight-normal text-center">{{ desc[1] }}</h1>
+                <h1 class="font-weight-normal text-center">{{ org.name }}</h1>
                 <h3 class="font-weight-normal text-center">Кадровый отдел организации</h3>
                 <div class="progress m-3">
                     {% set stats_sum = len(workers) + len(personnel) + len(required_workers) %}

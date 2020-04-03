@@ -82,7 +82,7 @@ def personnel():
     if org is None:
         return 'Не привязан ни к одной'
     organization_info = {
-        'desc': org.get_base_info(),
+        'org': org,
         'workers': org.get_workers(),
         'required_workers': org.get_required_workers(),
     }
