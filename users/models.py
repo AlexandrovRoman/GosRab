@@ -76,7 +76,8 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def new(cls, surname, name, fathername, binded_org, salary, birth_year, birth_month, birth_day,
-            age, email, password, sex, marriage, roles='user'):
+            age, email, password, sex, marriage):
+        roles = 'user'
         kwargs = {"surname": surname, "name": name, "fathername": fathername,
                   "work_department_id": binded_org, "salary": salary,
                   "birth_date": datetime.date(birth_year, birth_month, birth_day),
