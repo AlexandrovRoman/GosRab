@@ -4,7 +4,6 @@ from .views import add_organization, organizations, menu_organization, job
 # Add your urls
 urlpatterns = [
     relative_path('job/', job),
-    # relative_path('profile/personnel/organization/', organization),  уже не используется
     relative_path('profile/organizations/', organizations),
     relative_path('profile/redact/add_organization/', add_organization),
     relative_path('profile/menu_organization/', menu_organization),

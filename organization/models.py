@@ -24,7 +24,7 @@ class Organization(db.Model):
         return user.binded_org
 
     @classmethod
-    def get_by_id(cls, user, org_id: int):  # Возвращает организацию под org_id,
+    def get_by_id(cls, user, org_id: int):
         org = session.query(cls).get(org_id)
         if user.id != org.owner_id:  # если пользователь ею не владеет
             return None
@@ -39,27 +39,14 @@ class Organization(db.Model):
         kwargs = {"name": name, "owner_id": owner_id, "org_desc": org_desc, "org_type": org_type, "date": date}
         base_new(cls, **kwargs)
 
-    # def add_department(self, dep_name):
-    #     department = Department(name=dep_name, organization=self)
-    #     session.add(department)
-    #     session.commit()
-
-    # def add_hr_manager(self, user):
-    #     user.add_roles(['hr manager'])
-    #     self.hr_managers.append(user)
-
-    # def add_user(self, new_user_id):  # добавляет пользователя в организацию
-    #     user = session.query(User).filter(User.id == new_user_id).first()
-    #     user.work_place_id = self.id
-
     def get_base_info(self):
         return self.id, self.name
 
     def get_full_info(self):
         return self.id, self.org_type, self.name, self.creation_date, self.org_desc, 'Путь к картинке'
 
-    def get_required_workers(self):  # Список требуемых работников организации
-        return [(vacancy.title, vacancy.salary) for vacancy in filter(lambda x: x.worker_id is None, self.vacancies)]
+    def get_required_workers(self):
+        return [(vacancy.title, vacancy.salary) for vacancy in self.vacancies if vacancy.worker_id is None]
 
     def get_personnel(self):
         return [(hr.full_name, hr.salary, hr.id, bool(hr.t2_rel)) for hr in self.personnels]
@@ -67,11 +54,7 @@ class Organization(db.Model):
     def get_workers(self):
         return [
             (vacancy.worker.full_name, vacancy.title, vacancy.salary, vacancy.worker.id, bool(vacancy.worker.t2_rel))
-            for vacancy in filter(lambda x: x.worker_id is not None, self.vacancies)]
-
-    # def delete_user(self, delete_user_id):  # удаляет пользователя из организации
-    #     user = session.query(User).filter(User.id == delete_user_id).first()
-    #     user.work_place_id = None
+            for vacancy in self.vacancies if vacancy.worker_id is not None]
 
 
 class Vacancy(db.Model):
@@ -92,15 +75,3 @@ class Vacancy(db.Model):
             'title': title,
         }
         base_new(cls, **kwargs)
-
-# class Department(db.Model):
-#     __tablename__ = 'departments'
-#
-#     id = db.Column(db.Integer,
-#                    primary_key=True, autoincrement=True)
-#     name = db.Column(db.String(80), nullable=True)
-#     organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
-#     # employees = db.relationship("User", backref='work_department')
-#
-#     def __repr__(self):
-#         return f'<Department {self.name} org: {self.organization.name} employees: {self.users}>'

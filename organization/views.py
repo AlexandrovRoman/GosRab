@@ -7,10 +7,10 @@ from organization.models import Organization, Vacancy
 
 @login_required
 def organizations():
-    orgs = Organization.get_attached_to_user(current_user)
-    org_list = [org.get_full_info() for org in orgs]
+    user_orgs = Organization.get_attached_to_user(current_user)
+    orgs_full_info = [org.get_full_info() for org in user_orgs]
 
-    return render_template("organization/organizations.html", orgs=org_list)
+    return render_template("organization/organizations.html", orgs=orgs_full_info)
 
 
 @login_required
@@ -72,9 +72,3 @@ def job():
     res = session.query(Vacancy).filter(Vacancy.worker_id == None).all()
     return render_template("organization/job.html", vacancies=list(filter(filter_vacancy, res)), filters=request.args)
 
-#
-# def organization():
-#     organization_info = current_user.get_organization(request.args.get('organization'))
-#     if organization_info is None:
-#         return 'Нет доступа'
-#     return render_template("organization/organization.html", **organization_info)

@@ -4,3 +4,4 @@ migrations/
 venv/
 *.log
 *.db
+*.http

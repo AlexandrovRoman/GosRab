@@ -1,8 +1,6 @@
 import datetime
 from flask_login import UserMixin
 from sqlalchemy import orm
-from sqlalchemy.orm.attributes import InstrumentedAttribute
-
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import base_new

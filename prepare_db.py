@@ -2,8 +2,6 @@ import os
 import argparse
 import shutil
 import sys
-
-from app import session
 from news.models import HotNews, News
 from organization.models import Organization, Vacancy
 from users.models import User, Course, T2Form

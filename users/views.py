@@ -1,8 +1,8 @@
-from flask import render_template, request, make_response, redirect, url_for
+from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
-from users.models import User, Course, T2Form
+from users.models import User, Course
 
 
 @login_manager.user_loader
@@ -22,16 +22,8 @@ def profile():
 def edit_profile():
     user = current_user
     if request.method == 'POST':
-        # print('\n\t', current_user, '\n')
-
-        current_user.name = request.form['name']
-        current_user.surname = request.form['surname']
-        current_user.fathername = request.form['middlename']
-        current_user.age = request.form['age']
-        current_user.email = request.form['email']
-        current_user.sex = request.form['gender']
-        current_user.marriage = request.form['maritalstatus']
-        current_user.about_myself = request.form['aboutmyself']
+        for attr in request.form:
+            setattr(current_user, attr, request.form[attr])
 
         session.merge(current_user)
         session.commit()
@@ -41,23 +33,6 @@ def edit_profile():
     info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
 
     return render_template('users/edit_profile.html', **info)
-
-
-@login_required
-def cookie_test():
-    print(current_user)
-    print(type(current_user))
-    print(isinstance(current_user, User))
-    print(current_user.name)
-    print(current_user.surname)
-    print(current_user.fathername)
-    print(current_user.email)
-    cook = request.cookies.get('click')
-    click_count = cook if cook else '2'
-    res = make_response(f"Your click count is {click_count}")
-    res.set_cookie('click', str(int(click_count) + 1), max_age=1)
-
-    return res
 
 
 def login():
@@ -111,9 +86,11 @@ def registration():
 def t2():
     user_id = request.args['user_id']
     user = current_user
-    if False:  # Если не обладает правами кадровика над человеком с user_id
+    if False:  # TODO: Если не обладает правами кадровика над человеком с user_id
         return 'Нет доступа к форме этого пользователя'
-    target = session.query(User).filter(User.id == user_id).first()
+    target = User.get(user_id)
+
+    # TODO: Create html templates
     if target is None:
         return 'Нет пользователя'
     if not target.t2_rel:  # Если не обладает формой T2
