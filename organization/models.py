@@ -20,18 +20,18 @@ class Organization(db.Model):
         return f'<Organization {self.name}>'
 
     @classmethod
-    def get_attached_to_personnel(cls, user):  # Возвращает организацию, к которой привязан кадровик
+    def get_attached_to_personnel(cls, user):
         return user.binded_org
 
     @classmethod
     def get_by_id(cls, user, org_id: int):
         org = session.query(cls).get(org_id)
-        if user.id != org.owner_id:  # если пользователь ею не владеет
+        if user.id != org.owner_id:
             return None
         return org
 
     @classmethod
-    def get_attached_to_user(cls, user):  # Возвращает организации, которыми обладает пользователь
+    def get_attached_to_user(cls, user):
         return session.query(cls).filter(cls.owner_id == user.id).all()
 
     @classmethod
@@ -39,22 +39,11 @@ class Organization(db.Model):
         kwargs = {"name": name, "owner_id": owner_id, "org_desc": org_desc, "org_type": org_type, "date": date}
         base_new(cls, **kwargs)
 
-    def get_base_info(self):
-        return self.id, self.name
-
-    def get_full_info(self):
-        return self.id, self.org_type, self.name, self.creation_date, self.org_desc, 'Путь к картинке'
-
     def get_required_workers(self):
-        return [(vacancy.title, vacancy.salary) for vacancy in self.vacancies if vacancy.worker_id is None]
-
-    def get_personnel(self):
-        return [(hr.full_name, hr.salary, hr.id, bool(hr.t2_rel)) for hr in self.personnels]
+        return [vacancy for vacancy in self.vacancies if vacancy.worker_id is None]
 
     def get_workers(self):
-        return [
-            (vacancy.worker.full_name, vacancy.title, vacancy.salary, vacancy.worker.id, bool(vacancy.worker.t2_rel))
-            for vacancy in self.vacancies if vacancy.worker_id is not None]
+        return [vacancy for vacancy in self.vacancies if vacancy.worker_id is not None]
 
 
 class Vacancy(db.Model):

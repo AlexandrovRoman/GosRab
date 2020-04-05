@@ -8,9 +8,8 @@ from organization.models import Organization, Vacancy
 @login_required
 def organizations():
     user_orgs = Organization.get_attached_to_user(current_user)
-    orgs_full_info = [org.get_full_info() for org in user_orgs]
 
-    return render_template("organization/organizations.html", orgs=orgs_full_info)
+    return render_template("organization/organizations.html", orgs=user_orgs)
 
 
 @login_required
@@ -27,9 +26,7 @@ def menu_organization():
     if org is None:
         return 'Нет доступа'
 
-    org_info = org.get_full_info()
-
-    return render_template("organization/menu_organization.html", org=org_info)
+    return render_template("organization/menu_organization.html", org=org)
 
 
 @login_required
@@ -42,10 +39,11 @@ def personnel_department():
         return 'Нет доступа'
     if request.method == 'POST':
         session.add(Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']))
+        session.commit()
 
     organization_info = {
         'org': org,
-        'personnel': org.get_personnel(),
+        'personnel': org.personnels,
         'workers': org.get_workers(),
         'required_workers': org.get_required_workers(),
     }

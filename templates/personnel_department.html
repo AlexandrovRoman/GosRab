@@ -81,8 +81,8 @@
                             <tbody>
                             {% for employ in personnel %}
                                 <tr>
-                                    <td>{{ employ[0] }}</td>
-                                    <td>{{ employ[1] }}₽</td>
+                                    <td>{{ employ.full_name }}</td>
+                                    <td>{{ employ.salary }}₽</td>
                                     <td>
                                         <button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>
                                             Перейти
@@ -104,10 +104,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for employ in required_workers %}
+                            {% for vacancy in required_workers %}
                                 <tr>
-                                    <td>{{ employ[0] }}</td>
-                                    <td>{{ employ[1] }}₽</td>
+                                    <td>{{ vacancy.title }}</td>
+                                    <td>{{ vacancy.salary }}₽</td>
                                     <td>
                                         <button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>
                                             Поиск сотрудника
@@ -132,15 +132,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for employ in workers %}
+                            {% for vacancy in workers %}
                                 <tr>
-                                    <td>{{ employ[0] }}</td>
-                                    <td>{{ employ[1] }}</td>
-                                    <td>{{ employ[2] }}₽</td>
-                                    {% if employ[4] %}
+                                    <td>{{ vacancy.worker.full_name }}</td>
+                                    <td>{{ vacancy.title }}</td>
+                                    <td>{{ vacancy.salary }}₽</td>
+                                    {% if vacancy.worker.t2_rel %}
                                         <td>
                                             <p class="mt-3"><a class="btn-sm btn-primary"
-                                                               href="/users/profile/t2?user_id={{ employ[3] }}"
+                                                               href="/users/profile/t2?user_id={{ vacancy.worker.id }}"
                                                                role="button">T2</a></p>
                                         </td>
                                     {% else %}
