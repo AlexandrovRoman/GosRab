@@ -1,4 +1,6 @@
 from functools import wraps
+
+from flask import render_template
 from flask_login import current_user
 from itsdangerous import URLSafeTimedSerializer
 
@@ -13,7 +15,9 @@ def check_confirmed(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user.confirmed is False:
-            return 'Please confirm your account!'
+            return render_template('not_confirmed.html',
+                                   error='Не подтверждена почта',
+                                   discription='Вам было прислано письмо, пройдите по ссылке и подтвердите вашу почту')
         return func(*args, **kwargs)
 
     return decorated_function
@@ -39,7 +43,6 @@ def send_email(receiver_email, html):
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender_email, password)
-        print(message.as_string())
         server.sendmail(
             sender_email, receiver_email, message.as_string()
         )

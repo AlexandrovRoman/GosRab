@@ -23,7 +23,9 @@ class BaseConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECURITY_PASSWORD_SALT = 'iufsdivdjkvcbadb'
     EMAIL_SENDER_LOGIN = 'pfrproject2020@gmail.com'
-    EMAIL_SENDER_PASSWORD = 'NEED PASSWORD'
+
+    with open('top_secret.txt') as password_file:
+        EMAIL_SENDER_PASSWORD = password_file.readline()
 
 
 class ProductionConfig(BaseConfig):
