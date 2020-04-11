@@ -42,7 +42,7 @@
                               </select>
                           </div>
                           <div class="col-md-3">
-                              <label for="country">Семейное положение</label>
+                              <label for="marital status">Семейное положение</label>
                               <select class="custom-select d-block w-100" id="marital status" name="maritalstatus" required>
 {#                                  <option value="">Андрей</option>#}
                                   <option value="В браке">В браке</option>
@@ -61,10 +61,10 @@
                               </div>
                           </div>
                           <div class="col-md-3">
-                              <label for="age">Возраст</label>
-                              <input type="number" min="0" class="form-control" id="age" value={{ Age }} name="age" required>
+                              <label for="birth_date">Дата рождения</label>
+                              <input type="date" min="0" class="form-control" id="birth_date" value={{ BirthDate }} name="birth_date" required>
                               <div class="invalid-feedback">
-                                  Укажите возраст
+                                  Укажите дату рождения
                               </div>
                           </div>
                       </div>

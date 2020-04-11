@@ -1,11 +1,10 @@
-import datetime
-
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
+from datetime import date
 
 
 @login_manager.user_loader
@@ -27,11 +26,11 @@ def profile():
 def edit_profile():
     user = current_user
     if request.method == 'POST':
+        request.form['birth_date'] = date(*map(int, request.form['birth_date'].split("-")))
         for attr in request.form:
             setattr(current_user, attr, request.form[attr])
 
-        session.merge(current_user)
-        session.commit()
+        user.save()
 
         return redirect(url_for('profile'))
     info = user.get_profile_info
@@ -87,16 +86,17 @@ def notification():
 
 def registration():
     if request.method == "POST":
-        if session.query(User).filter(User.email == request.form['email']).all():
+        if User.get_by(email=request.form['email']):
             return 'Email уже использован'
+        birth_date = date(*map(int, request.form['birth_date'].split("-")))
 
         user = User(request.form['name'], request.form['surname'],
                     request.form['middlename'], request.form['email'],
-                    request.form['password'])
+                    request.form['password'], sex=request.form['sex'], birth_date=birth_date)
 
         token = generate_confirmation_token(user.email)
         confirm_url = url_for('confirm_email', token=token, _external=True)
-        html = render_template('activate.html', confirm_url=confirm_url)
+        html = render_template('activate_mess.html', confirm_url=confirm_url)
         send_email(user.email, html)
 
         session.add(user)

@@ -1,9 +1,7 @@
 from functools import wraps
-
 from flask import render_template
 from flask_login import current_user
 from itsdangerous import URLSafeTimedSerializer
-
 from app import app, Config
 import smtplib
 import ssl

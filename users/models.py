@@ -1,12 +1,9 @@
 import datetime
-from datetime import date
-
 from flask_login import UserMixin
 from sqlalchemy import orm
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import ModelMixin
-import dateutil
 
 roles_relationship = db.Table('roles_relationship',
                               db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -27,7 +24,7 @@ class User(db.Model, ModelMixin, UserMixin):
     hashed_password = db.Column(db.String)
     birth_date = db.Column(db.Date)
     sex = db.Column(db.String(7))
-    marriage = db.Column(db.String(20))
+    marriage = db.Column(db.String(20), default="Не в браке")
     grate = db.Column(db.String, default='Новичок')
     education = db.Column(db.String, default='Отсутствует')
     foreign_languges = db.Column(db.String, default='Отсутствует')
@@ -66,8 +63,8 @@ class User(db.Model, ModelMixin, UserMixin):
         self.__class__.add_roles(self, roles)
         super().__init__(surname=surname, name=name, fathername=fathername,
                          work_department_id=binded_org, salary=salary,
-                         birth_date=birth_date,
-                         email=email, hashed_password=generate_password_hash(password),
+                         birth_date=birth_date, email=email,
+                         hashed_password=generate_password_hash(password),
                          sex=sex, marriage=marriage, grate=grate, education=education,
                          foreign_languges=foreign_languges, start_place=start_place,
                          about_myself=about_myself, confirmed=confirmed)
@@ -79,7 +76,7 @@ class User(db.Model, ModelMixin, UserMixin):
     def age(self):
         if self.birth_date is None:
             return 'Не указана дата рождения'
-        today = date.today()
+        today = datetime.date.today()
         try:
             birthday = self.birth_date.replace(year=today.year)
         except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
@@ -102,7 +99,7 @@ class User(db.Model, ModelMixin, UserMixin):
     @property
     def get_profile_info(self):
         return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
-                'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,
+                'Gender': self.sex, 'Age': self.age, 'Grade': self.grate, "BirthDate": self.birth_date,
                 'Education': self.education, 'Marital_status': self.marriage,
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
                 'About_myself': self.about_myself, 'Workplace': 'Автосервис Михаил-авто(отдел продаж) - Глав.Менеджер'}
@@ -120,7 +117,7 @@ class User(db.Model, ModelMixin, UserMixin):
 
     @classmethod
     def new(cls, surname, name, fathername, binded_org, salary, birth_date,
-            age, email, password, sex, marriage):
+            email, password, sex, marriage):
         super().new(name, surname, fathername, email, password,
                     binded_org, salary, birth_date, sex, marriage=marriage, confirmed=True)
 
