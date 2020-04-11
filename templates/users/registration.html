@@ -16,7 +16,7 @@
                 <div class="card col-md-4 shadow">
                     <div class="column mb-3 text-center">
                         <div class="h1 text-center mt-3">Регистрация</div>
-                        <form>
+                        <form class="needs-validation" novalidate method="POST" action="">
                             <div class="col-md-12 mt-3">
                                 <label class="h4 my-1" for="Фамилия">Фамилия</label>
                                 <input type="text" class="form-control my-2" id="Фамилия" name="surname" required>
@@ -31,11 +31,11 @@
                             </div>
                             <div class="col-md-12">
                                 <label class="h4 my-1" for="Отчество">Почта</label>
-                                <input type="email" class="form-control my-2" id="Отчество" name="middlename" required>
+                                <input type="email" class="form-control my-2" id="Email" name="email" required>
                             </div>
                             <div class="col-md-12">
                                 <label class="h4 my-1" for="Отчество">Пароль</label>
-                                <input type="password" class="form-control my-2" id="Отчество" name="middlename" required>
+                                <input type="password" class="form-control my-2" id="Password" name="password" required>
                             </div>
                             <button class="btn btn-primary btn-lg btn-block mt-3" type="submit">Зарегистрироватся</button>
                         </form>

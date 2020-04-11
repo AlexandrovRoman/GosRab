@@ -21,6 +21,7 @@ class BaseConfig:
     SECRET_KEY = 'zxczxasdsad'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECURITY_PASSWORD_SALT = 'my_precious_two'  # todo Поменять
 
 
 class ProductionConfig(BaseConfig):

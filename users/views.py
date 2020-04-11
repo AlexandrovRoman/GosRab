@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
 from users.models import User, Course
+from users.utils import check_confirmed
 
 
 @login_manager.user_loader
@@ -11,6 +12,7 @@ def load_user(user_id):
 
 
 @login_required
+@check_confirmed
 def profile():
     user = current_user
     info = user.get_profile_info
@@ -19,6 +21,7 @@ def profile():
 
 
 @login_required
+@check_confirmed
 def edit_profile():
     user = current_user
     if request.method == 'POST':
@@ -52,6 +55,7 @@ def logout():
 
 
 @login_required
+@check_confirmed
 def personnel():
     org = Organization.get_attached_to_personnel(current_user)
     if org is None:
@@ -70,6 +74,7 @@ def education():
 
 
 @login_required
+@check_confirmed
 def notification():
     user = current_user
     info = user.get_profile_info
@@ -80,11 +85,21 @@ def notification():
 
 def registration():
     if request.method == "POST":
-        pass
+        if session.query(User).filter(User.email == request.form['email']).all():
+            return 'Email уже использован'
+        user = User(request.form['name'], request.form['surname'],
+                    request.form['middlename'], request.form['email'],
+                    request.form['password'])
+        session.add(user)
+        session.commit()
+        print('Зарегистрирован пользователь:', user)
+        login_user(user)
+        return redirect('/users/profile')
     return render_template("users/registration.html")
 
 
 @login_required
+@check_confirmed
 def t2():
     user_id = request.args['user_id']
     user = current_user

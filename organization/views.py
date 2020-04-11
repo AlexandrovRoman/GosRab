@@ -3,9 +3,11 @@ from flask_login import current_user, login_required
 
 from app import session
 from organization.models import Organization, Vacancy
+from users.utils import check_confirmed
 
 
 @login_required
+@check_confirmed
 def organizations():
     user_orgs = Organization.get_attached_to_user(current_user)
 
@@ -13,11 +15,13 @@ def organizations():
 
 
 @login_required
+@check_confirmed
 def add_organization():
     return render_template("organization/add_organization.html")
 
 
 @login_required
+@check_confirmed
 def menu_organization():
     org_id = request.args.get('org_id')
     if not org_id.isdigit():
@@ -30,6 +34,7 @@ def menu_organization():
 
 
 @login_required
+@check_confirmed
 def personnel_department():
     org_id = request.args.get('org_id')
     if not org_id.isdigit():

@@ -1,9 +1,12 @@
 import datetime
+from datetime import date
+
 from flask_login import UserMixin
 from sqlalchemy import orm
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import ModelMixin
+import dateutil
 
 roles_relationship = db.Table('roles_relationship',
                               db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -20,9 +23,9 @@ class User(db.Model, ModelMixin, UserMixin):
     surname = db.Column(db.String(80))
     fathername = db.Column(db.String(80), nullable=True)
     email = db.Column(db.String(40), index=True, unique=True)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
     hashed_password = db.Column(db.String)
     birth_date = db.Column(db.Date)
-    age = db.Column(db.Integer)  # TODO: Лишний параметр, стоит удалить
     sex = db.Column(db.String(7))
     marriage = db.Column(db.String(20))
     grate = db.Column(db.String, default='Новичок')
@@ -48,9 +51,7 @@ class User(db.Model, ModelMixin, UserMixin):
                  password=None,
                  binded_org=None,
                  salary=None,
-                 birth_year=None,
-                 birth_month=None,
-                 birth_day=None,
+                 birth_date=None,
                  sex=None,
                  marriage=None,
                  grate=None,
@@ -58,22 +59,35 @@ class User(db.Model, ModelMixin, UserMixin):
                  foreign_languges=None,
                  start_place=None,
                  about_myself=None,
+                 confirmed=False,
                  roles=("user",)):
 
         roles = " ".join(roles)
         self.__class__.add_roles(self, roles)
         super().__init__(surname=surname, name=name, fathername=fathername,
                          work_department_id=binded_org, salary=salary,
-                         birth_date=datetime.date(birth_year, birth_month, birth_day),
-                         age=(datetime.datetime.now() -
-                              datetime.datetime(birth_year, birth_month, birth_day)).days // 365,
+                         birth_date=birth_date,
                          email=email, hashed_password=generate_password_hash(password),
                          sex=sex, marriage=marriage, grate=grate, education=education,
                          foreign_languges=foreign_languges, start_place=start_place,
-                         about_myself=about_myself)
+                         about_myself=about_myself, confirmed=confirmed)
 
     def __repr__(self):
         return f'<User {self.name}>'
+
+    @property
+    def age(self):
+        if self.birth_date is None:
+            return 'Не указана дата рождения'
+        today = date.today()
+        try:
+            birthday = self.birth_date.replace(year=today.year)
+        except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
+            birthday = self.birth_date.replace(year=today.year, month=self.birth_date.month + 1, day=1)
+        if birthday > today:
+            return today.year - self.birth_date.year - 1
+        else:
+            return today.year - self.birth_date.year
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
@@ -105,10 +119,10 @@ class User(db.Model, ModelMixin, UserMixin):
         return cls.get_by(id=user_id)
 
     @classmethod
-    def new(cls, surname, name, fathername, binded_org, salary, birth_year, birth_month, birth_day,
+    def new(cls, surname, name, fathername, binded_org, salary, birth_date,
             age, email, password, sex, marriage):
         super().new(name, surname, fathername, email, password,
-                    binded_org, salary, birth_year, birth_month, birth_day, sex, marriage=marriage)
+                    binded_org, salary, birth_date, sex, marriage=marriage, confirmed=True)
 
     @staticmethod
     def add_roles(user, role_names):
@@ -212,7 +226,8 @@ class T2Form(db.Model, ModelMixin):
 
         if linked_user is None:
             linked_user = User(name, surname, fathername, email, password, binded_org, salary,
-                               birthdate.year, birthdate.month, birthdate.day, gender, marriage)
+                               birthdate, gender, marriage,
+                               confirmed=True)
             linked_user.save()
             print('На основе Т2 создан пользователь', linked_user.full_name)
 
