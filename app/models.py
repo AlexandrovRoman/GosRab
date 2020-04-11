@@ -4,17 +4,6 @@ from logging import error, basicConfig
 basicConfig(format=u'%(levelname)-8s %(filename)s in [LINE:%(lineno)d]:\n%(message)s')
 
 
-def base_new(cls, special_commands=(), **kwargs):  # TODO: Перекинуть модели на ModelMixin
-    obj = cls()
-    for key in kwargs:
-        setattr(obj, key, kwargs[key])
-    for command in special_commands:
-        eval(command)
-    session.add(obj)
-    session.commit()
-    return obj
-
-
 class ModelMixin:
     def __init__(self, **db_columns):
         for key in db_columns:

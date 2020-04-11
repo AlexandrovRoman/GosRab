@@ -1,10 +1,10 @@
 from app import db, session
 from datetime import datetime
-from app.models import base_new
+from app.models import ModelMixin
 from users.models import User
 
 
-class Organization(db.Model):
+class Organization(db.Model, ModelMixin):
     __tablename__ = 'organizations'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -15,6 +15,14 @@ class Organization(db.Model):
     owner_id = db.Column(db.Integer)
     org_type = db.Column(db.String)
     org_desc = db.Column(db.String)
+
+    def __init__(self,
+                 name=None,
+                 owner_id=None,
+                 org_type=None,
+                 org_desc=None,
+                 date=None):
+        super().__init__(name=name, owner_id=owner_id, org_desc=org_desc, org_type=org_type, date=date)
 
     def __repr__(self):
         return f'<Organization {self.name}>'
@@ -36,8 +44,7 @@ class Organization(db.Model):
 
     @classmethod
     def new(cls, name, owner_id, org_type, org_desc, date=datetime.now):
-        kwargs = {"name": name, "owner_id": owner_id, "org_desc": org_desc, "org_type": org_type, "date": date}
-        base_new(cls, **kwargs)
+        super().new(name, owner_id, org_type, org_desc, date)
 
     def get_required_workers(self):
         return [vacancy for vacancy in self.vacancies if vacancy.worker_id is None]
@@ -46,7 +53,7 @@ class Organization(db.Model):
         return [vacancy for vacancy in self.vacancies if vacancy.worker_id is not None]
 
 
-class Vacancy(db.Model):
+class Vacancy(db.Model, ModelMixin):
     __tablename__ = 'vacancies'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -55,12 +62,13 @@ class Vacancy(db.Model):
     salary = db.Column(db.Integer)
     title = db.Column(db.String)
 
+    def __init__(self,
+                 org_id=None,
+                 worker_id=None,
+                 salary=None,
+                 title=None):
+        super().__init__(org_id=org_id, worker_id=worker_id, salary=salary, title=title)
+
     @classmethod
     def new(cls, org_id, worker_id, salary, title):
-        kwargs = {
-            'org_id': org_id,
-            'worker_id': worker_id,
-            'salary': salary,
-            'title': title,
-        }
-        base_new(cls, **kwargs)
+        super().new(org_id, worker_id, salary, title)

@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy import orm
 from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import base_new, ModelMixin
+from app.models import ModelMixin
 
 roles_relationship = db.Table('roles_relationship',
                               db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -129,16 +129,12 @@ class User(db.Model, ModelMixin, UserMixin):
             user.roles.append(local_session_role)
 
 
-class T2Form(db.Model):
+class T2Form(db.Model, ModelMixin):
     __tablename__ = 't2'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     org_name_prop = db.Column(db.String)
-
-    @property
-    def org_name(self):
-        return self.org_name_prop
 
     linked_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     linked_user = orm.relation('User')
@@ -147,10 +143,6 @@ class T2Form(db.Model):
     service_number = db.Column(db.Integer, default=55)
     taxpayer_id_number = db.Column(db.String, default='0123456789012')
     pension_insurance_certificate = db.Column(db.String, default='123-456-789 12')
-
-    @property
-    def alphabet(self):
-        return self.linked_user.surname[0]
 
     work_nature = db.Column(db.String, default='Постоянная')  # Характер работы
     work_kind = db.Column(db.String, default='Основная')  # Вид работы
@@ -188,45 +180,45 @@ class T2Form(db.Model):
     passport_id = db.Column(db.String)
     passport_given = db.Column(db.Date, default=datetime.datetime.now())
 
-    @classmethod
-    def new(cls,
-            email,
-            password,
-            surname,
-            name,
-            fathername,
-            binded_org,
-            salary,
-            marriage,
-            gender,
-            org_name,
-            compile_date,
-            service_number,
-            taxpayer_id_number,
-            pension_insurance_certificate,
-            work_nature,
-            work_kind,
-            employment_contract_id,
-            employment_contract_date,
-            birthdate,
-            birthplace,
-            birthplace_okato,
-            nationality,
-            nationality_okin,
-            foreign_language_knowledge,
-            foreign_language_knowledge_okin,
-            education, education_okin,
-            education_list,
-            profession,
-            profession_code,
-            profession_other,
-            profession_other_code,
-            experience_checked,
-            experience,
-            marriage_okin,
-            family,
-            passport_id,
-            passport_given):
+    def __init__(self,
+                 email=None,
+                 password=None,
+                 surname=None,
+                 name=None,
+                 fathername=None,
+                 binded_org=None,
+                 salary=None,
+                 marriage=None,
+                 gender=None,
+                 org_name=None,
+                 compile_date=None,
+                 service_number=None,
+                 taxpayer_id_number=None,
+                 pension_insurance_certificate=None,
+                 work_nature=None,
+                 work_kind=None,
+                 employment_contract_id=None,
+                 employment_contract_date=None,
+                 birthdate=None,
+                 birthplace=None,
+                 birthplace_okato=None,
+                 nationality=None,
+                 nationality_okin=None,
+                 foreign_language_knowledge=None,
+                 foreign_language_knowledge_okin=None,
+                 education=None,
+                 education_okin=None,
+                 education_list=None,
+                 profession=None,
+                 profession_code=None,
+                 profession_other=None,
+                 profession_other_code=None,
+                 experience_checked=None,
+                 experience=None,
+                 marriage_okin=None,
+                 family=None,
+                 passport_id=None,
+                 passport_given=None):
         linked_user = User.get_by(email=email)
 
         if linked_user is None:
@@ -234,6 +226,7 @@ class T2Form(db.Model):
                                birthdate.year, birthdate.month, birthdate.day, gender, marriage)
             linked_user.save()
             print('На основе Т2 создан пользователь', linked_user.full_name)
+
         kwargs = {
             'org_name_prop': org_name,
             'linked_user_id': linked_user.id,
@@ -266,10 +259,66 @@ class T2Form(db.Model):
             'passport_id': passport_id,
             'passport_given': passport_given
         }
-        base_new(cls, debug=True, **kwargs)
+        super().__init__(**kwargs)
+
+    @classmethod
+    def new(cls,
+            email,
+            password,
+            surname,
+            name,
+            fathername,
+            binded_org,
+            salary,
+            marriage,
+            gender,
+            org_name,
+            compile_date,
+            service_number,
+            taxpayer_id_number,
+            pension_insurance_certificate,
+            work_nature,
+            work_kind,
+            employment_contract_id,
+            employment_contract_date,
+            birthdate,
+            birthplace,
+            birthplace_okato,
+            nationality,
+            nationality_okin,
+            foreign_language_knowledge,
+            foreign_language_knowledge_okin,
+            education,
+            education_okin,
+            education_list,
+            profession,
+            profession_code,
+            profession_other,
+            profession_other_code,
+            experience_checked,
+            experience,
+            marriage_okin,
+            family,
+            passport_id,
+            passport_given):
+        super().new(email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name,
+                    compile_date, service_number, taxpayer_id_number, pension_insurance_certificate,
+                    work_nature, work_kind, employment_contract_id, employment_contract_date, birthdate, birthplace,
+                    birthplace_okato, nationality, nationality_okin, foreign_language_knowledge,
+                    foreign_language_knowledge_okin, education, education_okin, education_list, profession,
+                    profession_code, profession_other, profession_other_code, experience_checked,
+                    experience, marriage_okin, family, passport_id, passport_given)
+
+    @property
+    def org_name(self):
+        return self.org_name_prop
+
+    @property
+    def alphabet(self):
+        return self.linked_user.surname[0]
 
 
-class Role(db.Model):
+class Role(db.Model, ModelMixin):
     __tablename__ = 'roles'
 
     role_id = db.Column(db.Integer,
@@ -277,20 +326,24 @@ class Role(db.Model):
     role_name = db.Column(db.String(20), unique=True)
     description = db.Column(db.String(200))
 
+    def __init__(self,
+                 role_name=None,
+                 description=None):
+        super().__init__(role_name=role_name, description=description)
+
     @classmethod
     def new(cls, name, description):
-        kwargs = {"role_name": name, "description": description}
-        base_new(cls, **kwargs)
+        super().new(name, description)
 
     def __repr__(self):
         return f'<Role {self.role_name}, Возможности: {self.description}>'
 
     @classmethod
     def get_role_for_name(cls, role_name):
-        return cls.query.filter_by(role_name=role_name).first()
+        return super().get_by(role_name=role_name)
 
 
-class Course(db.Model):
+class Course(db.Model, ModelMixin):
     __tablename__ = 'courses'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -300,11 +353,18 @@ class Course(db.Model):
     description = db.Column(db.String)
     image = db.Column(db.String(20))  # TODO: хранить картинку в юазе данных
 
+    def __init__(self,
+                 course_type=None,
+                 course_name=None,
+                 data=None,
+                 description=None,
+                 image=None):
+        super().__init__(course_type=course_type, course_name=course_name,
+                         data=data, description=description, image=image)
+
     @classmethod
     def new(cls, course_type, name, data, description, image):
-        kwargs = {"course_type": course_type, "course_name": name,
-                  "data": data, "description": description, "image": image}
-        base_new(cls, **kwargs)
+        super().new(course_type, name, data, description, image)
 
     @classmethod
     def get_courses(cls):
