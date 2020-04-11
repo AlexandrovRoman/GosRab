@@ -22,7 +22,7 @@ class Organization(db.Model, ModelMixin):
                  org_type=None,
                  org_desc=None,
                  date=None):
-        super().__init__(name=name, owner_id=owner_id, org_desc=org_desc, org_type=org_type, date=date)
+        super().__init__(name=name, owner_id=owner_id, org_desc=org_desc, org_type=org_type, creation_date=date)
 
     def __repr__(self):
         return f'<Organization {self.name}>'
@@ -43,7 +43,8 @@ class Organization(db.Model, ModelMixin):
         return session.query(cls).filter(cls.owner_id == user.id).all()
 
     @classmethod
-    def new(cls, name, owner_id, org_type, org_desc, date=datetime.now):
+    def new(cls, name, owner_id, org_type, org_desc, date=None):
+        date = date if date else datetime.now()
         super().new(name, owner_id, org_type, org_desc, date)
 
     def get_required_workers(self):
