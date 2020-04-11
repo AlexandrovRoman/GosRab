@@ -21,7 +21,9 @@ class BaseConfig:
     SECRET_KEY = 'zxczxasdsad'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECURITY_PASSWORD_SALT = 'my_precious_two'  # todo Поменять
+    SECURITY_PASSWORD_SALT = 'iufsdivdjkvcbadb'
+    EMAIL_SENDER_LOGIN = 'pfrproject2020@gmail.com'
+    EMAIL_SENDER_PASSWORD = 'NEED PASSWORD'
 
 
 class ProductionConfig(BaseConfig):

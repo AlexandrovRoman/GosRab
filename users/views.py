@@ -1,9 +1,11 @@
-from flask import render_template, request, redirect, url_for
+import datetime
+
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
 from users.models import User, Course
-from users.utils import check_confirmed
+from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
 
 
 @login_manager.user_loader
@@ -87,15 +89,39 @@ def registration():
     if request.method == "POST":
         if session.query(User).filter(User.email == request.form['email']).all():
             return 'Email уже использован'
+
         user = User(request.form['name'], request.form['surname'],
                     request.form['middlename'], request.form['email'],
                     request.form['password'])
+
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('confirm_email', token=token, _external=True)
+        html = render_template('activate.html', confirm_url=confirm_url)
+        send_email(user.email, html)
+
         session.add(user)
         session.commit()
+
         print('Зарегистрирован пользователь:', user)
-        login_user(user)
+        login_user(session.query(User).get(user.id))
         return redirect('/users/profile')
     return render_template("users/registration.html")
+
+
+@login_required
+def confirm_email():
+    token = request.args['token']
+    email = confirm_token(token)
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        session.merge(user)
+        session.commit()
+        print('Account confirmed', user, user.confirmed)
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect('/')
 
 
 @login_required
