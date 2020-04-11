@@ -79,6 +79,8 @@ def notification():
 
 
 def registration():
+    if request.method == "POST":
+        pass
     return render_template("users/registration.html")
 
 

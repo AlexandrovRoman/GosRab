@@ -12,6 +12,6 @@ urlpatterns = [
     relative_path('education/', education),
     relative_path('profile/notification/', notification),
     relative_path('profile/menu_organization/personnel_department/', personnel_department, methods=['GET', 'POST']),
-    relative_path('registration/', registration),
+    relative_path('registration/', registration, methods=["GET", "POST"]),
     relative_path('profile/t2/', t2)
 ]

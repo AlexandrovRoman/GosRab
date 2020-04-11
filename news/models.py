@@ -1,9 +1,9 @@
 from app import db
 import datetime
-from app.models import base_new
+from app.models import ModelMixin
 
 
-class HotNews(db.Model):
+class HotNews(db.Model, ModelMixin):
     __tablename__ = 'hot_news'
 
     id = db.Column(db.Integer,
@@ -13,6 +13,9 @@ class HotNews(db.Model):
     date = db.Column(db.DateTime, default=datetime.datetime.now)
     tags = db.Column(db.String, nullable=True)  # Тэги новости через запятую
     link = db.Column(db.String, default='#')
+
+    def __init__(self, title=None, description=None, date=None, tags=None, link=None):
+        super().__init__(title=title, description=description, date=date, tags=tags, link=link)
 
     def __repr__(self):
         return '<News {}>'.format(self.title)
@@ -24,11 +27,10 @@ class HotNews(db.Model):
 
     @classmethod
     def new(cls, title, description, link='#'):
-        kwargs = {"title": title, "description": description, "link": link}
-        base_new(cls, **kwargs)
+        super().new(title, description, link=link)
 
 
-class News(db.Model):
+class News(db.Model, ModelMixin):
     __tablename__ = 'news'
 
     id = db.Column(db.Integer,
@@ -36,6 +38,9 @@ class News(db.Model):
     title = db.Column(db.String(80), nullable=True)
     description = db.Column(db.String, nullable=True)
     image_link = db.Column(db.String, nullable=True)
+
+    def __init__(self, title=None, description=None, image_link=None):
+        super().__init__(title=title, description=description, image_link=image_link)
 
     def __repr__(self):
         return '<News {}>'.format(self.title)
@@ -47,5 +52,4 @@ class News(db.Model):
 
     @classmethod
     def new(cls, title, description, image_link):
-        kwargs = {"title": title, "description": description, "image_link": image_link}
-        base_new(cls, **kwargs)
+        super().new(title, description, image_link)
