@@ -1,7 +1,4 @@
 from app import session
-from logging import error, basicConfig
-
-basicConfig(format=u'%(levelname)-8s %(filename)s in [LINE:%(lineno)d]:\n%(message)s')
 
 
 class ModelMixin:
@@ -13,8 +10,8 @@ class ModelMixin:
     def save(self):
         try:
             session.add(self)
-        except Exception as ex:
-            error(f"{ex.__class__.__name__}: {ex}")
+        except:
+            session.merge(self)
         finally:
             session.commit()
 

@@ -99,8 +99,7 @@ def registration():
         html = render_template('activate_mess.html', confirm_url=confirm_url)
         send_email(user.email, html)
 
-        session.add(user)
-        session.commit()
+        user.save()
 
         print('Зарегистрирован пользователь:', user)
         login_user(session.query(User).get(user.id))
@@ -117,8 +116,7 @@ def confirm_email():
         flash('Account already confirmed. Please login.', 'success')
     else:
         user.confirmed = True
-        session.merge(user)
-        session.commit()
+        user.save()
         print('Account confirmed', user, user.confirmed)
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect('/')
