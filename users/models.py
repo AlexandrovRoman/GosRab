@@ -62,26 +62,15 @@ class User(db.Model, ModelMixin, UserMixin):
 
         roles = " ".join(roles)
         self.__class__.add_roles(self, roles)
-
-        kwargs = {
-            "surname": surname,
-            "name": name,
-            "fathername": fathername,
-            "work_department_id": binded_org,
-            "salary": salary,
-            "birth_date": datetime.date(birth_year, birth_month, birth_day),
-            "age": (datetime.datetime.now() - datetime.datetime(birth_year, birth_month, birth_day)).days // 365,
-            "email": email,
-            "hashed_password": generate_password_hash(password),
-            "sex": sex,
-            "marriage": marriage,
-            "grate": grate,
-            "education": education,
-            "foreign_languges": foreign_languges,
-            "start_place": start_place,
-            "about_myself": about_myself,
-        }
-        super().__init__(**kwargs)
+        super().__init__(surname=surname, name=name, fathername=fathername,
+                         work_department_id=binded_org, salary=salary,
+                         birth_date=datetime.date(birth_year, birth_month, birth_day),
+                         age=(datetime.datetime.now() -
+                              datetime.datetime(birth_year, birth_month, birth_day)).days // 365,
+                         email=email, hashed_password=generate_password_hash(password),
+                         sex=sex, marriage=marriage, grate=grate, education=education,
+                         foreign_languges=foreign_languges, start_place=start_place,
+                         about_myself=about_myself)
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -227,39 +216,24 @@ class T2Form(db.Model, ModelMixin):
             linked_user.save()
             print('На основе Т2 создан пользователь', linked_user.full_name)
 
-        kwargs = {
-            'org_name_prop': org_name,
-            'linked_user_id': linked_user.id,
-            'compile_date': compile_date,
-            'service_number': service_number,
-            'taxpayer_id_number': taxpayer_id_number,
-            'pension_insurance_certificate': pension_insurance_certificate,
-            'work_nature': work_nature,
-            'work_kind': work_kind,
-            'employment_contract_id': employment_contract_id,
-            'employment_contract_date': employment_contract_date,
-            'birthdate': birthdate,
-            'birthplace': birthplace,
-            'birthplace_okato': birthplace_okato,
-            'nationality': nationality,
-            'nationality_okin': nationality_okin,
-            'foreign_language_knowledge': foreign_language_knowledge,
-            'foreign_language_knowledge_okin': foreign_language_knowledge_okin,
-            'education': education,
-            'education_okin': education_okin,
-            'education_list': education_list,
-            'profession': profession,
-            'profession_code': profession_code,
-            'profession_other': profession_other,
-            'profession_other_code': profession_other_code,
-            'experience_checked': experience_checked,
-            'experience': experience,
-            'marriage_okin': marriage_okin,
-            'family': family,
-            'passport_id': passport_id,
-            'passport_given': passport_given
-        }
-        super().__init__(**kwargs)
+        super().__init__(org_name_prop=org_name, linked_user_id=linked_user.id,
+                         compile_date=compile_date, taxpayer_id_number=taxpayer_id_number,
+                         pension_insurance_certificate=pension_insurance_certificate,
+                         work_nature=work_nature, work_kind=work_kind,
+                         employment_contract_id=employment_contract_id,
+                         employment_contract_date=employment_contract_date,
+                         birthdate=birthdate, birthplace=birthplace,
+                         birthplace_okato=birthplace_okato, nationality=nationality,
+                         nationality_okin=nationality_okin, service_number=service_number,
+                         foreign_language_knowledge=foreign_language_knowledge,
+                         foreign_language_knowledge_okin=foreign_language_knowledge_okin,
+                         education=education, education_okin=education_okin,
+                         education_list=education_list, profession=profession,
+                         profession_code=profession_code, profession_other=profession_other,
+                         profession_other_code=profession_other_code,
+                         experience_checked=experience_checked, experience=experience,
+                         marriage_okin=marriage_okin, family=family,
+                         passport_id=passport_id, passport_given=passport_given)
 
     @classmethod
     def new(cls,
