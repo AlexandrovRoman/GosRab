@@ -28,9 +28,12 @@ def profile():
 def edit_profile():
     user = current_user
     if request.method == 'POST':
-        request.form['birth_date'] = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
+        ignore = ("birth_date",)
+        setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
         for attr in request.form:
-            setattr(current_user, attr, request.form[attr])
+            if attr in ignore:
+                continue
+            setattr(user, attr, request.form[attr])
 
         user.save()
 
