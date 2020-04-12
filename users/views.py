@@ -1,3 +1,5 @@
+from threading import Thread
+
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
@@ -26,12 +28,9 @@ def profile():
 def edit_profile():
     user = current_user
     if request.method == 'POST':
-        ignore = ("birth_date",)
-        setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
+        request.form['birth_date'] = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
         for attr in request.form:
-            if attr in ignore:
-                continue
-            setattr(user, attr, request.form[attr])
+            setattr(current_user, attr, request.form[attr])
 
         user.save()
 
@@ -91,7 +90,7 @@ def registration():
     if request.method == "POST":
         if User.get_by(email=request.form['email']):
             return 'Email уже использован'
-        birth_date = datetime.strptime(request.form["birth_date"], "%d-%m-%Y").date()
+        birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
 
         user = User(request.form['name'], request.form['surname'],
                     request.form['middlename'], request.form['email'],
@@ -100,7 +99,9 @@ def registration():
         token = generate_confirmation_token(user.email)
         confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('activate_mess.html', confirm_url=confirm_url)
-        send_email(user.email, html, "Confirm your GosRab account")
+
+        thread = Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account"))
+        thread.run()
 
         user.save()
 
