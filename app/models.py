@@ -8,12 +8,8 @@ class ModelMixin:
                 setattr(self, key, db_columns[key])
 
     def save(self):
-        try:
-            session.add(self)
-        except:
-            session.merge(self)
-        finally:
-            session.commit()
+        session.merge(self)
+        session.commit()
 
     @classmethod
     def new(cls, *db_columns, **kdb_columns):

@@ -1,6 +1,5 @@
 from flask import render_template, request
 from flask_login import current_user, login_required
-
 from app import session
 from organization.models import Organization, Vacancy
 from users.utils import check_confirmed
@@ -43,8 +42,7 @@ def personnel_department():
     if org is None:
         return 'Нет доступа'
     if request.method == 'POST':
-        session.add(Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']))
-        session.commit()
+        Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']).save()
 
     organization_info = {
         'org': org,
@@ -72,6 +70,5 @@ def job():
 
         return True
 
-    res = session.query(Vacancy).filter(Vacancy.worker_id == None).all()
+    res = session.query(Vacancy).filter(Vacancy.worker_id is None).all()
     return render_template("organization/job.html", vacancies=list(filter(filter_vacancy, res)), filters=request.args)
-

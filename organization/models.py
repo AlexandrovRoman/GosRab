@@ -33,7 +33,7 @@ class Organization(db.Model, ModelMixin):
 
     @classmethod
     def get_by_id(cls, user, org_id: int):
-        org = session.query(cls).get(org_id)
+        org = cls.get_by(id=org_id)
         if user.id != org.owner_id:
             return None
         return org

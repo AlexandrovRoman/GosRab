@@ -13,20 +13,21 @@ def check_confirmed(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user.confirmed is False:
-            return render_template('not_confirmed.html',
+            return render_template('users/not_confirmed.html',
                                    error='Не подтверждена почта',
-                                   discription='Вам было прислано письмо, пройдите по ссылке и подтвердите вашу почту')
+                                   discription='Вам было прислано письмо, пожалуйста перейдите '
+                                               'по ссылке и подтвердите вашу почту')
         return func(*args, **kwargs)
 
     return decorated_function
 
 
-def send_email(receiver_email, html):
+def send_email(receiver_email, html, subject="multipart test"):
     sender_email = Config.EMAIL_SENDER_LOGIN
     password = Config.EMAIL_SENDER_PASSWORD
 
     message = MIMEMultipart("alternative")
-    message["Subject"] = "multipart test"
+    message["Subject"] = subject
     message["From"] = sender_email
     message["To"] = receiver_email
 

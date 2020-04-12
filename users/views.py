@@ -4,7 +4,7 @@ from app import login_manager, session
 from organization.models import Organization
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
-from datetime import date
+from datetime import datetime
 
 
 @login_manager.user_loader
@@ -26,7 +26,7 @@ def profile():
 def edit_profile():
     user = current_user
     if request.method == 'POST':
-        request.form['birth_date'] = date(*map(int, request.form['birth_date'].split("-")))
+        request.form['birth_date'] = datetime.strptime(request.form["birth_date"], "%d-%m-%Y").date()
         for attr in request.form:
             setattr(current_user, attr, request.form[attr])
 
@@ -88,7 +88,7 @@ def registration():
     if request.method == "POST":
         if User.get_by(email=request.form['email']):
             return 'Email уже использован'
-        birth_date = date(*map(int, request.form['birth_date'].split("-")))
+        birth_date = datetime.strptime(request.form["birth_date"], "%d-%m-%Y").date()
 
         user = User(request.form['name'], request.form['surname'],
                     request.form['middlename'], request.form['email'],
@@ -97,7 +97,7 @@ def registration():
         token = generate_confirmation_token(user.email)
         confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('activate_mess.html', confirm_url=confirm_url)
-        send_email(user.email, html)
+        send_email(user.email, html, "Confirm your GosRab account")
 
         user.save()
 

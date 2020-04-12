@@ -102,7 +102,7 @@ class User(db.Model, ModelMixin, UserMixin):
                 'Gender': self.sex, 'Age': self.age, 'Grade': self.grate, "BirthDate": self.birth_date,
                 'Education': self.education, 'Marital_status': self.marriage,
                 'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
-                'About_myself': self.about_myself, 'Workplace': 'Автосервис Михаил-авто(отдел продаж) - Глав.Менеджер'}
+                'About_myself': self.about_myself}
 
     @classmethod
     def get_logged(cls, login, password):
