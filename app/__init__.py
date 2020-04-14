@@ -3,7 +3,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from flask_dj.app_init import create_session
+from flask_dj.app_init import create_session, db_init
 from .config import Config
 
 app = Flask('__main__')
@@ -15,4 +15,5 @@ SqlAlchemyBase = dec.declarative_base()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-session = create_session(Config.SQLALCHEMY_DATABASE_URI, SqlAlchemyBase)
+db_init(Config.SQLALCHEMY_DATABASE_URI, SqlAlchemyBase, None)
+session = create_session()

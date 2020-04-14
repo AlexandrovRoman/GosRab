@@ -6,3 +6,4 @@ venv/
 *.db
 *.http
 top_secret.txt
+/postgresql_config.txt

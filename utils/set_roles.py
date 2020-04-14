@@ -10,4 +10,3 @@ def create_roles():
     Role.new('head of department', 'глава отдела')
     Role.new('admin', 'доступны фичи админа: .......')
     Role.new('superuser', 'доступны фичи суперюзера: .........')
-    session.commit()

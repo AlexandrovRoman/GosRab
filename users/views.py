@@ -1,12 +1,11 @@
+from datetime import datetime
 from threading import Thread
-
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
-from datetime import datetime
 
 
 @login_manager.user_loader
