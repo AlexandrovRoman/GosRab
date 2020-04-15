@@ -6,14 +6,14 @@
                           <h4 class="d-flex justify-content-center mb-3">
                               <span class="h1 mt-3">Личный профиль</span>
                           </h4>
-                          <h4 class="mb-3">Фамилия: {{ Surname }}</h4>
-                          <h4 class="mb-3">Имя: {{ Name }}</h4>
+                          <h4 class="mb-3">Фамилия: {{ surname }}</h4>
+                          <h4 class="mb-3">Имя: {{ name }}</h4>
                           <h4 class="mb-3">Отчество: {{ Middle_name }}</h4>
-                          <h4 class="mb-3">Пол: {{ Gender }}</h4>
-                          <h4 class="mb-3">Возраст: {{ Age }} лет</h4>
-                          <h4 class="mb-3">Грейд: {{ Grade }}</h4>
-                          <h4 class="mb-3">Образование: {{ Education }}</h4>
-                          <h4 class="mb-3">Семейное положение: {{ Marital_status }}</h4>
+                          <h4 class="mb-3">Пол: {{ gender }}</h4>
+                          <h4 class="mb-3">Возраст: {{ age }} лет</h4>
+                          <h4 class="mb-3">Грейд: {{ grade }}</h4>
+                          <h4 class="mb-3">Образование: {{ education }}</h4>
+                          <h4 class="mb-3">Семейное положение: {{ marital_status }}</h4>
                       </div>
                       <div class="order-md-1 mt-2 col-11 col-sm-11 col-md-11 col-lg-11 col-xl-5">
                           <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" alt="" style="max-width: 100%; height: auto">
@@ -21,6 +21,6 @@
                   </div>
 {#                  <h4 class="mb-3">Работа: {{ Workplace }}</h4>#}
 {#                  <h4 class="mb-3">Знание иностранных язаков: {{ Knowledge_of_foreign_language }}</h4>#}
-                  <h4 class="mb-3">Информация о себе: {{ About_myself }}</h4>
+                  <h4 class="mb-3">Информация о себе: {{ about_myself }}</h4>
               </div>
 {% endblock %}

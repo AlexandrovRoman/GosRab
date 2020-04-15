@@ -1,4 +1,6 @@
 import datetime
+from typing import Union
+
 from flask_login import UserMixin
 from sqlalchemy import orm
 from app import db, session
@@ -98,11 +100,11 @@ class User(db.Model, ModelMixin, UserMixin):
 
     @property
     def get_profile_info(self):
-        return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
-                'Gender': self.sex, 'Age': self.age, 'Grade': self.grate, "BirthDate": self.birth_date,
-                'Education': self.education, 'Marital_status': self.marriage,
-                'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
-                'About_myself': self.about_myself}
+        return {'surname': self.surname, 'name': self.name, 'fathername': self.fathername,
+                'gender': self.sex, 'age': self.age, 'grade': self.grate, "birth_date": self.birth_date,
+                'education': self.education, 'marital_status': self.marriage,
+                'knowledge_of_foreign_language': self.foreign_languges, 'email': self.email,
+                'about_myself': self.about_myself}
 
     @classmethod
     def get_logged(cls, login, password):
@@ -248,45 +250,12 @@ class T2Form(db.Model, ModelMixin):
                          passport_id=passport_id, passport_given=passport_given)
 
     @classmethod
-    def new(cls,
-            email,
-            password,
-            surname,
-            name,
-            fathername,
-            binded_org,
-            salary,
-            marriage,
-            gender,
-            org_name,
-            compile_date,
-            service_number,
-            taxpayer_id_number,
-            pension_insurance_certificate,
-            work_nature,
-            work_kind,
-            employment_contract_id,
-            employment_contract_date,
-            birthdate,
-            birthplace,
-            birthplace_okato,
-            nationality,
-            nationality_okin,
-            foreign_language_knowledge,
-            foreign_language_knowledge_okin,
-            education,
-            education_okin,
-            education_list,
-            profession,
-            profession_code,
-            profession_other,
-            profession_other_code,
-            experience_checked,
-            experience,
-            marriage_okin,
-            family,
-            passport_id,
-            passport_given):
+    def new(cls, email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name,
+            compile_date, service_number, taxpayer_id_number, pension_insurance_certificate, work_nature, work_kind,
+            employment_contract_id, employment_contract_date, birthdate, birthplace, birthplace_okato, nationality,
+            nationality_okin, foreign_language_knowledge, foreign_language_knowledge_okin, education, education_okin,
+            education_list, profession, profession_code, profession_other, profession_other_code, experience_checked,
+            experience, marriage_okin, family, passport_id, passport_given):
         super().new(email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name,
                     compile_date, service_number, taxpayer_id_number, pension_insurance_certificate,
                     work_nature, work_kind, employment_contract_id, employment_contract_date, birthdate, birthplace,

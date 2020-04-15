@@ -2,14 +2,34 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, Email
+from wtforms.fields import SelectField
 
 
 class RegisterForm(FlaskForm):
-    name = StringField('Имя', validators=[DataRequired()])
     surname = StringField('Фамилия', validators=[DataRequired()])
-    fathername = StringField('Очество', default='')
-    sex = StringField('Пол', validators=[DataRequired()])
-    date_of_birth = DateField('Дата рождения', format='%y/%m/%d', validators=[DataRequired()])
-    email = EmailField('', validators=[Email()])
+    name = StringField('Имя', validators=[DataRequired()])
+    fathername = StringField('Очество', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[("Мужской", "Мужской"), ("Женский", "Женский")], validators=[DataRequired()])
+    birth_date = DateField('Дата рождения', format='%Y-%m-%d', validators=[DataRequired()])
+    email = EmailField('Почта', validators=[Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])
+    submit = SubmitField('Зарегестрироваться')
+
+
+class EditForm(FlaskForm):
+    surname = StringField('Фамилия', validators=[DataRequired()])
+    name = StringField('Имя', validators=[DataRequired()])
+    fathername = StringField('Очество', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[("Мужской", "Мужской"), ("Женский", "Женский")], validators=[DataRequired()])
+    marriage = SelectField('Семейное положение', choices=[("В браке", "В браке"), ("Не в браке", "Не в браке")])
+    email = EmailField('Почта', validators=[Email()])
+    birth_date = DateField('Дата рождения', format='%Y-%m-%d', validators=[DataRequired()])
+    about_myself = StringField('Информация о себе', validators=[DataRequired()])
+    submit = SubmitField('Редактировать')
+
+
+class SignInForm(FlaskForm):
+    email = EmailField('Адрес электронной почты', validators=[DataRequired()],
+                       render_kw={"placeholder": "Адрес электронной почты"})
+    password = PasswordField('Пароль', validators=[DataRequired()], render_kw={"placeholder": "Пароль"})
     submit = SubmitField('Войти')

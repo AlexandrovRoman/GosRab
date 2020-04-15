@@ -16,40 +16,20 @@
                 <div class="card col-md-4 shadow">
                     <div class="column mb-3 text-center">
                         <div class="h1 text-center mt-3">Регистрация</div>
-                        <form class="needs-validation" novalidate method="POST" action="">
-                            <div class="col-md-12 mt-3">
-                                <label class="h4 my-1" for="Фамилия">Фамилия</label>
-                                <input type="text" class="form-control my-2" id="Фамилия" name="surname" required>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="h4 my-1" for="Имя">Имя</label>
-                                <input type="text" class="form-control my-2" id="Имя" name="name" required>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="h4 my-1" for="Отчество">Отчество</label>
-                                <input type="text" class="form-control my-2" id="Отчество" name="middlename" required>
-                            </div>
-                            <div class="col-md-12">
-                              <label class="h4 my-1" for="sex">Пол</label>
-                              <select class="custom-select d-block w-100" id="sex" name="sex" required>
-                                  <option value="Мужской" selected>Мужской</option>
-                                  <option value="Женский">Женский</option>
-                              </select>
-                          </div>
-                            <div class="col-md-12">
-                                <label class="h4 my-1" for="Дата рождения">Дата рождения</label>
-                                <input type="date" class="form-control my-2" id="Дата рождения" name="birth_date"
-                                       required>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="h4 my-1" for="Отчество">Почта</label>
-                                <input type="email" class="form-control my-2" id="Email" name="email" required>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="h4 my-1" for="Отчество">Пароль</label>
-                                <input type="password" class="form-control my-2" id="Password" name="password" required>
-                            </div>
-                            <button class="btn btn-primary btn-lg btn-block mt-3" type="submit">Зарегистрироватся</button>
+                        <form novalidate method="POST" action="">
+                            <div>
+                                {{ form.csrf_token }}
+                                </div>
+                                {% for field in form if field.name != 'csrf_token' and field != form.submit %}
+                                <div class="col-md-12 mt-3">
+                                    {{ field.label(class="h4 my-1") }}
+                                    {{ field(class="form-control my-2") }}
+                                    {% for error in field.errors %}
+                                    <div class="error">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            {{ form.submit(class="btn btn-primary btn-lg btn-block mt-3", type="submit") }}
                         </form>
                     </div>
                 </div>

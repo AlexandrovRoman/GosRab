@@ -4,6 +4,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
 from organization.models import Organization
+from users.forms import RegisterForm, SignInForm, EditForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
 
@@ -25,14 +26,14 @@ def profile():
 @login_required
 @check_confirmed
 def edit_profile():
+    form = EditForm()
     user = current_user
     if request.method == 'POST':
         ignore = ("birth_date",)
         setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
         for attr in request.form:
-            if attr in ignore:
-                continue
-            setattr(user, attr, request.form[attr])
+            if attr not in ignore:
+                setattr(user, attr, request.form[attr])
 
         user.save()
 
@@ -40,17 +41,18 @@ def edit_profile():
     info = user.get_profile_info
     info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
 
-    return render_template('users/edit_profile.html', **info)
+    return render_template('users/edit_profile.html', **info, form=form, info=info)
 
 
 def login():
-    if request.method == 'POST':
-        user = User.get_logged(request.form['username'], request.form['password'])
+    form = SignInForm()
+    if form.validate_on_submit():
+        user = User.get_logged(request.form['email'], request.form['password'])
         if user is not None:
             login_user(user)
             return redirect('/')
 
-    return render_template('users/sign_in.html')
+    return render_template('users/sign_in.html', form=form)
 
 
 @login_required
@@ -89,28 +91,28 @@ def notification():
 
 
 def registration():
-    if request.method == "POST":
-        if User.get_by(email=request.form['email']):
-            return 'Email уже использован'
-        birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
+    form = RegisterForm()
+    if not form.validate_on_submit():
+        return render_template("users/registration.html", form=form)
+    if User.get_by(email=request.form['email']):
+        return 'Email уже использован'
+    birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
 
-        user = User(request.form['name'], request.form['surname'],
-                    request.form['middlename'], request.form['email'],
-                    request.form['password'], sex=request.form['sex'], birth_date=birth_date)
+    user = User(request.form['name'], request.form['surname'],
+                request.form['fathername'], request.form['email'],
+                request.form['password'], sex=request.form['sex'], birth_date=birth_date)
 
-        token = generate_confirmation_token(user.email)
-        confirm_url = url_for('confirm_email', token=token, _external=True)
-        html = render_template('activate_mess.html', confirm_url=confirm_url)
+    token = generate_confirmation_token(user.email)
+    confirm_url = url_for('confirm_email', token=token, _external=True)
+    html = render_template('activate_mess.html', confirm_url=confirm_url)
 
-        thread = Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account"))
-        thread.run()
+    Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()
 
-        user.save()
+    user.save()
 
-        print('Зарегистрирован пользователь:', user)
-        login_user(session.query(User).get(user.id))
-        return redirect('/users/profile')
-    return render_template("users/registration.html")
+    print('Зарегистрирован пользователь:', user)
+    login_user(session.query(User).get(user.id))
+    return redirect('/users/profile')
 
 
 @login_required

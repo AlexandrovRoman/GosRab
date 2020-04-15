@@ -14,23 +14,23 @@
           <form method="POST" action="">
           <div class="d-flex justify-content-center" style="height: 100px">
             <div class="d-flex p-3 my-1 flex-column" style="width: 300px">
-              <label for="inputEmail" class="sr-only">Адрес электронной почты</label>
-              <input  name="username" type="email" id="inputEmail" class="form-control" placeholder="Адрес электронной почты" required autofocus>
-              <label for="inputPassword" class="sr-only">Пароль</label>
-              <input  name="password" type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
+                <div>
+                {{ form.csrf_token }}
+                </div>
+                {% for field in form if field.name != 'csrf_token' and field != form.submit %}
+                        {{ field(class="form-control") }}
+                        {% for error in field.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                {% endfor %}
             </div>
           </div>
           <div class="row p-3 mx-5 mb-2 justify-content-center" style="height: 50px; max-width: 1800px">
-            <div class="checkbox mx-5">
-              <label>
-                <input type="checkbox" value="remember-me"> Запомнить пароль
-              </label>
-            </div>
             <p class="mx-5 float-right"><a href=/users/registration/>Зарегистрироватся</a></p>
           </div>
           <div class="d-flex justify-content-center" style="height: 130px">
             <div class="d-flex p-3 my-1 flex-column">
-              <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 300px">Войти</button>
+                {{ form.submit(class="btn btn-lg btn-primary btn-block", type="submit", style="width: 300px") }}
               <p class="mt-1 mb-3 ml-5 mt-3 text-muted">&copy; SAMARA-CORPARATION</p>
             </div>
           </div>
