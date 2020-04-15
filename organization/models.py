@@ -28,10 +28,6 @@ class Organization(db.Model, ModelMixin):
         return f'<Organization {self.name}>'
 
     @classmethod
-    def get_attached_to_personnel(cls, user):
-        return user.binded_org
-
-    @classmethod
     def get_by_id(cls, user, org_id: int):
         org = cls.get_by(id=org_id)
         if user.id != org.owner_id:

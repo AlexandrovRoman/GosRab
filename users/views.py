@@ -3,7 +3,6 @@ from threading import Thread
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager, session
-from organization.models import Organization
 from users.forms import RegisterForm, SignInForm, EditForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
@@ -19,7 +18,6 @@ def load_user(user_id):
 def profile():
     user = current_user
     info = user.get_profile_info
-    info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
     return render_template('users/profile.html', **info)
 
 
@@ -28,20 +26,19 @@ def profile():
 def edit_profile():
     form = EditForm()
     user = current_user
-    if request.method == 'POST':
-        ignore = ("birth_date",)
-        setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
-        for attr in request.form:
-            if attr not in ignore:
-                setattr(user, attr, request.form[attr])
+    if not form.validate_on_submit():
+        info = user.get_profile_info
+        return render_template('users/edit_profile.html', form=form, info=info)
 
-        user.save()
+    ignore = ("birth_date",)
+    setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
+    for attr in request.form:
+        if attr not in ignore:
+            setattr(user, attr, request.form[attr])
 
-        return redirect(url_for('profile'))
-    info = user.get_profile_info
-    info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
+    user.save()
 
-    return render_template('users/edit_profile.html', **info, form=form, info=info)
+    return redirect(url_for('profile'))
 
 
 def login():
@@ -64,7 +61,7 @@ def logout():
 @login_required
 @check_confirmed
 def personnel():
-    org = Organization.get_attached_to_personnel(current_user)
+    org = current_user.binded_org
     if org is None:
         return 'Не привязан ни к одной'
     organization_info = {
@@ -85,7 +82,6 @@ def education():
 def notification():
     user = current_user
     info = user.get_profile_info
-    info['hasAttached'] = Organization.get_attached_to_personnel(user) is not None
 
     return render_template('users/notifications.html', **info)
 
