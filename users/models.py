@@ -5,10 +5,6 @@ from app import db, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import ModelMixin
 
-roles_relationship = db.Table('roles_relationship',
-                              db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-                              db.Column('role_id', db.Integer, db.ForeignKey('roles.role_id')))
-
 
 class User(db.Model, ModelMixin, UserMixin):
     __tablename__ = 'users'
@@ -37,7 +33,6 @@ class User(db.Model, ModelMixin, UserMixin):
     work_department_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
     salary = db.Column(db.Integer, nullable=True)
 
-    roles = db.relationship('Role', secondary=roles_relationship, backref=db.backref('users', lazy='dynamic'))
     vacancies = db.relationship("Vacancy", backref='worker')
 
     def __init__(self,
@@ -56,11 +51,8 @@ class User(db.Model, ModelMixin, UserMixin):
                  foreign_languges=None,
                  start_place=None,
                  about_myself=None,
-                 confirmed=False,
-                 roles=("user",)):
+                 confirmed=False):
 
-        roles = " ".join(roles)
-        self.__class__.add_roles(self, roles)
         super().__init__(surname=surname, name=name, fathername=fathername,
                          work_department_id=binded_org, salary=salary,
                          birth_date=birth_date, email=email,
@@ -121,13 +113,6 @@ class User(db.Model, ModelMixin, UserMixin):
             email, password, sex, marriage):
         super().new(name, surname, fathername, email, password,
                     binded_org, salary, birth_date, sex, marriage=marriage, confirmed=True)
-
-    @staticmethod
-    def add_roles(user, role_names):
-        for role_name in role_names.split():
-            role = Role.get_role_for_name(role_name)
-            local_session_role = session.merge(role)
-            user.roles.append(local_session_role)
 
 
 class T2Form(db.Model, ModelMixin):
@@ -272,31 +257,6 @@ class T2Form(db.Model, ModelMixin):
         return self.linked_user.surname[0]
 
 
-class Role(db.Model, ModelMixin):
-    __tablename__ = 'roles'
-
-    role_id = db.Column(db.Integer,
-                        primary_key=True, autoincrement=True)
-    role_name = db.Column(db.String(20), unique=True)
-    description = db.Column(db.String(200))
-
-    def __init__(self,
-                 role_name=None,
-                 description=None):
-        super().__init__(role_name=role_name, description=description)
-
-    @classmethod
-    def new(cls, name, description):
-        super().new(name, description)
-
-    def __repr__(self):
-        return f'<Role {self.role_name}, Возможности: {self.description}>'
-
-    @classmethod
-    def get_role_for_name(cls, role_name):
-        return super().get_by(role_name=role_name)
-
-
 class Course(db.Model, ModelMixin):
     __tablename__ = 'courses'
 
@@ -324,9 +284,3 @@ class Course(db.Model, ModelMixin):
     def get_courses(cls):
         courses = [(obj.course_type, obj.course_name, obj.data, obj.description, obj.image) for obj in cls.query.all()]
         return courses
-
-
-# ЭТО ЗАГЛУШКА НЕ УДАЛЯТЬ
-class Model1(db.Model):
-    __tablename__ = 'model1'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)

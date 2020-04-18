@@ -5,7 +5,6 @@ from news.models import HotNews, News
 from organization.models import Organization, Vacancy
 from users.models import User, Course, T2Form
 from utils.excel_DB import export_from_excel
-from utils.set_roles import create_roles
 
 
 def confirm(msg):
@@ -38,7 +37,5 @@ os.system(f'{sys.executable} manage.py db migrate')
 confirm('manage.py db migrate завершено.')
 os.system(f'{sys.executable} manage.py db upgrade')
 confirm('manage.py db upgrade завершено.')
-create_roles()
-confirm('set_roles.py завершено.')
 create_test_models()
 print('\n\texcel_DB.py завершено.\n')
