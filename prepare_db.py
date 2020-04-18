@@ -1,5 +1,4 @@
 import os
-import argparse
 import shutil
 import sys
 from news.models import HotNews, News
@@ -27,22 +26,17 @@ def create_test_models():
     export_from_excel('test_models/courses.xlsx', Course.new)
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("pythonenv")
-
-args = parser.parse_args()
-
 # confirm('Снести бд?')
 # resetdb_command(app.config['SQLALCHEMY_DATABASE_URI'])
-
+print(sys.executable)
 if os.path.exists('migrations'):
     shutil.rmtree('migrations')
 
-os.system(f'{args.pythonenv} manage.py db init')
+os.system(f'{sys.executable} manage.py db init')
 confirm('manage.py db init завершено.')
-os.system(f'{args.pythonenv} manage.py db migrate')
+os.system(f'{sys.executable} manage.py db migrate')
 confirm('manage.py db migrate завершено.')
-os.system(f'{args.pythonenv} manage.py db upgrade')
+os.system(f'{sys.executable} manage.py db upgrade')
 confirm('manage.py db upgrade завершено.')
 create_roles()
 confirm('set_roles.py завершено.')
