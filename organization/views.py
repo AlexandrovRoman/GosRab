@@ -1,6 +1,7 @@
 from flask import render_template, request
 from flask_login import current_user, login_required
 from app import session
+from organization.forms import AddOrganizationForm
 from organization.models import Organization, Vacancy
 from users.utils import check_confirmed
 
@@ -16,7 +17,13 @@ def organizations():
 @login_required
 @check_confirmed
 def add_organization():
-    return render_template("organization/add_organization.html")
+    form = AddOrganizationForm()
+
+    if form.validate_on_submit():
+        # Creation here
+        pass
+
+    return render_template("organization/add_organization.html", form=form)
 
 
 @login_required

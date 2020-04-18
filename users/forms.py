@@ -1,15 +1,16 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.fields.html5 import EmailField, DateField
-from wtforms.validators import DataRequired, Email
+from wtforms.validators import DataRequired, Email, AnyOf
 from wtforms.fields import SelectField
 
 
 class RegisterForm(FlaskForm):
     surname = StringField('Фамилия', validators=[DataRequired()])
     name = StringField('Имя', validators=[DataRequired()])
-    fathername = StringField('Очество', validators=[DataRequired()])
-    sex = SelectField('Пол', choices=[("Мужской", "Мужской"), ("Женский", "Женский")], validators=[DataRequired()])
+    fathername = StringField('Отчество', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[("Мужской", "Мужской"), ("Женский", "Женский")],
+                      validators=[DataRequired(), AnyOf(['Женский', 'Мужской'])])
     birth_date = DateField('Дата рождения', format='%Y-%m-%d', validators=[DataRequired()])
     email = EmailField('Почта', validators=[Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])

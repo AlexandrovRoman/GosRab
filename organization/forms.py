@@ -1,4 +1,13 @@
 from flask_wtf import FlaskForm
-import wtforms
+from wtforms import StringField, SelectField, SubmitField, TextAreaField
+from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired, Email, AnyOf
 
-# Create your forms
+
+class AddOrganizationForm(FlaskForm):
+    name = StringField('Имя организации', validators=[DataRequired()])
+    org_type = SelectField('Вид организации', choices=[("ООО", "ООО"), ("АО", "АО"), ("ИП", "ИП")],
+                           validators=[DataRequired(), AnyOf(['ООО', 'АО', 'ИП'])])
+    email = EmailField('Почта организации', validators=[Email()])
+    org_desc = TextAreaField('Описание организации')
+    submit = SubmitField('Добавить организацию')
