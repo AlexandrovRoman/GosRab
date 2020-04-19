@@ -2,7 +2,7 @@ from datetime import datetime
 from threading import Thread
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from app import login_manager, session
+from app import login_manager
 from users.forms import RegisterForm, SignInForm, EditForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
@@ -104,18 +104,19 @@ def registration():
 
     Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()
 
-    user.save()
+    user.save(add=True)
 
     print('Зарегистрирован пользователь:', user)
-    login_user(session.query(User).get(user.id))
+    login_user(user)
     return redirect('/users/profile')
 
 
-@login_required
 def confirm_email():
     token = request.args['token']
     email = confirm_token(token)
     user = User.query.filter_by(email=email).first_or_404()
+    if not current_user.is_authenticated:
+        login_user(user)
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
     else:

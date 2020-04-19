@@ -7,8 +7,8 @@ class ModelMixin:
             if not db_columns[col_name] is None:
                 self.set_col(col_name, db_columns[col_name])
 
-    def save(self):
-        session.merge(self)
+    def save(self, *, add=False):
+        session.merge(self) if not add else session.add(self)
         session.commit()
 
     def set_model(self, **db_columns):
@@ -22,7 +22,7 @@ class ModelMixin:
     @classmethod
     def new(cls, *db_columns, **kdb_columns):
         obj = cls(*db_columns, **kdb_columns)
-        obj.save()
+        obj.save(add=True)
 
     @classmethod
     def get_by(cls, **model_fields):
