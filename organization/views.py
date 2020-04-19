@@ -77,5 +77,5 @@ def job():
 
         return True
 
-    res = session.query(Vacancy).filter(Vacancy.worker_id is None).all()
+    res = session.query(Vacancy).filter_by(worker_id=None).all()
     return render_template("organization/job.html", vacancies=list(filter(filter_vacancy, res)), filters=request.args)
