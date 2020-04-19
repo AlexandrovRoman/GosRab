@@ -1,23 +1,36 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.fields.html5 import DateTimeLocalField, EmailField, IntegerField
-from wtforms.validators import DataRequired, Email
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.fields.html5 import EmailField, DateField
+from wtforms.validators import DataRequired, Email, AnyOf
+from wtforms.fields import SelectField
 
 
 class RegisterForm(FlaskForm):
-    name = StringField('Имя', validators=[DataRequired()])
     surname = StringField('Фамилия', validators=[DataRequired()])
-    fathername = StringField('Очество', default='')
-    age = IntegerField('Возраст', validators=[DataRequired()])
-    sex = StringField('Пол', validators=[DataRequired()])
-    start_place = StringField('Место рождения',  validators=[DataRequired()])
-    nationality = StringField('Гражданство',  validators=[DataRequired()])
-    education = StringField('Образование', default='Отсутствует')
-    date_of_birth = DateTimeLocalField('Дата рождения', format='%d/%m/%y', validators=[DataRequired()])
-    foreign_languge = StringField('Иностранные языки', validators=[DataRequired()])
-    role = StringField('Роль', validators=[DataRequired()])
-    marriage = BooleanField('В браке', validators=[DataRequired()])
-    email = EmailField('', validators=[Email()])
+    name = StringField('Имя', validators=[DataRequired()])
+    fathername = StringField('Отчество', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[("Мужской", "Мужской"), ("Женский", "Женский")],
+                      validators=[DataRequired(), AnyOf(['Женский', 'Мужской'])])
+    birth_date = DateField('Дата рождения', format='%Y-%m-%d', validators=[DataRequired()])
+    email = EmailField('Почта', validators=[Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Получать уведомления о событиях')
+    submit = SubmitField('Зарегестрироваться')
+
+
+class EditForm(FlaskForm):
+    surname = StringField('Фамилия', validators=[DataRequired()])
+    name = StringField('Имя', validators=[DataRequired()])
+    fathername = StringField('Очество', validators=[DataRequired()])
+    sex = SelectField('Пол', choices=[("Мужской", "Мужской"), ("Женский", "Женский")], validators=[DataRequired()])
+    marriage = SelectField('Семейное положение', choices=[("В браке", "В браке"), ("Не в браке", "Не в браке")])
+    email = EmailField('Почта', validators=[Email()])
+    birth_date = DateField('Дата рождения', format='%Y-%m-%d', validators=[DataRequired()])
+    about_myself = StringField('Информация о себе', validators=[DataRequired()])
+    submit = SubmitField('Редактировать')
+
+
+class SignInForm(FlaskForm):
+    email = EmailField('Адрес электронной почты', validators=[DataRequired()],
+                       render_kw={"placeholder": "Адрес электронной почты"})
+    password = PasswordField('Пароль', validators=[DataRequired()], render_kw={"placeholder": "Пароль"})
     submit = SubmitField('Войти')

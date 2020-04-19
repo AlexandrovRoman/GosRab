@@ -1,11 +1,13 @@
 from flask import render_template, request
 from flask_login import current_user, login_required
-
 from app import session
+from organization.forms import AddOrganizationForm
 from organization.models import Organization, Vacancy
+from users.utils import check_confirmed
 
 
 @login_required
+@check_confirmed
 def organizations():
     user_orgs = Organization.get_attached_to_user(current_user)
 
@@ -13,11 +15,19 @@ def organizations():
 
 
 @login_required
+@check_confirmed
 def add_organization():
-    return render_template("organization/add_organization.html")
+    form = AddOrganizationForm()
+
+    if form.validate_on_submit():
+        # Creation here
+        pass
+
+    return render_template("organization/add_organization.html", form=form)
 
 
 @login_required
+@check_confirmed
 def menu_organization():
     org_id = request.args.get('org_id')
     if not org_id.isdigit():
@@ -30,6 +40,7 @@ def menu_organization():
 
 
 @login_required
+@check_confirmed
 def personnel_department():
     org_id = request.args.get('org_id')
     if not org_id.isdigit():
@@ -38,8 +49,7 @@ def personnel_department():
     if org is None:
         return 'Нет доступа'
     if request.method == 'POST':
-        session.add(Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']))
-        session.commit()
+        Vacancy(org_id=int(org_id), salary=request.form['salary'], title=request.form['title']).save()
 
     organization_info = {
         'org': org,
@@ -67,6 +77,5 @@ def job():
 
         return True
 
-    res = session.query(Vacancy).filter(Vacancy.worker_id == None).all()
+    res = session.query(Vacancy).filter_by(worker_id=None).all()
     return render_template("organization/job.html", vacancies=list(filter(filter_vacancy, res)), filters=request.args)
-

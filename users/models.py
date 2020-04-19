@@ -1,35 +1,31 @@
 import datetime
 from flask_login import UserMixin
 from sqlalchemy import orm
-from app import db, session
+from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import base_new
-
-roles_relationship = db.Table('roles_relationship',
-                              db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-                              db.Column('role_id', db.Integer, db.ForeignKey('roles.role_id')))
+from app.models import ModelMixin
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, ModelMixin, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     t2_rel = orm.relation("T2Form", back_populates='linked_user')
 
-    name = db.Column(db.String(80), nullable=True)
-    surname = db.Column(db.String(80), nullable=True)
+    name = db.Column(db.String(80))
+    surname = db.Column(db.String(80))
     fathername = db.Column(db.String(80), nullable=True)
-    email = db.Column(db.String(40), index=True, unique=True, nullable=True)
-    hashed_password = db.Column(db.String, nullable=True)
+    email = db.Column(db.String(40), index=True, unique=True)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    hashed_password = db.Column(db.String)
     birth_date = db.Column(db.Date)
-    age = db.Column(db.Integer)
-    sex = db.Column(db.String(7), nullable=True)  # М/Ж
+    sex = db.Column(db.String(7))
+    marriage = db.Column(db.String(20), default="Не в браке")
     grate = db.Column(db.String, default='Новичок')
     education = db.Column(db.String, default='Отсутствует')
     foreign_languges = db.Column(db.String, default='Отсутствует')
     start_place = db.Column(db.String)
     nationality = db.Column(db.String)
-    marriage = db.Column(db.String(20))
     about_myself = db.Column(db.String, default='Отсутствует')
     # organization info
     post = db.Column(db.String, nullable=True)
@@ -37,11 +33,50 @@ class User(db.Model, UserMixin):
     work_department_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
     salary = db.Column(db.Integer, nullable=True)
 
-    roles = db.relationship('Role', secondary=roles_relationship, backref=db.backref('users', lazy='dynamic'))
     vacancies = db.relationship("Vacancy", backref='worker')
 
+    def __init__(self,
+                 name=None,
+                 surname=None,
+                 fathername=None,
+                 email=None,
+                 password=None,
+                 binded_org=None,
+                 salary=None,
+                 birth_date=None,
+                 sex=None,
+                 marriage=None,
+                 grate=None,
+                 education=None,
+                 foreign_languges=None,
+                 start_place=None,
+                 about_myself=None,
+                 confirmed=False):
+
+        super().__init__(surname=surname, name=name, fathername=fathername,
+                         work_department_id=binded_org, salary=salary,
+                         birth_date=birth_date, email=email,
+                         hashed_password=generate_password_hash(password),
+                         sex=sex, marriage=marriage, grate=grate, education=education,
+                         foreign_languges=foreign_languges, start_place=start_place,
+                         about_myself=about_myself, confirmed=confirmed)
+
     def __repr__(self):
-        return '<User {}>'.format(self.name)
+        return f'<User {self.name}>'
+
+    @property
+    def age(self):
+        if self.birth_date is None:
+            return 'Не указана дата рождения'
+        today = datetime.date.today()
+        try:
+            birthday = self.birth_date.replace(year=today.year)
+        except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
+            birthday = self.birth_date.replace(year=today.year, month=self.birth_date.month + 1, day=1)
+        if birthday > today:
+            return today.year - self.birth_date.year - 1
+        else:
+            return today.year - self.birth_date.year
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
@@ -55,54 +90,37 @@ class User(db.Model, UserMixin):
 
     @property
     def get_profile_info(self):
-        return {'Surname': self.surname, 'Name': self.name, 'Middle_name': self.fathername,
-                'Gender': self.sex, 'Age': self.age, 'Grade': self.grate,
-                'Education': self.education, 'Marital_status': self.marriage,
-                'Knowledge_of_foreign_language': self.foreign_languges, 'Email': self.email,
-                'About_myself': self.about_myself, 'Workplace': 'Автосервис Михаил-авто(отдел продаж) - Глав.Менеджер'}
+        return {'surname': self.surname, 'name': self.name, 'fathername': self.fathername,
+                'gender': self.sex, 'age': self.age, 'grade': self.grate, "birth_date": self.birth_date,
+                'education': self.education, 'marital_status': self.marriage,
+                'knowledge_of_foreign_language': self.foreign_languges, 'email': self.email,
+                'about_myself': self.about_myself,
+                "hasAttached": self.binded_org is not None}
 
     @classmethod
     def get_logged(cls, login, password):
-        user = session.query(cls).filter(cls.email == login).first()
+        user = cls.get_by(email=login)
         if user and user.check_password(password):
             return user
         return None
 
     @classmethod
     def get(cls, user_id):
-        return session.query(cls).filter(cls.id == user_id).first()
+        return cls.get_by(id=user_id)
 
     @classmethod
-    def new(cls, surname, name, fathername, binded_org, salary, birth_year, birth_month, birth_day,
-            age, email, password, sex, marriage):
-        roles = 'user'
-        kwargs = {"surname": surname, "name": name, "fathername": fathername,
-                  "work_department_id": binded_org, "salary": salary,
-                  "birth_date": datetime.date(birth_year, birth_month, birth_day),
-                  "age": age, "email": email, "hashed_password": generate_password_hash(password),
-                  "sex": sex, "marriage": marriage}
-        special_commands = (f"cls.add_roles(obj, '{roles}')",)
-        base_new(cls, special_commands, **kwargs)
-
-    @staticmethod
-    def add_roles(user, role_names):
-        for role_name in role_names.split():
-            role = Role.get_role_for_name(role_name)
-            local_session_role = session.merge(role)
-            user.roles.append(local_session_role)
-        session.commit()
+    def new(cls, surname, name, fathername, binded_org, salary, birth_date,
+            email, password, sex, marriage):
+        super().new(name, surname, fathername, email, password,
+                    binded_org, salary, birth_date, sex, marriage=marriage, confirmed=True)
 
 
-class T2Form(db.Model):
+class T2Form(db.Model, ModelMixin):
     __tablename__ = 't2'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     org_name_prop = db.Column(db.String)
-
-    @property
-    def org_name(self):
-        return self.org_name_prop
 
     linked_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     linked_user = orm.relation('User')
@@ -112,10 +130,6 @@ class T2Form(db.Model):
     taxpayer_id_number = db.Column(db.String, default='0123456789012')
     pension_insurance_certificate = db.Column(db.String, default='123-456-789 12')
 
-    @property
-    def alphabet(self):
-        return self.linked_user.surname[0]
-
     work_nature = db.Column(db.String, default='Постоянная')  # Характер работы
     work_kind = db.Column(db.String, default='Основная')  # Вид работы
 
@@ -124,20 +138,18 @@ class T2Form(db.Model):
 
     birthdate = db.Column(db.Date, default=datetime.datetime.now())
 
-    birthplace = db.Column(db.String, default='Москва')
+    birthplace = db.Column(db.String)
     birthplace_okato = db.Column(db.String, default='42432712412')
 
     nationality = db.Column(db.String, default='Россия')
     nationality_okin = db.Column(db.String, default='1')
 
-    foreign_language_knowledge = db.Column(db.String,
-                                           default='Английский:владеет свободно,Французский:читает и может объясняться')
+    foreign_language_knowledge = db.Column(db.String, default='Не имеет знаний иностраных языков')
     foreign_language_knowledge_okin = db.Column(db.String, default='016,017')
     education = db.Column(db.String, default='Среднее')
     education_okin = db.Column(db.String, default='07')
 
-    education_list = db.Column(db.String,
-                               default='Московский государственный Университет(МГУ),Диплом,III-III,123456,2010,Маркетолог,Маркетинг,80111')  # Разделитель ;
+    education_list = db.Column(db.String, default='Отсутствует')  # Разделитель ;
 
     profession = db.Column(db.String, default='Маркетолог')
     profession_code = db.Column(db.String, default='23461')
@@ -150,88 +162,102 @@ class T2Form(db.Model):
     marriage_okin = db.Column(db.String, default='2')
 
     family = db.Column(db.String,
-                       default='Жена,Антонова Светлана Валерьевна,1986;Дочь,Антонова Виктория Алексеевна,2016')
-    passport_id = db.Column(db.String, default='1234 123456')
+                       default='Отсутствует')
+    passport_id = db.Column(db.String)
     passport_given = db.Column(db.Date, default=datetime.datetime.now())
 
-    @classmethod
-    def new(cls, email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name, compile_date, service_number,
-            taxpayer_id_number,
-            pension_insurance_certificate, work_nature, work_kind, employment_contract_id, employment_contract_date,
-            birthdate, birthplace, birthplace_okato, nationality, nationality_okin, foreign_language_knowledge,
-            foreign_language_knowledge_okin, education, education_okin, education_list, profession, profession_code,
-            profession_other, profession_other_code, experience_checked, experience, marriage_okin, family, passport_id,
-            passport_given):
-        linked_user = session.query(User).filter(User.email == email).first()
+    def __init__(self,
+                 email=None,
+                 password=None,
+                 surname=None,
+                 name=None,
+                 fathername=None,
+                 binded_org=None,
+                 salary=None,
+                 marriage=None,
+                 gender=None,
+                 org_name=None,
+                 compile_date=None,
+                 service_number=None,
+                 taxpayer_id_number=None,
+                 pension_insurance_certificate=None,
+                 work_nature=None,
+                 work_kind=None,
+                 employment_contract_id=None,
+                 employment_contract_date=None,
+                 birthdate=None,
+                 birthplace=None,
+                 birthplace_okato=None,
+                 nationality=None,
+                 nationality_okin=None,
+                 foreign_language_knowledge=None,
+                 foreign_language_knowledge_okin=None,
+                 education=None,
+                 education_okin=None,
+                 education_list=None,
+                 profession=None,
+                 profession_code=None,
+                 profession_other=None,
+                 profession_other_code=None,
+                 experience_checked=None,
+                 experience=None,
+                 marriage_okin=None,
+                 family=None,
+                 passport_id=None,
+                 passport_given=None):
+        linked_user = User.get_by(email=email)
 
         if linked_user is None:
-            kwargs = {"surname": surname, "name": name, "fathername": fathername,
-                      "birth_date": birthdate,
-                      "work_department_id": binded_org, "salary": salary,
-                      "age": (datetime.datetime.now() - birthdate).days // 365, "email": email,
-                      "hashed_password": generate_password_hash(password),
-                      "sex": gender, "marriage": marriage,
-                      }
-            special_commands = (f"cls.add_roles(obj, '{'user'}')",)
-            linked_user = base_new(User, special_commands, **kwargs)
+            linked_user = User(name, surname, fathername, email, password, binded_org, salary,
+                               birthdate, gender, marriage,
+                               confirmed=True)
+            linked_user.save()
             print('На основе Т2 создан пользователь', linked_user.full_name)
-        kwargs = {
-            'org_name_prop': org_name,
-            'linked_user_id': linked_user.id,
-            'compile_date': compile_date,
-            'service_number': service_number,
-            'taxpayer_id_number': taxpayer_id_number,
-            'pension_insurance_certificate': pension_insurance_certificate,
-            'work_nature': work_nature,
-            'work_kind': work_kind,
-            'employment_contract_id': employment_contract_id,
-            'employment_contract_date': employment_contract_date,
-            'birthdate': birthdate,
-            'birthplace': birthplace,
-            'birthplace_okato': birthplace_okato,
-            'nationality': nationality,
-            'nationality_okin': nationality_okin,
-            'foreign_language_knowledge': foreign_language_knowledge,
-            'foreign_language_knowledge_okin': foreign_language_knowledge_okin,
-            'education': education,
-            'education_okin': education_okin,
-            'education_list': education_list,
-            'profession': profession,
-            'profession_code': profession_code,
-            'profession_other': profession_other,
-            'profession_other_code': profession_other_code,
-            'experience_checked': experience_checked,
-            'experience': experience,
-            'marriage_okin': marriage_okin,
-            'family': family,
-            'passport_id': passport_id,
-            'passport_given': passport_given
-        }
-        base_new(cls, debug=True, **kwargs)
 
-
-class Role(db.Model):
-    __tablename__ = 'roles'
-
-    role_id = db.Column(db.Integer,
-                        primary_key=True, autoincrement=True)
-    role_name = db.Column(db.String(20), unique=True)
-    description = db.Column(db.String(200))
+        super().__init__(org_name_prop=org_name, linked_user_id=linked_user.id,
+                         compile_date=compile_date, taxpayer_id_number=taxpayer_id_number,
+                         pension_insurance_certificate=pension_insurance_certificate,
+                         work_nature=work_nature, work_kind=work_kind,
+                         employment_contract_id=employment_contract_id,
+                         employment_contract_date=employment_contract_date,
+                         birthdate=birthdate, birthplace=birthplace,
+                         birthplace_okato=birthplace_okato, nationality=nationality,
+                         nationality_okin=nationality_okin, service_number=service_number,
+                         foreign_language_knowledge=foreign_language_knowledge,
+                         foreign_language_knowledge_okin=foreign_language_knowledge_okin,
+                         education=education, education_okin=education_okin,
+                         education_list=education_list, profession=profession,
+                         profession_code=profession_code, profession_other=profession_other,
+                         profession_other_code=profession_other_code,
+                         experience_checked=experience_checked, experience=experience,
+                         marriage_okin=marriage_okin, family=family,
+                         passport_id=passport_id, passport_given=passport_given)
 
     @classmethod
-    def new(cls, name, description):
-        kwargs = {"role_name": name, "description": description}
-        base_new(cls, **kwargs)
+    def new(cls, email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name,
+            compile_date, service_number, taxpayer_id_number, pension_insurance_certificate, work_nature, work_kind,
+            employment_contract_id, employment_contract_date, birthdate, birthplace, birthplace_okato, nationality,
+            nationality_okin, foreign_language_knowledge, foreign_language_knowledge_okin, education, education_okin,
+            education_list, profession, profession_code, profession_other, profession_other_code, experience_checked,
+            experience, marriage_okin, family, passport_id, passport_given):
+        super().new(email, password, surname, name, fathername, binded_org, salary, marriage, gender, org_name,
+                    compile_date, service_number, taxpayer_id_number, pension_insurance_certificate,
+                    work_nature, work_kind, employment_contract_id, employment_contract_date, birthdate, birthplace,
+                    birthplace_okato, nationality, nationality_okin, foreign_language_knowledge,
+                    foreign_language_knowledge_okin, education, education_okin, education_list, profession,
+                    profession_code, profession_other, profession_other_code, experience_checked,
+                    experience, marriage_okin, family, passport_id, passport_given)
 
-    def __repr__(self):
-        return '<Role {}, Возможности:{}>'.format(self.role_name, self.description)
+    @property
+    def org_name(self):
+        return self.org_name_prop
 
-    @classmethod
-    def get_role_for_name(cls, role_name):
-        return cls.query.filter_by(role_name=role_name).first()
+    @property
+    def alphabet(self):
+        return self.linked_user.surname[0]
 
 
-class Course(db.Model):
+class Course(db.Model, ModelMixin):
     __tablename__ = 'courses'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -241,20 +267,20 @@ class Course(db.Model):
     description = db.Column(db.String)
     image = db.Column(db.String(20))  # TODO: хранить картинку в юазе данных
 
+    def __init__(self,
+                 course_type=None,
+                 course_name=None,
+                 data=None,
+                 description=None,
+                 image=None):
+        super().__init__(course_type=course_type, course_name=course_name,
+                         data=data, description=description, image=image)
+
     @classmethod
     def new(cls, course_type, name, data, description, image):
-        kwargs = {"course_type": course_type, "course_name": name,
-                  "data": data, "description": description, "image": image}
-        base_new(cls, **kwargs)
+        super().new(course_type, name, data, description, image)
 
     @classmethod
     def get_courses(cls):
         courses = [(obj.course_type, obj.course_name, obj.data, obj.description, obj.image) for obj in cls.query.all()]
         return courses
-
-
-# ЭТО ЗАГЛУШКА НЕ УДАЛЯТЬ
-class Model1(db.Model):
-    __tablename__ = 'model1'
-    id = db.Column(db.Integer,
-                   primary_key=True, autoincrement=True)

@@ -5,73 +5,40 @@
                       <span class="h1 mt-3">Редактирование профиля</span>
                   </h4>
                   <form class="needs-validation" novalidate method="POST" action="">
-                      <div class="row mb-3">
-                          <div class="col-md-4">
-                              <label for="Фамилия">Фамилия</label>
-                              <input type="text" class="form-control" id="Фамилия" value={{ Surname }} name="surname" required>
-                              <div class="invalid-feedback">
-                                  Введите свою фамилию.
-                              </div>
-                          </div>
-                          <div class="col-md-4">
-                              <label for="Имя">Имя</label>
-                              <input type="text" class="form-control" id="Имя" value={{ Name }} name="name" required>
-                              <div class="invalid-feedback">
-                                  Введите своё имя.
-                              </div>
-                          </div>
-                          <div class="col-md-4">
-                              <label for="Отчество">Отчество</label>
-                              <input type="text" class="form-control" id="Отчество" value={{ Middle_name }} name="middlename" required>
-                              <div class="invalid-feedback">
-                                  Введите своё отчество.
-                              </div>
-                          </div>
+                      <div>
+                          {{ form.csrf_token }}
                       </div>
                       <div class="row mb-3">
-                          <div class="col-md-3">
-                              <label for="country">Пол</label>
-                              <select class="custom-select d-block w-100" id="country" name="gender" required>
-                                  <option value="Мужской">Мужской</option>
-                                  {% if Gender == "Женский" %}
-                                      <option value="Женский" selected>Женский</option>
-                                  {% else %}
-                                      <option value="Женский">Женский</option>
-                                  {% endif %}
-
-                              </select>
-                          </div>
-                          <div class="col-md-3">
-                              <label for="country">Семейное положение</label>
-                              <select class="custom-select d-block w-100" id="marital status" name="maritalstatus" required>
-{#                                  <option value="">Андрей</option>#}
-                                  <option value="В браке">В браке</option>
-                                  {% if Marital_status == "Не в браке" %}
-                                    <option value="Не в браке" selected>Не в браке</option>
-                                  {% else %}
-                                      <option value="Не в браке">Не в браке</option>
-                                  {% endif %}
-                              </select>
-                          </div>
-                          <div class="mb-3 col-md-3">
-                              <label for="email">Почта</label>
-                              <input type="email" class="form-control" id="email" value={{ Email }} name="email" required>
-                              <div class="invalid-feedback">
-                                  Пожалуйста, укажите вашу почту
+                          {% for field in form if field == form.surname or field == form.name or field == form.fathername %}
+                              <div class="col-md-4">
+                                  {{ field.label() }}
+                                  {{ field(class="form-control", value=info[field.name]) }}
+                                  {% for error in field.errors %}
+                                      <div class="error">{{ error }}</div>
+                                  {% endfor %}
                               </div>
-                          </div>
-                          <div class="col-md-3">
-                              <label for="age">Возраст</label>
-                              <input type="number" min="0" class="form-control" id="age" value={{ Age }} name="age" required>
-                              <div class="invalid-feedback">
-                                  Укажите возраст
-                              </div>
-                          </div>
+                          {% endfor %}
                       </div>
+                      <div class="row mb-3">
+                          {% for field in form if field == form.sex or field == form.marriage or field == form.email or field == form.birth_date %}
+                              <div class="col-md-3">
+                                  {% if field == form.sex or field == form.marriage %}
+                                      {% set style = "custom-select d-block w-100" %}
+                                  {% else %}
+                                      {% set style = "form-control" %}
+                                  {% endif %}
 
+                                  {{ field.label() }}
+                                  {{ field(class=style, value=info[field.name]) }}
+                                  {% for error in field.errors %}
+                                      <div class="error">{{ error }}</div>
+                                  {% endfor %}
+                              </div>
+                          {% endfor %}
+                      </div>
                       <div class="mb-3">
-                          <label for="address">Информация о себе</label>
-                          <input type="text" class="form-control" id="address" placeholder="Отсутвует в бд" name="aboutmyself">
+                          {{ form.about_myself.label() }}
+                          {{ form.about_myself(class="form-control", value=info[form.about_myself.name]) }}
                       </div>
                       <hr class="featurette-divider">
                       <div class="row justify-content-between mx-3">
@@ -80,7 +47,7 @@
                       </div>
                       <h3 class="m-2 card-text font-weight-normal text-center">В данный момент, нет привязанных организаций</h3>
                       <hr class="featurette-divider">
-                      <button class="btn btn-primary btn-lg btn-block" type="submit">Редактировать</button>
+                      {{ form.submit(class="btn btn-primary btn-lg btn-block", type="submit") }}
                   </form>
   <script src="{{ url_for('static', filename="js/form-validation.js") }}"></script>
 {% endblock %}
