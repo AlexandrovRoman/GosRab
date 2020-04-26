@@ -25,9 +25,6 @@ def create_test_models():
     export_from_excel('test_models/courses.xlsx', Course.new)
 
 
-# confirm('Снести бд?')
-# resetdb_command(app.config['SQLALCHEMY_DATABASE_URI'])
-print(sys.executable)
 if os.path.exists('migrations'):
     shutil.rmtree('migrations')
 
