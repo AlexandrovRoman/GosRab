@@ -12,7 +12,7 @@
             <p><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти</a></p>
             <p><a class="btn btn-lg btn-primary disabled col-12" href="#" role="button">Удалить</a></p>
             <hr class="featurette-divider my-4">
-            {% if hasAttached %}
+            {% if user.binded_org %}
                 <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/personnel" role="button">Отдел кадров</a></p>
             {% endif %}
             <p><a class="btn btn-lg btn-primary col-12" href="/organization/profile/organizations" role="button">Организации</a></p>

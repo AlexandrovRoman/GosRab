@@ -6,14 +6,14 @@
                           <h4 class="d-flex justify-content-center mb-3">
                               <span class="h1 mt-3">Личный профиль</span>
                           </h4>
-                          <h4 class="mb-3">Фамилия: {{ surname }}</h4>
-                          <h4 class="mb-3">Имя: {{ name }}</h4>
-                          <h4 class="mb-3">Отчество: {{ Middle_name }}</h4>
-                          <h4 class="mb-3">Пол: {{ gender }}</h4>
-                          <h4 class="mb-3">Возраст: {{ age }} лет</h4>
-                          <h4 class="mb-3">Грейд: {{ grade }}</h4>
-                          <h4 class="mb-3">Образование: {{ education }}</h4>
-                          <h4 class="mb-3">Семейное положение: {{ marital_status }}</h4>
+                          <h4 class="mb-3">Фамилия: {{ user.surname }}</h4>
+                          <h4 class="mb-3">Имя: {{ user.name }}</h4>
+                          <h4 class="mb-3">Отчество: {{ user.fathername }}</h4>
+                          <h4 class="mb-3">Пол: {{ user.sex }}</h4>
+                          <h4 class="mb-3">Возраст: {{ user.age }} лет</h4>
+                          <h4 class="mb-3">Грейд: {{ user.grate }}</h4>
+                          <h4 class="mb-3">Образование: {{ user.education }}</h4>
+                          <h4 class="mb-3">Семейное положение: {{ user.marriage }}</h4>
                       </div>
                       <div class="order-md-1 mt-2 col-11 col-sm-11 col-md-11 col-lg-11 col-xl-5">
                           <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" alt="" style="max-width: 100%; height: auto">

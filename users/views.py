@@ -16,9 +16,7 @@ def load_user(user_id):
 @login_required
 @check_confirmed
 def profile():
-    user = current_user
-    info = user.get_profile_info
-    return render_template('users/profile.html', **info)
+    return render_template('users/profile.html', user=current_user)
 
 
 @login_required
@@ -27,8 +25,13 @@ def edit_profile():
     form = EditForm()
     user = current_user
     if not form.validate_on_submit():
-        info = user.get_profile_info
-        return render_template('users/edit_profile.html', form=form, info=info)
+        for i in ['surname', 'name',
+                  'fathername', 'sex',
+                  'marriage', 'email',
+                  'birth_date', 'about_myself',
+                  ]:
+            form[i].data = getattr(user, i)
+        return render_template('users/edit_profile.html', user=user, form=form)
 
     ignore = ("birth_date",)
     setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
@@ -80,10 +83,7 @@ def education():
 @login_required
 @check_confirmed
 def notification():
-    user = current_user
-    info = user.get_profile_info
-
-    return render_template('users/notifications.html', **info)
+    return render_template('users/notifications.html', user=current_user)
 
 
 def registration():

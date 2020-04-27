@@ -88,15 +88,6 @@ class User(db.Model, ModelMixin, UserMixin):
     def full_name(self):
         return f'{self.surname} {self.name} {self.fathername}'
 
-    @property
-    def get_profile_info(self):
-        return {'surname': self.surname, 'name': self.name, 'fathername': self.fathername,
-                'gender': self.sex, 'age': self.age, 'grade': self.grate, "birth_date": self.birth_date,
-                'education': self.education, 'marital_status': self.marriage,
-                'knowledge_of_foreign_language': self.foreign_languges, 'email': self.email,
-                'about_myself': self.about_myself,
-                "hasAttached": self.binded_org is not None}
-
     @classmethod
     def get_logged(cls, login, password):
         user = cls.get_by(email=login)

@@ -9,10 +9,10 @@
                           {{ form.csrf_token }}
                       </div>
                       <div class="row mb-3">
-                          {% for field in form if field == form.surname or field == form.name or field == form.fathername %}
+                          {% for field in form if field in [form.surname, form.name, form.fathername] %}
                               <div class="col-md-4">
                                   {{ field.label() }}
-                                  {{ field(class="form-control", value=info[field.name]) }}
+                                  {{ field(class="form-control") }}
                                   {% for error in field.errors %}
                                       <div class="error">{{ error }}</div>
                                   {% endfor %}
@@ -20,7 +20,7 @@
                           {% endfor %}
                       </div>
                       <div class="row mb-3">
-                          {% for field in form if field == form.sex or field == form.marriage or field == form.email or field == form.birth_date %}
+                          {% for field in form if field in [form.sex, form.marriage, form.email, form.birth_date] %}
                               <div class="col-md-3">
                                   {% if field == form.sex or field == form.marriage %}
                                       {% set style = "custom-select d-block w-100" %}
@@ -29,7 +29,7 @@
                                   {% endif %}
 
                                   {{ field.label() }}
-                                  {{ field(class=style, value=info[field.name]) }}
+                                  {{ field(class=style) }}
                                   {% for error in field.errors %}
                                       <div class="error">{{ error }}</div>
                                   {% endfor %}
@@ -38,7 +38,7 @@
                       </div>
                       <div class="mb-3">
                           {{ form.about_myself.label() }}
-                          {{ form.about_myself(class="form-control", value=info[form.about_myself.name]) }}
+                          {{ form.about_myself(class="form-control") }}
                       </div>
                       <hr class="featurette-divider">
                       <div class="row justify-content-between mx-3">
