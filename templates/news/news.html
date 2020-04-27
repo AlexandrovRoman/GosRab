@@ -9,7 +9,7 @@
             {% endfor %}
         </ol>
         <div class="carousel-inner">
-            {% for i in hot_news %}
+            {% for hot_new in hot_news %}
                 <div class="carousel-item {% if loop.first %} active {% endif %}">
                     <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                          preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
@@ -17,9 +17,9 @@
                     </svg>
                     <div class="container">
                         <div class="carousel-caption text-left">
-                            <h1>{{ i[0] }}</h1>
-                            <p>{{ i[1] }}</p>
-                            <p><a class="btn btn-lg btn-primary" href="{{ i[2] }}" role="button">Узнать подробнее</a>
+                            <h1>{{ hot_new.title }}</h1>
+                            <p>{{ hot_new.description }}</p>
+                            <p><a class="btn btn-lg btn-primary" href="{{ hot_new.link }}" role="button">Узнать подробнее</a>
                             </p>
                         </div>
                     </div>
@@ -45,8 +45,8 @@
                     <img class="img-fluid" src="{{ url_for('static', filename="icon/1.jpg") }}" alt=""
                          style="max-width: 100%; height: auto">
                     <div class="card-body">
-                        <p class="card-text">Работадатель может как вручную искать новых сотрудников и просматривать
-                            объявления, а так же выставить свободные вакансии предприятия, интересы которого он
+                        <p class="card-text">Работодатель может как вручную искать новых сотрудников и просматривать
+                            объявления, а так же выставлять свободные вакансии предприятия, интересы которого он
                             представляет.</p>
                         <div class="d-flex justify-content-center align-items-center">
                             <p><a class="btn btn-lg btn-block btn-outline-primary" href="/users/job" role="button">Узнать
@@ -64,8 +64,8 @@
                     <img class="img-fluid" src="{{ url_for('static', filename="icon/1.jpg") }}" alt=""
                          style="max-width: 100%; height: auto">
                     <div class="card-body">
-                        <p class="card-text">Работадатель может как вручную искать новых сотрудников и просматривать
-                            объявления, а так же выставить свободные вакансии предприятия, интересы которого он
+                        <p class="card-text">Работодатель может как вручную искать новых сотрудников и просматривать
+                            объявления, а так же выставлять свободные вакансии предприятия, интересы которого он
                             представляет.</p>
                         <div class="d-flex justify-content-center align-items-center">
                             <p><a class="btn btn-lg btn-block btn-outline-primary" href="/users/job" role="button">Узнать
@@ -81,10 +81,10 @@
         {% for new in news %}
             <div class="row featurette">
                 <div class="col-md-7{% if loop.index0 % 2 == 1 %} order-md-2 {% endif %}">
-                    <h2 class="featurette-heading">{{ new[0] }}</h2>
-                    <p class="lead">{{ new[1] }}</p>
+                    <h2 class="featurette-heading">{{ new.title }}</h2>
+                    <p class="lead">{{ new.description }}</p>
                 </div>
-                <div class="col"><img src="{{ new[2] }}" alt="" class="w-100">
+                <div class="col"><img src="{{ new.image_link }}" alt="" class="w-100">
                 </div>
             </div>
 
