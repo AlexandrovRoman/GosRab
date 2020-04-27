@@ -2,11 +2,12 @@ import datetime
 from flask_login import UserMixin
 from sqlalchemy import orm
 from app import db
+from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import ModelMixin
 
 
-class User(db.Model, ModelMixin, UserMixin):
+class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

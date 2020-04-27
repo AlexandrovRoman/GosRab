@@ -1,10 +1,11 @@
 from app import db, session
 from datetime import datetime
 from app.models import ModelMixin
+from sqlalchemy_serializer import SerializerMixin
 from users.models import User
 
 
-class Organization(db.Model, ModelMixin):
+class Organization(db.Model, ModelMixin, SerializerMixin):
     __tablename__ = 'organizations'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
