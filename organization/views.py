@@ -31,7 +31,7 @@ def add_organization():
         org.save(add=True)
         return redirect('/organization/profile/organizations/')
 
-    return render_template("organization/add_organization.html", user=current_user, form=form)
+    return render_template("organization/add_organization.html", form=form)
 
 
 @login_required

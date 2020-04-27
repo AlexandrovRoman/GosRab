@@ -1,53 +1,54 @@
 {% set title = "Редактирование" %}
 {% extends "users/user_button.html" %}
 {% block user_content %}
-                  <h4 class="d-flex justify-content-center mb-3">
-                      <span class="h1 mt-3">Редактирование профиля</span>
-                  </h4>
-                  <form class="needs-validation" novalidate method="POST" action="">
-                      <div>
-                          {{ form.csrf_token }}
-                      </div>
-                      <div class="row mb-3">
-                          {% for field in form if field in [form.surname, form.name, form.fathername] %}
-                              <div class="col-md-4">
-                                  {{ field.label() }}
-                                  {{ field(class="form-control") }}
-                                  {% for error in field.errors %}
-                                      <div class="error">{{ error }}</div>
-                                  {% endfor %}
-                              </div>
-                          {% endfor %}
-                      </div>
-                      <div class="row mb-3">
-                          {% for field in form if field in [form.sex, form.marriage, form.email, form.birth_date] %}
-                              <div class="col-md-3">
-                                  {% if field == form.sex or field == form.marriage %}
-                                      {% set style = "custom-select d-block w-100" %}
-                                  {% else %}
-                                      {% set style = "form-control" %}
-                                  {% endif %}
+    <h4 class="d-flex justify-content-center mb-3">
+        <span class="h1 mt-3">Редактирование профиля</span>
+    </h4>
+    <form class="needs-validation" novalidate method="POST" action="">
+        <div>
+            {{ form.csrf_token }}
+        </div>
+        <div class="row mb-3">
+            {% for field in form if field in [form.surname, form.name, form.fathername] %}
+                <div class="col-md-4">
+                    {{ field.label() }}
+                    {{ field(class="form-control") }}
+                    {% for error in field.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row mb-3">
+            {% for field in form if field in [form.sex, form.marriage, form.email, form.birth_date] %}
+                <div class="col-md-3">
+                    {% if field == form.sex or field == form.marriage %}
+                        {% set style = "custom-select d-block w-100" %}
+                    {% else %}
+                        {% set style = "form-control" %}
+                    {% endif %}
 
-                                  {{ field.label() }}
-                                  {{ field(class=style) }}
-                                  {% for error in field.errors %}
-                                      <div class="error">{{ error }}</div>
-                                  {% endfor %}
-                              </div>
-                          {% endfor %}
-                      </div>
-                      <div class="mb-3">
-                          {{ form.about_myself.label() }}
-                          {{ form.about_myself(class="form-control") }}
-                      </div>
-                      <hr class="featurette-divider">
-                      <div class="row justify-content-between mx-3">
-                          <label for="address">Организации:</label>
-                          <p><a class="btn btn-sm btn-primary col-12" href="/organization/profile/redact/add_organization" role="button">Добавить организацию</a></p>
-                      </div>
-                      <h3 class="m-2 card-text font-weight-normal text-center">В данный момент, нет привязанных организаций</h3>
-                      <hr class="featurette-divider">
-                      {{ form.submit(class="btn btn-primary btn-lg btn-block", type="submit") }}
-                  </form>
-  <script src="{{ url_for('static', filename="js/form-validation.js") }}"></script>
+                    {{ field.label() }}
+                    {{ field(class=style) }}
+                    {% for error in field.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.about_myself.label() }}
+            {{ form.about_myself(class="form-control") }}
+        </div>
+        <hr class="featurette-divider">
+        <div class="row justify-content-between mx-3">
+            <label for="address">Организации:</label>
+            <p><a class="btn btn-sm btn-primary col-12" href="/organization/profile/redact/add_organization"
+                  role="button">Добавить организацию</a></p>
+        </div>
+        <h3 class="m-2 card-text font-weight-normal text-center">В данный момент, нет привязанных организаций</h3>
+        <hr class="featurette-divider">
+        {{ form.submit(class="btn btn-primary btn-lg btn-block", type="submit") }}
+    </form>
+    <script src="{{ url_for('static', filename="js/form-validation.js") }}"></script>
 {% endblock %}

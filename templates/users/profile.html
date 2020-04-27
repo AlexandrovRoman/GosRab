@@ -1,26 +1,26 @@
 {% set title = "Личный профиль" %}
 {% extends "users/user_button.html" %}
 {% block user_content %}
-                  <div class="row">
-                      <div class="order-md-2 mt-4 mb-4 col-12 col-sm-12 col-md-12 col-lg-11 col-xl-7">
-                          <h4 class="d-flex justify-content-center mb-3">
-                              <span class="h1 mt-3">Личный профиль</span>
-                          </h4>
-                          <h4 class="mb-3">Фамилия: {{ user.surname }}</h4>
-                          <h4 class="mb-3">Имя: {{ user.name }}</h4>
-                          <h4 class="mb-3">Отчество: {{ user.fathername }}</h4>
-                          <h4 class="mb-3">Пол: {{ user.sex }}</h4>
-                          <h4 class="mb-3">Возраст: {{ user.age }} лет</h4>
-                          <h4 class="mb-3">Грейд: {{ user.grate }}</h4>
-                          <h4 class="mb-3">Образование: {{ user.education }}</h4>
-                          <h4 class="mb-3">Семейное положение: {{ user.marriage }}</h4>
-                      </div>
-                      <div class="order-md-1 mt-2 col-11 col-sm-11 col-md-11 col-lg-11 col-xl-5">
-                          <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" alt="" style="max-width: 100%; height: auto">
-                      </div>
-                  </div>
-{#                  <h4 class="mb-3">Работа: {{ Workplace }}</h4>#}
-{#                  <h4 class="mb-3">Знание иностранных язаков: {{ Knowledge_of_foreign_language }}</h4>#}
-                  <h4 class="mb-3">Информация о себе: {{ about_myself }}</h4>
-              </div>
+    <div class="row">
+        <div class="order-md-2 mt-4 mb-4 col-12 col-sm-12 col-md-12 col-lg-11 col-xl-7">
+            <h4 class="d-flex justify-content-center mb-3">
+                <span class="h1 mt-3">Личный профиль</span>
+            </h4>
+            <h4 class="mb-3">Фамилия: {{ current_user.surname }}</h4>
+            <h4 class="mb-3">Имя: {{ current_user.name }}</h4>
+            <h4 class="mb-3">Отчество: {{ current_user.fathername }}</h4>
+            <h4 class="mb-3">Пол: {{ current_user.sex }}</h4>
+            <h4 class="mb-3">Возраст: {{ current_user.age }} лет</h4>
+            <h4 class="mb-3">Грейд: {{ current_user.grate }}</h4>
+            <h4 class="mb-3">Образование: {{ current_user.education }}</h4>
+            <h4 class="mb-3">Семейное положение: {{ current_user.marriage }}</h4>
+        </div>
+        <div class="order-md-1 mt-2 col-11 col-sm-11 col-md-11 col-lg-11 col-xl-5">
+            <img class="m-4 img-thumbnail img-fluid" src="{{ url_for('static', filename="icon/pol.png") }}" alt=""
+                 style="max-width: 100%; height: auto">
+        </div>
+    </div>
+    {#                  <h4 class="mb-3">Работа: {{ Workplace }}</h4>#}
+    {#                  <h4 class="mb-3">Знание иностранных язаков: {{ Knowledge_of_foreign_language }}</h4>#}
+    <h4 class="mb-3">Информация о себе: {{ about_myself }}</h4>
 {% endblock %}

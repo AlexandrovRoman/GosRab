@@ -16,7 +16,7 @@ def load_user(user_id):
 @login_required
 @check_confirmed
 def profile():
-    return render_template('users/profile.html', user=current_user)
+    return render_template('users/profile.html')
 
 
 @login_required
@@ -83,7 +83,7 @@ def education():
 @login_required
 @check_confirmed
 def notification():
-    return render_template('users/notifications.html', user=current_user)
+    return render_template('users/notifications.html')
 
 
 def registration():
