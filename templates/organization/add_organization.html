@@ -1,105 +1,80 @@
 {% set title = "Добавление организации" %}
-{% extends "base.html" %}
-{% block content %}
-    <hr class="featurette-divider m-5">
+{% extends "users/user_button.html" %}
+
+{% block user_content %}
 
     <div class="container marketing">
         {{ form.hidden_tag() }}
-        <div class="row justify-content-center">
-            <div class="column mt-5 col-9 col-sm-9 col-md-4 col-lg-3 col-xl-3">
-                <p><a class="btn btn-lg btn-primary col-12" href="/users/profile" role="button">Профиль</a></p>
-                <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/redact"
-                      role="button">Редактирование</a></p>
-                <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/notification/" role="button">Уведомления</a>
-                </p>
-                <hr class="featurette-divider my-4">
-                <p><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти</a></p>
-                <p><a class="btn btn-lg btn-primary disabled col-12" href=# role="button">Удалить</a></p>
-                <hr class="featurette-divider my-4">
-                <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/personnel" role="button">Отдел
-                    кадров</a></p>
-                <p><a class="btn btn-lg btn-primary col-12" href="/users/profile/organizations" role="button">Организации</a>
-                </p>
-            </div>
-            <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9" style="background-color: whitesmoke">
 
-                <h4 class="d-flex justify-content-center mb-3">
-                    <span class="h1 mt-3">Добавление организации</span>
-                </h4>
-                <form class="needs-validation" novalidate method="POST" action="">
+        <h4 class="d-flex justify-content-center mb-3">
+            <span class="h1 mt-3">Добавление организации</span>
+        </h4>
+        <form class="needs-validation" novalidate method="POST" action="">
+            <div>
+                {{ form.csrf_token }}
+            </div>
+
+            <div class="row justify-content-center">
+                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg"
+                     preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder: Thumbnail"
+                     style="width: 300px; height: 300px">
+                    <rect fill="#55595c" width="100%" height="100%"/>
+                    <text fill="#eceeef" x="50%" y="50%">Thumbnail</text>
+                </svg>
+                <div class="column mx-2">
+
                     <div>
-                        {{ form.csrf_token }}
+                        {{ form.name.label }}<br>
+                        {{ form.name(class="form-control") }}<br>
+                        {% for error in form.name.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
                     </div>
-
-                    <div class="row justify-content-center">
-                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg"
-                             preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder: Thumbnail"
-                             style="width: 300px; height: 300px">
-                            <rect fill="#55595c" width="100%" height="100%"/>
-                            <text fill="#eceeef" x="50%" y="50%">Thumbnail</text>
-                        </svg>
-                        <div class="column mx-2">
-
-                            <div>
-                                {{ form.name.label }}<br>
-                                {{ form.name(class="form-control") }}<br>
-                                {% for error in form.name.errors %}
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
+                    <div>
+                        {{ form.org_type.label }}<br>
+                        {{ form.org_type(class="form-control") }}<br>
+                        {% for error in form.org_type.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
                             </div>
-                            <div>
-                                {{ form.org_type.label }}<br>
-                                {{ form.org_type(class="form-control") }}<br>
-                                {% for error in form.org_type.errors %}
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <div>
-                                {{ form.email.label }}<br>
-                                {{ form.email(class="form-control") }}<br>
-                                {% for error in form.email.errors %}
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="column mt-3">
-                            <div>
-                                {#                                <form>#}
-                                {#                                    <div class="form-group">#}
-                                {#                                        <label for="exampleFormControlFile1">Изображение</label>#}
-                                {#                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
-                                {#                                    </div>#}
-                                {#                                </form>#}
-                            </div>
-                            <div>
-
-                                {{ form.org_desc.label }}<br>
-                                {{ form.org_desc(class="form-control") }}<br>
-                                {% for error in form.org_desc.errors %}
-                                    <div class="alert alert-danger" role="alert">
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
-                    <hr class="featurette-divider">
-                    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-                    {{ form.submit(type="submit", class="btn btn-primary btn-lg btn-block my-3") }}
-                </form>
-                <hr class="featurette-divider">
-                <footer class="row justify-content-between m-4">
-                    <p>&copy; SAMARA-CORPARATION</p>
-                    <p class="float-right"><a href=#>Вернутся в начало страницы</a></p>
-                </footer>
+                    <div>
+                        {{ form.email.label }}<br>
+                        {{ form.email(class="form-control") }}<br>
+                        {% for error in form.email.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="column mt-3">
+                    <div>
+                        {#                                <form>#}
+                        {#                                    <div class="form-group">#}
+                        {#                                        <label for="exampleFormControlFile1">Изображение</label>#}
+                        {#                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
+                        {#                                    </div>#}
+                        {#                                </form>#}
+                    </div>
+                    <div>
+
+                        {{ form.org_desc.label }}<br>
+                        {{ form.org_desc(class="form-control") }}<br>
+                        {% for error in form.org_desc.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-        </div>
+            <hr class="featurette-divider">
+            {{ form.submit(type="submit", class="btn btn-primary btn-lg btn-block my-3") }}
+        </form>
     </div>
     <script src="{{ url_for('static', filename="js/form-validation.js") }}"></script>
 {% endblock %}
