@@ -1,6 +1,6 @@
 import datetime
 
-from flask import render_template, request
+from flask import render_template, request, redirect
 from flask_login import current_user, login_required
 from app import session
 from organization.forms import AddOrganizationForm
@@ -20,10 +20,7 @@ def organizations():
 @check_confirmed
 def add_organization():
     form = AddOrganizationForm()
-    print(request.method)
-    print(form)
     if form.validate_on_submit():
-        print('Org created by', current_user.id)
         org = Organization(
             date=datetime.datetime.now().date(),
             name=form.name.data,
@@ -32,7 +29,7 @@ def add_organization():
             owner_id=current_user.id
         )
         org.save(add=True)
-        return 'Success'
+        return redirect('/organization/profile/organizations/')
 
     return render_template("organization/add_organization.html", form=form)
 

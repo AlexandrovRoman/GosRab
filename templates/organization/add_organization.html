@@ -22,10 +22,15 @@
                 </p>
             </div>
             <div class="container col-11 col-sm-12 col-md-8 col-lg-8 col-xl-9" style="background-color: whitesmoke">
+
                 <h4 class="d-flex justify-content-center mb-3">
                     <span class="h1 mt-3">Добавление организации</span>
                 </h4>
                 <form class="needs-validation" novalidate method="POST" action="">
+                    <div>
+                        {{ form.csrf_token }}
+                    </div>
+
                     <div class="row justify-content-center">
                         <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg"
                              preserveAspectRatio="xMidYMid slice" role="img" aria-label="Placeholder: Thumbnail"
@@ -65,12 +70,12 @@
                         </div>
                         <div class="column mt-3">
                             <div>
-{#                                <form>#}
-{#                                    <div class="form-group">#}
-{#                                        <label for="exampleFormControlFile1">Изображение</label>#}
-{#                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
-{#                                    </div>#}
-{#                                </form>#}
+                                {#                                <form>#}
+                                {#                                    <div class="form-group">#}
+                                {#                                        <label for="exampleFormControlFile1">Изображение</label>#}
+                                {#                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
+                                {#                                    </div>#}
+                                {#                                </form>#}
                             </div>
                             <div>
 
@@ -85,7 +90,7 @@
                         </div>
                     </div>
                     <hr class="featurette-divider">
-                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
                     {{ form.submit(type="submit", class="btn btn-primary btn-lg btn-block my-3") }}
                 </form>
                 <hr class="featurette-divider">
