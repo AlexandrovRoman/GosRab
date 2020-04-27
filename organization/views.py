@@ -20,6 +20,7 @@ def organizations():
 @check_confirmed
 def add_organization():
     form = AddOrganizationForm()
+    print(request.method)
     print(form)
     if form.validate_on_submit():
         print('Org created by', current_user.id)

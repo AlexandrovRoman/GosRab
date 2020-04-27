@@ -4,6 +4,7 @@
     <hr class="featurette-divider m-5">
 
     <div class="container marketing">
+        {{ form.hidden_tag() }}
         <div class="row justify-content-center">
             <div class="column mt-5 col-9 col-sm-9 col-md-4 col-lg-3 col-xl-3">
                 <p><a class="btn btn-lg btn-primary col-12" href="/users/profile" role="button">Профиль</a></p>
@@ -64,12 +65,12 @@
                         </div>
                         <div class="column mt-3">
                             <div>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="exampleFormControlFile1">Изображение</label>
-                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                                    </div>
-                                </form>
+{#                                <form>#}
+{#                                    <div class="form-group">#}
+{#                                        <label for="exampleFormControlFile1">Изображение</label>#}
+{#                                        <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
+{#                                    </div>#}
+{#                                </form>#}
                             </div>
                             <div>
 
