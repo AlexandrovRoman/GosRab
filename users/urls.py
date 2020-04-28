@@ -20,4 +20,4 @@ urlpatterns = [
 ]
 
 api.add_resource(UserListResource, '/api/user')
-api.add_resource(UserResource, '/api/v2/user/<int:user_id>')
+api.add_resource(UserResource, '/api/user/<int:user_id>')

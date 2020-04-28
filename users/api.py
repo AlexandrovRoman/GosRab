@@ -1,7 +1,6 @@
 from flask import jsonify
 from flask_login import current_user
 from flask_restful import reqparse, Resource
-from app import session
 from app.api import abort_obj_not_found
 from users.models import User
 
@@ -24,8 +23,7 @@ class UserResource(Resource):
         if user_id != getattr(current_user, "id", None):
             return jsonify({'deleting': 'Operation not allowed to this user'})
         user = User.get(user_id)
-        session.delete(user)
-        session.commit()  # Нужно ли тут заменить session?
+        user.delete()
         return jsonify({'deleting': 'OK'})
 
 
@@ -39,7 +37,7 @@ class UserListResource(Resource):
 
     def get(self):
         # Кто может смотреть данные всех юзеров?
-        users = session.query(User).all()  # Можно ли тут заменить session на методы ModelMixin?
+        users = User.all()
         return jsonify({'user': [user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date')) for user in users]})
 

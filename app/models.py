@@ -11,6 +11,10 @@ class ModelMixin:
         session.merge(self) if not add else session.add(self)
         session.commit()
 
+    def delete(self):
+        session.delete(self)
+        session.commit()
+
     def set_model(self, **db_columns):
         for col_name in db_columns:
             self.set_col(col_name, db_columns[col_name])
@@ -27,3 +31,7 @@ class ModelMixin:
     @classmethod
     def get_by(cls, **model_fields):
         return session.query(cls).filter_by(**model_fields).first()
+
+    @classmethod
+    def all(cls, offset=0):
+        return session.query(cls).filter(offset < cls.id < offset + 1000).all()
