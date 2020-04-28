@@ -270,8 +270,3 @@ class Course(db.Model, ModelMixin):
     @classmethod
     def new(cls, course_type, name, data, description, image):
         super().new(course_type, name, data, description, image)
-
-    @classmethod
-    def get_courses(cls):
-        courses = [(obj.course_type, obj.course_name, obj.data, obj.description, obj.image) for obj in cls.query.all()]
-        return courses

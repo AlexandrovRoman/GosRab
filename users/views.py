@@ -77,7 +77,7 @@ def personnel():
 
 
 def education():
-    return render_template("users/education.html", courses=Course.get_courses())
+    return render_template("users/education.html", courses=Course.all())
 
 
 @login_required
