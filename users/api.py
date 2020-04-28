@@ -1,30 +1,27 @@
-from flask_restful import reqparse, abort, Resource
 from flask import jsonify
-from app import db
-from app import session
-from users.models import User
-from organization.models import Organization
 from flask_login import current_user
+from flask_restful import reqparse, Resource
+from app import session
+from app.api import abort_obj_not_found
+from users.models import User
 
 
-def abort_user_not_found(user_id):  # По идее можно обобщить для всех классов
-    obj = User.get(user_id)
-    if not obj:
-        abort(404, message=f"User with id {user_id} not found")
+def abort_user_not_found(user_id):
+    abort_obj_not_found(user_id, User)
 
 
 class UserResource(Resource):
     def get(self, user_id):
         abort_user_not_found(user_id)
         user = User.get(user_id)
-        if user.id != current_user.id:
+        if user.id != getattr(current_user, "id", None):
             return jsonify({'user': 'Operation not allowed to this user'})
         return jsonify({'user': user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
 
     def delete(self, user_id):
         abort_user_not_found(user_id)
-        if user_id != current_user.id:
+        if user_id != getattr(current_user, "id", None):
             return jsonify({'deleting': 'Operation not allowed to this user'})
         user = User.get(user_id)
         session.delete(user)
@@ -48,7 +45,7 @@ class UserListResource(Resource):
 
     def post(self):
         # Кто может добавить юзера?
-        args = parser.parse_args()
+        args = self.parser.parse_args()
         user = User(
             name=args['name'],
             surname=args['surname'],

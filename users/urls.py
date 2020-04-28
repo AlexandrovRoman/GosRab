@@ -1,5 +1,7 @@
+from app import api
 from organization.views import personnel_department
 from utils.urls import relative_path
+from .api import UserListResource, UserResource
 from .views import profile, login, logout, \
     edit_profile, personnel, education, notification, registration, t2, confirm_email
 
@@ -16,3 +18,6 @@ urlpatterns = [
     relative_path('confirm/', confirm_email),
     relative_path('profile/t2/', t2)
 ]
+
+api.add_resource(UserListResource, '/api/user')
+api.add_resource(UserResource, '/api/v2/user/<int:user_id>')

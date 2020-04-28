@@ -4,7 +4,7 @@ from os import environ
 models = [
     'users.models',
     'news.models',
-    'organization.models'
+    'organization.models',
 ]
 
 # Special urlpatterns
