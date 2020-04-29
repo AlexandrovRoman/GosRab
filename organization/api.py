@@ -2,6 +2,7 @@ from flask import jsonify
 from flask_login import current_user
 from flask_restful import reqparse, Resource
 from app.api import abort_obj_not_found
+from app.tokens import check_tokens
 from organization.models import Organization
 
 
@@ -10,19 +11,19 @@ def abort_org_not_found(org_id):
 
 
 class OrganizationResource(Resource):
-    def get(self, org_id):
+    def get(self, api_token, org_id):
         abort_org_not_found(org_id)
         org = Organization.get(org_id)
-        if org.owner_id != getattr(current_user, "id", None):
+        if not check_tokens(org.api_token, api_token):
             return jsonify({'organization': 'Operation not allowed to this organization'})
         return jsonify({'organization': org.to_dict(
             only=('id', 'name', 'creation_date', 'vacancies', 'owner_id', 'org_type', 'org_desc'))})
 
-    def delete(self, org_id):
+    def delete(self, api_token, org_id):
         abort_org_not_found(org_id)
-        if org_id.owner_id != getattr(current_user, "id", None):
-            return jsonify({'deleting': 'Operation not allowed to this organization'})
         org = Organization.get(org_id)
+        if not check_tokens(org.api_token, api_token):
+            return jsonify({'deleting': 'Operation not allowed to this organization'})
         org.delete()
         return jsonify({'deleting': 'OK'})
 

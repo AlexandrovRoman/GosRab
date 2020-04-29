@@ -2,6 +2,7 @@ from app import db, session
 from datetime import datetime
 from app.models import ModelMixin
 from sqlalchemy_serializer import SerializerMixin
+from app.tokens import create_jwt
 from users.models import User
 
 
@@ -16,6 +17,8 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
     owner_id = db.Column(db.Integer)
     org_type = db.Column(db.String)
     org_desc = db.Column(db.String)
+
+    api_token = db.Column(db.String, default=create_jwt(id))
 
     def __init__(self,
                  name=None,
@@ -49,6 +52,9 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
 
     def get_workers(self):
         return [vacancy for vacancy in self.vacancies if vacancy.worker_id is not None]
+
+    def refresh_token(self):
+        self.api_token = create_jwt(self.id)
 
 
 class Vacancy(db.Model, ModelMixin):
