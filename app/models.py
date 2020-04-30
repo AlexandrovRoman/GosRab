@@ -2,6 +2,8 @@ from app import session
 
 
 class ModelMixin:
+    ALL_LIMIT = 1000
+
     def __init__(self, **db_columns):
         for col_name in db_columns:
             if not db_columns[col_name] is None:
@@ -33,5 +35,10 @@ class ModelMixin:
         return session.query(cls).filter_by(**model_fields).first()
 
     @classmethod
-    def all(cls, offset=0):
-        return session.query(cls).filter(offset < cls.id < offset + 1000).all()
+    def all(cls, offset=0, limits=False):
+        res = session.query(cls)
+        if limits:
+            res = res.limit(cls.ALL_LIMIT)
+        if offset:
+            res = res.offset(offset)
+        return res

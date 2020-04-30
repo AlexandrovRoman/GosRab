@@ -1,3 +1,4 @@
+requests
 flask==1.1.1
 Flask-DJ==1.0.7
 Flask-Mail==0.9.1

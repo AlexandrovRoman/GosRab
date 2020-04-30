@@ -37,19 +37,21 @@ class UserListResource(Resource):
 
     def get(self):
         # Кто может смотреть данные всех юзеров?
-        users = User.all()
+        users = User.all(limits=True)
         return jsonify({'user': [user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date')) for user in users]})
 
     def post(self):
         # Кто может добавить юзера?
         args = self.parser.parse_args()
+        if User.get_by(email=args['email']):
+            return jsonify({'error': 'email already taken'})
         user = User(
             name=args['name'],
             surname=args['surname'],
             fathername=args['fathername'],
             email=args['email'],
+            password=args['password']
         )
-        user.set_password(args['password'])
         user.save(add=True)
         return jsonify({'adding': 'OK'})
