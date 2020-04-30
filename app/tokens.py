@@ -6,8 +6,8 @@ from app.config import BaseConfig
 def create_jwt(subject, exp_days=7):
     token = jwt.encode({
         'sub': subject,
-        'iat': datetime.utcnow(),
-        'exp': datetime.utcnow() + datetime.timedelta(days=exp_days)},
+        'iat': datetime.datetime.utcnow(),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=exp_days)},
         BaseConfig.JWT_SECRET_KEY, algorithm='HS256')
     return token
 

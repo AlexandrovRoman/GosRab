@@ -17,8 +17,7 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
     owner_id = db.Column(db.Integer)
     org_type = db.Column(db.String)
     org_desc = db.Column(db.String)
-
-    api_token = db.Column(db.String, default=create_jwt(id))
+    api_token = db.Column(db.String)
 
     def __init__(self,
                  name=None,
@@ -27,6 +26,7 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
                  org_desc=None,
                  date=None):
         super().__init__(name=name, owner_id=owner_id, org_desc=org_desc, org_type=org_type, creation_date=date)
+        self.refresh_token()
 
     def __repr__(self):
         return f'<Organization {self.name}>'
