@@ -4,7 +4,7 @@ from os import environ
 models = [
     'users.models',
     'news.models',
-    'organization.models'
+    'organization.models',
 ]
 
 # Special urlpatterns
@@ -30,6 +30,7 @@ class BaseConfig:
     SECURITY_PASSWORD_SALT = environ.get('SECURITY_PASSWORD_SALT', 'iufsdivdjkvcbadb')
     EMAIL_SENDER_LOGIN = 'pfrproject2020@gmail.com'
     EMAIL_SENDER_PASSWORD = environ.get('EMAIL_SENDER_PASSWORD', '')
+    JWT_SECRET_KEY = 'some_string'  # Стоит ли брать из переменных сред?
 
 
 class ProductionConfig(BaseConfig):

@@ -1,10 +1,14 @@
 import os
 import shutil
 import sys
+from pprint import pprint
+
 from news.models import HotNews, News
 from organization.models import Organization, Vacancy
 from users.models import User, Course, T2Form
+from utils.clear_postgresql_db import DB
 from utils.excel_DB import export_from_excel
+from app import config
 
 
 def confirm(msg):
@@ -27,6 +31,10 @@ def create_test_models():
 
 if os.path.exists('migrations'):
     shutil.rmtree('migrations')
+
+db = DB(config.db, config.user, config.password, *config.url.split(":"))
+db.clear_tables()
+pprint(db.get_tables())
 
 os.system(f'{sys.executable} manage.py db init')
 confirm('manage.py db init завершено.')
