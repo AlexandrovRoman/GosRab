@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import datetime, time
 from threading import Thread
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
-from users.forms import RegisterForm, SignInForm, EditForm
+from app.tokens import create_jwt, unpack_token
+from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
 
@@ -50,7 +51,7 @@ def login():
         user = User.get_logged(request.form['email'], request.form['password'])
         if user is not None:
             login_user(user)
-            return redirect('/')
+            return redirect('/users/profile')
 
     return render_template('users/sign_in.html', form=form)
 
@@ -125,6 +126,36 @@ def confirm_email():
         print('Account confirmed', user, user.confirmed)
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect('/')
+
+
+def restore_password():
+    form = RestorePasswordForm()
+    if form.validate_on_submit():
+        user = User.get_by(email=form.email.data)
+        if not user:
+            return 'Такой пользователь отсутствует'
+        user.restore_token = create_jwt(datetime.now().timestamp())
+        user.save()
+
+        confirm_url = url_for('change_password', email=form.email.data, token=user.restore_token, _external=True)
+        html = render_template('activate_mess.html', confirm_url=confirm_url)
+
+        Thread(target=send_email, args=(user.email, html, "Restore your GosRab password")).run()
+
+        return 'Ok'
+    return render_template('users/forgot_password.html', form=form)
+
+
+def change_password(email, token):
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        user = User.get_by(email=email)
+        if user.restore_token != token:
+            return 'Жульё, не воруй чужие аккаунты'
+        user.set_password(form.password.data)
+        login_user(user)
+        return redirect('/users/profile')
+    return render_template('users/forgot_password.html', form=form)
 
 
 @login_required

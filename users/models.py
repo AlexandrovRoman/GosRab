@@ -31,6 +31,8 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
     # organization info
     post = db.Column(db.String, nullable=True)
 
+    restore_token = db.Column(db.String, nullable=True)
+
     work_department_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
     salary = db.Column(db.Integer, nullable=True)
 
