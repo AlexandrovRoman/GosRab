@@ -153,6 +153,8 @@ def change_password(email, token):
         if user.restore_token != token:
             return 'Жульё, не воруй чужие аккаунты'
         user.set_password(form.password.data)
+        user.restore_token = None
+        user.save()
         login_user(user)
         return redirect('/users/profile')
     return render_template('users/forgot_password.html', form=form)
