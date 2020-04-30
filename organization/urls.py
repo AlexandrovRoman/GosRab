@@ -12,4 +12,4 @@ urlpatterns = [
 ]
 
 api.add_resource(OrganizationListResource, '/api/organization')
-api.add_resource(OrganizationResource, '/api/organization/<str:api_token>/<int:org_id>')
+api.add_resource(OrganizationResource, '/api/organization/<string:api_token>/<int:org_id>')

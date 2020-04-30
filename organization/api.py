@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_login import current_user
 from flask_restful import reqparse, Resource
-from app.api import abort_obj_not_found
+from app.api_utils import abort_obj_not_found
 from app.tokens import check_tokens
 from organization.models import Organization
 
