@@ -21,11 +21,6 @@ class HotNews(db.Model, ModelMixin):
         return '<News {}>'.format(self.title)
 
     @classmethod
-    def get_news(cls):
-        news = [(obj.title, obj.description, obj.link) for obj in cls.query.all()]
-        return news
-
-    @classmethod
     def new(cls, title, description, link='#'):
         super().new(title, description, link=link)
 
@@ -44,11 +39,6 @@ class News(db.Model, ModelMixin):
 
     def __repr__(self):
         return '<News {}>'.format(self.title)
-
-    @classmethod
-    def get_courses(cls):
-        courses = [(obj.title, obj.description, obj.image_link) for obj in cls.query.all()]
-        return courses
 
     @classmethod
     def new(cls, title, description, image_link):

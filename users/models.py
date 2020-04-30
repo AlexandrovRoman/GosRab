@@ -205,7 +205,7 @@ class T2Form(db.Model, ModelMixin):
             linked_user = User(name, surname, fathername, email, password, binded_org, salary,
                                birthdate, gender, marriage,
                                confirmed=True)
-            linked_user.save()
+            linked_user.save(add=True)
             print('На основе Т2 создан пользователь', linked_user.full_name)
 
         super().__init__(org_name_prop=org_name, linked_user_id=linked_user.id,
@@ -273,8 +273,3 @@ class Course(db.Model, ModelMixin):
     @classmethod
     def new(cls, course_type, name, data, description, image):
         super().new(course_type, name, data, description, image)
-
-    @classmethod
-    def get_courses(cls):
-        courses = [(obj.course_type, obj.course_name, obj.data, obj.description, obj.image) for obj in cls.query.all()]
-        return courses

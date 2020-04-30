@@ -7,7 +7,7 @@
         <div class="jumbotron p-3 p-md-5 text-white rounded row" style="background-color: #777">
             <div class="col-md-6 px-0">
                 <h1 class="display-4 font-italic">"Век живи - век учись"</h1>
-                <p class="lead my-3">Обучение - неотъемлемая часть нашей жизни. Тем более ваш будующий работодатель, приятно оценит ваше стремление к учёбе.</p>
+                <p class="lead my-3">Обучение - неотъемлемая часть нашей жизни. Тем более ваш будущий работодатель, приятно оценит ваше стремление к учёбе.</p>
                 <p class="lead mb-0"><a href="#" class="text-white font-weight-bold" data-toggle="modal" data-target="#exampleModalLong">Подробнее...</a></p>
             </div>
             <div class="col-md-6 px-0">
@@ -20,14 +20,14 @@
                 <div class="col-md-5">
                     <div href="#" type="button" class="card flex-md-row mb-4 box-shadow h-md-250"  style="height: 252px; width: 446px">
                         <div class="card-body d-flex flex-column align-items-start bg-light">
-                            <strong class="d-inline-block mb-2 text-primary">{{ cours[0] }}</strong>
+                            <strong class="d-inline-block mb-2 text-primary">{{ cours.course_type }}</strong>
                             <h3 class="mb-0">
-                                <a class="text-dark">{{ cours[1] }}</a>
+                                <a class="text-dark">{{ cours.course_name }}</a>
                             </h3>
-                            <div class="mb-2 text-muted">{{ cours[2] }}</div>
-                            <p class="card-text mb-auto">{{ cours[3] }}</p>
+                            <div class="mb-2 text-muted">{{ cours.data }}</div>
+                            <p class="card-text mb-auto">{{ cours.description }}</p>
                         </div>
-                        <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="{{ url_for('static', filename=cours[4]) }}" style="height:250px; width: 199px" alt="Card image cap">
+                        <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="{{ url_for('static', filename=cours.image) }}" style="height:250px; width: 199px" alt="Card image cap">
                     </div>
                 </div>
 
@@ -50,7 +50,7 @@
                 </div>
                 <div class="modal-body text-center">
                     <p>Информация пока недоступна :(</p>
-                    <p>Приносим свои извенения.</p>
+                    <p>Приносим свои извинения.</p>
                 </div>
             </div>
         </div>

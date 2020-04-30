@@ -1,2 +1,0 @@
-class UrlConnectError(Exception):
-    pass
