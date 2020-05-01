@@ -1,9 +1,9 @@
-from datetime import datetime, time
+from datetime import datetime
 from threading import Thread
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
-from app.tokens import create_jwt, unpack_token
+from app.tokens import create_jwt
 from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token

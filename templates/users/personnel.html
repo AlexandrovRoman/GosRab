@@ -102,9 +102,7 @@
                                     <td>{{ vacancy.title }}</td>
                                     <td>{{ vacancy.salary }}₽</td>
                                     <td>
-                                        <button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>
-                                            Поиск сотрудника
-                                        </button>
+                                        <a class="btn btn-primary btn-lg btn-block btn-sm" href="/organization/showpretenders/{{ vacancy.id }}">Поиск сотрудника</a>
                                     </td>
                                 </tr>
                             {% endfor %}
