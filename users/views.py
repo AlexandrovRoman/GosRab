@@ -1,12 +1,13 @@
-from datetime import datetime, time
+from datetime import datetime
 from threading import Thread
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
-from app.tokens import create_jwt, unpack_token
+from app.tokens import create_jwt
 from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
+from flask.views import MethodView
 
 
 @login_manager.user_loader
@@ -18,42 +19,6 @@ def load_user(user_id):
 @check_confirmed
 def profile():
     return render_template('users/profile.html')
-
-
-@login_required
-@check_confirmed
-def edit_profile():
-    form = EditForm()
-    user = current_user
-    if not form.validate_on_submit():
-        for field in ['surname', 'name',
-                      'fathername', 'sex',
-                      'marriage', 'email',
-                      'birth_date', 'about_myself',
-                      ]:
-            form[field].data = getattr(user, field)
-        return render_template('users/edit_profile.html', form=form)
-
-    ignore = ("birth_date",)
-    setattr(user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
-    for attr in request.form:
-        if attr not in ignore:
-            setattr(user, attr, request.form[attr])
-
-    user.save()
-
-    return redirect(url_for('profile'))
-
-
-def login():
-    form = SignInForm()
-    if form.validate_on_submit():
-        user = User.get_logged(request.form['email'], request.form['password'])
-        if user is not None:
-            login_user(user)
-            return redirect('/users/profile')
-
-    return render_template('users/sign_in.html', form=form)
 
 
 @login_required
@@ -87,29 +52,92 @@ def notification():
     return render_template('users/notifications.html')
 
 
-def registration():
-    form = RegisterForm()
-    if not form.validate_on_submit():
+@login_required
+@check_confirmed
+def t2():
+    user_id = request.args['user_id']
+    user = current_user
+    if False:  # TODO: Если не обладает правами кадровика над человеком с user_id
+        return 'Нет доступа к форме этого пользователя'
+    target = User.get(user_id)
+
+    # TODO: Create html templates
+    if target is None:
+        return 'Нет пользователя'
+    if not target.t2_rel:  # Если не обладает формой T2
+        return 'Нет формы T2'
+
+    return render_template("users/T2.html", form=target.t2_rel[0])
+
+
+class EditProfile(MethodView):
+    decorators = [check_confirmed, login_required]
+
+    def get(self):
+        form = EditForm()
+        for field in ['surname', 'name',
+                      'fathername', 'sex',
+                      'marriage', 'email',
+                      'birth_date', 'about_myself',
+                      ]:
+            form[field].data = getattr(current_user, field)
+        return render_template('users/edit_profile.html', form=form)
+
+    def post(self):
+        form = EditForm()
+        if not form.validate_on_submit():
+            return self.get()
+        ignore = ("birth_date",)
+        setattr(current_user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
+        for attr in request.form:
+            if attr not in ignore:
+                setattr(current_user, attr, request.form[attr])
+        current_user.save()
+        return redirect(url_for('profile'))
+
+
+class Login(MethodView):
+    def get(self):
+        form = SignInForm()
+        return render_template('users/sign_in.html', form=form)
+
+    def post(self):
+        form = SignInForm()
+        if form.validate_on_submit():
+            user = User.get_logged(request.form['email'], request.form['password'])
+            if user is not None:
+                login_user(user)
+                return redirect('/users/profile')
+        return self.get()
+
+
+class Registration(MethodView):
+    def get(self):
+        form = RegisterForm()
         return render_template("users/registration.html", form=form)
-    if User.get_by(email=request.form['email']):
-        return 'Email уже использован'
-    birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
 
-    user = User(request.form['name'], request.form['surname'],
-                request.form['fathername'], request.form['email'],
-                request.form['password'], sex=request.form['sex'], birth_date=birth_date)
+    def post(self):
+        form = RegisterForm()
+        if not form.validate_on_submit():
+            return self.get()
+        if User.get_by(email=request.form['email']):
+            return 'Email уже использован'
+        birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
+        user = User(request.form['name'], request.form['surname'],
+                    request.form['fathername'], request.form['email'],
+                    request.form['password'], sex=request.form['sex'], birth_date=birth_date)
+        self.send_email(user)
+        user.save(add=True)
+        print('Зарегистрирован пользователь:', user)
+        login_user(user)
+        return redirect('/users/profile')
 
-    token = generate_confirmation_token(user.email)
-    confirm_url = url_for('confirm_email', token=token, _external=True)
-    html = render_template('activate_mess.html', confirm_url=confirm_url)
+    def send_email(self, user):
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('confirm_email', token=token, _external=True)
+        html = render_template('activate_mess.html', confirm_url=confirm_url)
 
-    Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()
-
-    user.save(add=True)
-
-    print('Зарегистрирован пользователь:', user)
-    login_user(user)
-    return redirect('/users/profile')
+        Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()
 
 
 def confirm_email():
@@ -128,9 +156,15 @@ def confirm_email():
     return redirect('/')
 
 
-def restore_password():
-    form = RestorePasswordForm()
-    if form.validate_on_submit():
+class RestorePassword(MethodView):
+    def get(self):
+        form = RestorePasswordForm()
+        return render_template('users/forgot_password.html', form=form)
+
+    def post(self):
+        form = RestorePasswordForm()
+        if not form.validate_on_submit():
+            return self.get()
         user = User.get_by(email=form.email.data)
         if not user:
             return 'Такой пользователь отсутствует'
@@ -143,12 +177,17 @@ def restore_password():
         Thread(target=send_email, args=(user.email, html, "Restore your GosRab password")).run()
 
         return 'Ok'
-    return render_template('users/forgot_password.html', form=form)
 
 
-def change_password(email, token):
-    form = ForgotPasswordForm()
-    if form.validate_on_submit():
+class ChangePassword(MethodView):
+    def get(self):
+        form = ForgotPasswordForm()
+        return render_template('users/forgot_password.html', form=form)
+
+    def post(self, email, token):
+        form = ForgotPasswordForm()
+        if not form.validate_on_submit():
+            return self.get()
         user = User.get_by(email=email)
         if user.restore_token != token:
             return 'Жульё, не воруй чужие аккаунты'
@@ -157,22 +196,3 @@ def change_password(email, token):
         user.save()
         login_user(user)
         return redirect('/users/profile')
-    return render_template('users/forgot_password.html', form=form)
-
-
-@login_required
-@check_confirmed
-def t2():
-    user_id = request.args['user_id']
-    user = current_user
-    if False:  # TODO: Если не обладает правами кадровика над человеком с user_id
-        return 'Нет доступа к форме этого пользователя'
-    target = User.get(user_id)
-
-    # TODO: Create html templates
-    if target is None:
-        return 'Нет пользователя'
-    if not target.t2_rel:  # Если не обладает формой T2
-        return 'Нет формы T2'
-
-    return render_template("users/T2.html", form=target.t2_rel[0])
