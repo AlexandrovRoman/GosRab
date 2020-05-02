@@ -16,6 +16,35 @@ def organizations():
     return render_template("organization/organizations.html", orgs=user_orgs)
 
 
+@login_required
+@check_confirmed
+def menu_organization(org_id):
+    org = Organization.get_by_id(current_user, org_id)
+    if org is None:
+        return 'Нет доступа'
+
+    return render_template("organization/menu_organization.html", org=org)
+
+
+@login_required
+@check_confirmed
+def personnel_department(org_id):
+    org = Organization.get_by_id(current_user, org_id)
+    if org is None:
+        return 'Нет доступа'
+    if request.method == 'POST':
+        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save()
+
+    organization_info = {
+        'org': org,
+        'personnel': org.personnels,
+        'workers': org.get_workers(),
+        'required_workers': org.get_required_workers(),
+    }
+
+    return render_template("personnel_department.html", **organization_info, len=len)
+
+
 class AddOrganization(MethodView):
     decorators = [login_required, check_confirmed]
 
@@ -36,35 +65,6 @@ class AddOrganization(MethodView):
             )
         org.save(add=True)
         return redirect('/organization/profile/organizations/')
-
-
-@login_required
-@check_confirmed
-def menu_organization(org_id):
-    org = Organization.get_by_id(current_user, org_id)
-    if org is None:
-        return 'Нет доступа'
-
-    return render_template("organization/menu_organization.html", org=org)
-
-
-@login_required
-@check_confirmed
-def personnel_department(org_id):
-    org = Organization.get_by_id(current_user, int(org_id))
-    if org is None:
-        return 'Нет доступа'
-    if request.method == 'POST':
-        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save()
-
-    organization_info = {
-        'org': org,
-        'personnel': org.personnels,
-        'workers': org.get_workers(),
-        'required_workers': org.get_required_workers(),
-    }
-
-    return render_template("personnel_department.html", **organization_info, len=len)
 
 
 class Job(View):
