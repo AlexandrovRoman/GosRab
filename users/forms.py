@@ -43,5 +43,5 @@ class ForgotPasswordForm(FlaskForm):
 
 
 class RestorePasswordForm(FlaskForm):
-    email = EmailField('Ваш email', validators=[DataRequired()])
+    email = EmailField('Ваш email', validators=[DataRequired()], render_kw={"placeholder": "Электронная почта"})
     submit = SubmitField('Прислать письмо')
