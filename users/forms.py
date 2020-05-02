@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.fields.html5 import EmailField, DateField
-from wtforms.validators import DataRequired, Email, AnyOf
+from wtforms.validators import DataRequired, Email, AnyOf, EqualTo
 from wtforms.fields import SelectField
 
 
@@ -34,3 +34,14 @@ class SignInForm(FlaskForm):
                        render_kw={"placeholder": "Адрес электронной почты"})
     password = PasswordField('Пароль', validators=[DataRequired()], render_kw={"placeholder": "Пароль"})
     submit = SubmitField('Войти')
+
+
+class ForgotPasswordForm(FlaskForm):
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    password_again = PasswordField('Пароль повторно', validators=[EqualTo('password', message='Пароли должны совпадать')])
+    submit = SubmitField('Сменить')
+
+
+class RestorePasswordForm(FlaskForm):
+    email = EmailField('Ваш email', validators=[DataRequired()], render_kw={"placeholder": "Электронная почта"})
+    submit = SubmitField('Прислать письмо')
