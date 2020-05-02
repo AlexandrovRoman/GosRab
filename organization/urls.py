@@ -8,7 +8,7 @@ urlpatterns = [
     relative_path('job/', job),
     relative_path('profile/organizations/', organizations),
     relative_path('profile/redact/add_organization/', add_organization, methods=['GET', 'POST']),
-    relative_path('profile/menu_organization/', menu_organization),
+    relative_path('profile/menu_organization/<int:org_id>/', menu_organization),
 ]
 
 api.add_resource(OrganizationListResource, '/api/organization')

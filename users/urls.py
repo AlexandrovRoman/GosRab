@@ -13,7 +13,7 @@ urlpatterns = [
     relative_path('profile/personnel/', personnel),
     relative_path('education/', education),
     relative_path('profile/notification/', notification),
-    relative_path('profile/menu_organization/personnel_department/', personnel_department, methods=['GET', 'POST']),
+    relative_path('profile/menu_organization/personnel_department/<int: org_id>/', personnel_department, methods=['GET', 'POST']),
     relative_path('registration/', registration, methods=["GET", "POST"]),
     relative_path('restore/', restore_password, methods=["GET", "POST"]),
     relative_path('forgot/<email>/<token>/', change_password, methods=["GET", "POST"]),
