@@ -30,7 +30,7 @@ class BaseConfig:
     SECURITY_PASSWORD_SALT = environ.get('SECURITY_PASSWORD_SALT', 'iufsdivdjkvcbadb')
     EMAIL_SENDER_LOGIN = 'pfrproject2020@gmail.com'
     EMAIL_SENDER_PASSWORD = environ.get('EMAIL_SENDER_PASSWORD', '')
-    JWT_SECRET_KEY = 'some_string'  # Стоит ли брать из переменных сред?
+    JWT_SECRET_KEY = environ.get("JWT_SECRET_KEY", "cdrrftpocfpreio")
 
 
 class ProductionConfig(BaseConfig):

@@ -39,9 +39,9 @@ class SignInForm(FlaskForm):
 class ForgotPasswordForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     password_again = PasswordField('Пароль повторно', validators=[EqualTo('password', message='Пароли должны совпадать')])
-    submit = SubmitField('Войти')
+    submit = SubmitField('Сменить')
 
 
 class RestorePasswordForm(FlaskForm):
-    email = EmailField('Ваш email', validators=[DataRequired()])
+    email = EmailField('Ваш email', validators=[DataRequired()], render_kw={"placeholder": "Электронная почта"})
     submit = SubmitField('Прислать письмо')
