@@ -109,9 +109,8 @@
                                     <td>{{ vacancy.title }}</td>
                                     <td>{{ vacancy.salary }}₽</td>
                                     <td>
-                                        <button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>
-                                            Поиск сотрудника
-                                        </button>
+                                        <a class="btn btn-primary btn-lg btn-block btn-sm"
+                                           href="/organization/showpretenders/{{ vacancy.id }}">Поиск сотрудника</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -192,7 +191,8 @@
                         </div>
                         <div class="col-md-6">
                             <label for="age">Зарплата</label>
-                            <input type="number" min="0" class="form-control" id="age" name="salary" placeholder="Зарплата"
+                            <input type="number" min="0" class="form-control" id="age" name="salary"
+                                   placeholder="Зарплата"
                                    required>
                             <div class="invalid-feedback">
                                 Укажите зарплату

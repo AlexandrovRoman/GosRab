@@ -11,3 +11,8 @@ class AddOrganizationForm(FlaskForm):
     email = EmailField('Почта организации', validators=[Email()])
     org_desc = TextAreaField('Описание организации')
     submit = SubmitField('Добавить организацию')
+
+
+class SendResumeForm(FlaskForm):
+    contents = TextAreaField('Ваше резюме')
+    submit = SubmitField('Оправить работодателю')

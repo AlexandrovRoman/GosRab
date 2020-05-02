@@ -75,7 +75,7 @@
                                 <h4 class="mb-3">Должность: {{ vacancy.title }}</h4>
                                 <h4 class="mb-3">Заработная плата: {{ vacancy.salary }}₽</h4>
                                 <div class="mt-5">
-                                    <button class="btn btn-primary btn-lg btn-block mt-5" type="submit" disabled>Отправить резюме работодателю на рассмотрения</button>
+                                    <a class="btn btn-primary btn-lg btn-block mt-5" type="button" href="/organization/sendresume/{{ vacancy.id }}">Отправить резюме работодателю на рассмотрения</a>
                                 </div>
                             </div>
                             <div class="ml-5 mb-5 justify-content-left col-4">

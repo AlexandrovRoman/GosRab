@@ -65,6 +65,7 @@ class Vacancy(db.Model, ModelMixin):
     worker_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     salary = db.Column(db.Integer)
     title = db.Column(db.String)
+    resume = db.relationship("Resume", backref='vacancy')
 
     def __init__(self,
                  org_id=None,
@@ -76,3 +77,22 @@ class Vacancy(db.Model, ModelMixin):
     @classmethod
     def new(cls, org_id, worker_id, salary, title):
         super().new(org_id, worker_id, salary, title)
+
+    def has_permission(self, user):
+        if self.organization.owner_id == user.id:
+            return True
+
+        for p in self.organization.personnels:
+            if user.id == p.id:
+                return True
+
+        return False
+
+
+class Resume(db.Model, ModelMixin):
+    __tablename__ = 'resume'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    vacancy_id = db.Column(db.Integer, db.ForeignKey('vacancies.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    title = db.Column(db.String)

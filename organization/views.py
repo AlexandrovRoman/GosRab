@@ -3,8 +3,8 @@ from flask import render_template, request, redirect
 from flask.views import MethodView, View
 from flask_login import current_user, login_required
 from app import session
-from organization.forms import AddOrganizationForm
-from organization.models import Organization, Vacancy
+from organization.forms import AddOrganizationForm, SendResumeForm
+from organization.models import Organization, Vacancy, Resume
 from users.utils import check_confirmed
 
 
@@ -14,6 +14,25 @@ def organizations():
     user_orgs = Organization.get_attached_to_user(current_user)
 
     return render_template("organization/organizations.html", orgs=user_orgs)
+
+
+@login_required
+@check_confirmed
+def send_resume(vacancy_id):
+    vacancy = Vacancy.query.filter_by(id=vacancy_id).first_or_404()
+    if vacancy.worker_id is not None:
+        return 'Должность занята'
+    form = SendResumeForm()
+    if form.validate_on_submit():
+        resume = Resume(
+            title=form.contents.data,
+            user_id=current_user.id,
+            vacancy_id=vacancy_id,
+        )
+        resume.save(add=True)
+        return redirect('/organization/job/')
+
+    return render_template("organization/send_resume.html", form=form)
 
 
 @login_required
@@ -45,6 +64,34 @@ def personnel_department(org_id):
     return render_template("personnel_department.html", **organization_info, len=len)
 
 
+@login_required
+@check_confirmed
+def show_pretenders(vacancy_id):
+    vacancy = Vacancy.query.filter_by(id=vacancy_id).first_or_404()
+    if vacancy.has_permission(current_user):
+        return render_template('organization/show_pretenders.html', vacancy=vacancy)
+    return 'Вы не являетесь владельцем вакансии'
+
+
+@login_required
+@check_confirmed
+def hire_worker(resume_id):
+    resume = session.query(Resume).get(resume_id)
+    if not resume:
+        return 'Резюме отсутствует'
+    vacancy = resume.vacancy
+    if vacancy.has_permission(current_user):
+        for r in vacancy.resume:
+            if r.id != resume_id:
+                pass  # Выслать письма об отказе в пользу другого
+            r.delete()
+        vacancy.worker_id = resume.user_id
+        vacancy.save()
+        # Выслать письмо об принятии на должность
+        return redirect('/organization/profile/organizations/')
+    return 'Вы не являетесь владельцем вакансии'
+
+ 
 class AddOrganization(MethodView):
     decorators = [login_required, check_confirmed]
 

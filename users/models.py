@@ -37,6 +37,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
     salary = db.Column(db.Integer, nullable=True)
 
     vacancies = db.relationship("Vacancy", backref='worker')
+    resume = db.relationship("Resume", backref='user')
 
     def __init__(self,
                  name=None,
