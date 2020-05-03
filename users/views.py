@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
 from app.tokens import create_jwt
 from organization.models import Organization
-from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm
+from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm, NotificationForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
 from flask.views import MethodView
@@ -50,7 +50,10 @@ def education():
 @login_required
 @check_confirmed
 def notification():
-    return render_template('users/notifications.html')
+    form = NotificationForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('users/notifications.html', form=form)
 
 
 @login_required

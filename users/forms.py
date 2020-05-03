@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, Email, AnyOf, EqualTo
 from wtforms.fields import SelectField
@@ -45,3 +45,18 @@ class ForgotPasswordForm(FlaskForm):
 class RestorePasswordForm(FlaskForm):
     email = EmailField('Ваш email', validators=[DataRequired()], render_kw={"placeholder": "Электронная почта"})
     submit = SubmitField('Прислать письмо')
+
+
+class NotificationForm(FlaskForm):
+    access_desire_for_work_owner = BooleanField('Предоставить доступ работадателям просматривать ваше желание.')
+    access_desire_for_personnel = BooleanField('Предоставить доступ кадровикам просматривать ваше желание.')
+    access_redaction_for_work_owner = BooleanField('Предоставить доступ работадателю вносить изменения в ваш профиль.')
+    access_redaction_for_personnel = BooleanField('Предоставить доступ кадровикам вносить изменения в ваш профиль.')
+
+    notify_vacancy = BooleanField('Получать уведомления, о новых подходящих вакансиях.')
+    notify_cources = BooleanField('Получать уведомления, о новых курсах, которые могут вам понравится.')
+    notify_redaction = BooleanField('Получать уведомления, о изменениях профиля кадровиками, или работадателем.')
+    notify_projects = BooleanField('Получать уведомления, о проектой деятельности.')
+    notify_public_activities = BooleanField('Получать уведомления, о ообщественной деятельности.')
+
+    submit = SubmitField('Применить')
