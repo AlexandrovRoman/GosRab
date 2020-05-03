@@ -1,35 +1,10 @@
+{% import "macros.html" as  macros %}
 {% set title = "регистрация" %}
 {% set footer = false %}
 {% set height = "150px" %}
 {% extends "base.html" %}
 {% block content %}
     <div class="column">
-        <div class="container marketing mt-3">
-            <div class="row justify-content-center">
-                <div class="card col-md-4 shadow">
-                    <div class="column mb-3 text-center">
-                        <h6>Поданные резюме</h6>
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Содержание</th>
-                                <th>Имя подавшего</th>
-                                <th>Принять на должность</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for res in vacancy.resume %}
-                                <tr>
-                                    <td>{{ res.title }}</td>
-                                    <td>{{ res.user.full_name }}</td>
-                                    <td><a href="../hireworker/{{ res.id }}">Нанять</a></td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ macros.vacancy_resume(vacancy) }}
     </div>
 {% endblock %}

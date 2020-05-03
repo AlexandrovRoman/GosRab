@@ -109,6 +109,14 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
         super().new(name, surname, fathername, email, password,
                     binded_org, salary, birth_date, sex, marriage=marriage, confirmed=True)
 
+    def has_user_permission(self, user):
+        for vac in self.vacancies:
+            if user.binded_org.id == vac.org_id:
+                return True
+            if vac.organization.owner_id == user.id:
+                return True
+        return False
+
 
 class T2Form(db.Model, ModelMixin):
     __tablename__ = 't2'
@@ -156,8 +164,7 @@ class T2Form(db.Model, ModelMixin):
 
     marriage_okin = db.Column(db.String, default='2')
 
-    family = db.Column(db.String,
-                       default='Отсутствует')
+    family = db.Column(db.String, default='Отсутствует')
     passport_id = db.Column(db.String)
     passport_given = db.Column(db.Date, default=datetime.datetime.now())
 

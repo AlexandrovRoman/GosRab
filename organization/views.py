@@ -47,6 +47,16 @@ def menu_organization(org_id):
 
 @login_required
 @check_confirmed
+def vacancies_organization(org_id):
+    org = Organization.get_by_id(current_user, org_id)
+    if org is None:
+        return 'Нет доступа'
+
+    return render_template("organization/vacancies_organization.html", org=org)
+
+
+@login_required
+@check_confirmed
 def personnel_department(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
