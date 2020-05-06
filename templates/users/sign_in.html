@@ -3,39 +3,36 @@
 {% set height = "150px"%}
 {% extends "base.html" %}
 {% block content %}
-<div class="column">
-    <div class="d-flex justify-content-center mt-5" style="height: 100px">
-        <img class="mb-4" src="{{ url_for('static', filename="icon/icon.png") }}" alt="" style="width: 43px; height: 43px">
-            <img class="mb-4 mx-4" src="{{ url_for('static', filename="icon/Gos.jpg") }}" alt="" style="width: 300px; height: 51px">
+<div class="column justify-content-center">
+    <div class="d-flex justify-content-center mt-5">
+        <img class="mb-4" src="{{ url_for('static', filename='icon/icon.png') }}" alt="" style="width: 43px; height: 43px">
     </div>
-          <div class="h1 mx-auto" style="width: 100px; height: 30px">Вход</div>
-          <div class="h6 mx-auto mt-3" style="width: 160px; height: 30px">Для портала госуслуг</div>
-
-          <form method="POST" action="">
-          <div class="d-flex justify-content-center" style="height: 100px">
+    <div class="h1 mx-auto mt-3">Вход</div>
+    <div class="h6 mx-auto mt-3">Для портала госуслуг</div>
+    <form method="POST" action="">
+        <div class="d-flex justify-content-center" style="height: 100px">
             <div class="d-flex p-3 my-1 flex-column" style="width: 300px">
                 <div>
-                {{ form.csrf_token }}
+                    {{ form.csrf_token }}
                 </div>
                 {% for field in form if field.name != 'csrf_token' and field != form.submit %}
-                        {{ field(class="form-control") }}
-                        {% for error in field.errors %}
-                            <div class="error">{{ error }}</div>
-                        {% endfor %}
+                {{ field(class="form-control") }}
+                {% for error in field.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
                 {% endfor %}
             </div>
-          </div>
-          <div class="row p-3 mx-5 mb-2 justify-content-center" style="height: 50px; max-width: 1800px">
+        </div>
+        <div class="row p-3 mx-5 mb-2 justify-content-center" style="height: 50px; max-width: 1800px">
             <p class="mx-5 float-right"><a href=/users/registration/>Зарегистрироватся</a></p>
             <p class="mx-5 float-right"><a href=/users/restore/>Забыл пароль</a></p>
-          </div>
-          <div class="d-flex justify-content-center" style="height: 130px">
+        </div>
+        <div class="d-flex justify-content-center" style="height: 130px">
             <div class="d-flex p-3 my-1 flex-column">
                 {{ form.submit(class="btn btn-lg btn-primary btn-block", type="submit", style="width: 300px") }}
-              <p class="mt-1 mb-3 ml-5 mt-3 text-muted">&copy; SAMARA-CORPARATION</p>
+                <p class="mt-1 mb-3 ml-5 mt-3 text-muted">&copy; SAMARA-CORPARATION</p>
             </div>
-          </div>
-          </form>
-
         </div>
+    </form>
+</div>
 {% endblock %}
