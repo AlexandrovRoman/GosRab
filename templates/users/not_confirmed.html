@@ -2,14 +2,9 @@
 {% set footer = false %}
 {% extends "base.html" %}
 {% block content %}
-<div class="d-flex align-items-center">
-    <div>
-        <div class="pricing-header mt-px-200 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
-            <h1 class="mt-5">Не подтверждена почта</h1>
-            <h2>Вам было прислано письмо, пожалуйста перейдите по ссылке и подтвердите вашу почту</h2>
-        </div>
-        <p style="margin: auto"><a class="btn btn-lg btn-primary" href="/users/logout" role="button">Выйти из
-            аккаунта</a></p>
-    </div>
+<div class="pricing-header mt-px-200 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
+    <h1 class="mt-5">Не подтверждена почта</h1>
+    <h2>Вам было прислано письмо, пожалуйста перейдите по ссылке и подтвердите вашу почту</h2>
 </div>
+<p class="justify-content-center" style="margin: auto"><a class="btn btn-lg btn-primary" href="/users/logout" role="button">Выйти из аккаунта</a></p>
 {% endblock %}
