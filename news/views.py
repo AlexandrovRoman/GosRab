@@ -1,8 +1,12 @@
 from flask import render_template
-from news.models import HotNews, News
+from news.models import News
+from base64 import b64encode
 
 
 def index():
-    hot_news = HotNews.all()
-    news = News.all()
-    return render_template('news/news.html', hot_news=hot_news, news=news)
+    news = News.query.order_by(News.date.asc())
+    return render_template('news/index.html', news=news, b64encode=b64encode)
+
+
+def news_info(news_id):
+    return render_template("news/news.html", news=News.get_by(id=news_id))
