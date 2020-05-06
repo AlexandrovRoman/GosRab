@@ -3,7 +3,7 @@
 {% block content %}
     <div id="myCarousel" class="carousel slide bg-dark" data-ride="carousel">
         <ol class="carousel-indicators">
-            {% for i in hot_news %}
+            {% for i in news[:3] %}
                 <li data-target="#myCarousel" data-slide-to="{{ loop.index0 }}"
                     {% if loop.first %}class="active"{% endif %}></li>
             {% endfor %}
@@ -43,10 +43,10 @@
             <div class="row featurette">
                 <div class="col-md-7{% if loop.index0 % 2 == 1 %} order-md-2 {% endif %}">
                     <h2 class="featurette-heading">{{ new.title }}</h2>
-                        <p class="lead">{{ new.preview }}</p>
+                        <p class="lead">{{ new.preview }}... <a href="news/{{ new.id }}">Читать далее</a> </p>
                 </div>
                 {% if new.image %}
-                <div class="col"><img src="date:image/png;base64,{{ b64encode(new.image).decode('utf-8').replace('\n', '') }}" alt="" class="w-100">
+                <div class="col"><img src="data:image/png;base64,{{ b64encode(new.image).decode('utf-8') }}" alt="" class="w-100">
                 {% endif %}
                 </div>
             </div>
