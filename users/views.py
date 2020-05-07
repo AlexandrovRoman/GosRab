@@ -4,7 +4,8 @@ from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
 from app.tokens import create_jwt
-from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm
+from organization.models import Organization
+from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm, NotificationForm
 from users.models import User, Course
 from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
 from flask.views import MethodView
@@ -49,17 +50,18 @@ def education():
 @login_required
 @check_confirmed
 def notification():
-    return render_template('users/notifications.html')
+    form = NotificationForm()
+    if form.validate_on_submit():
+        pass
+    return render_template('users/notifications.html', form=form)
 
 
 @login_required
 @check_confirmed
-def t2():
-    user_id = request.args['user_id']
-    user = current_user
-    if False:  # TODO: Если не обладает правами кадровика над человеком с user_id
-        return 'Нет доступа к форме этого пользователя'
+def t2(user_id):
     target = User.get(user_id)
+    if not target.has_user_permission(current_user):
+        return 'Нет доступа к форме этого пользователя'
 
     # TODO: Create html templates
     if target is None:
@@ -81,7 +83,7 @@ class EditProfile(MethodView):
                       'birth_date', 'about_myself',
                       ]:
             form[field].data = getattr(current_user, field)
-        return render_template('users/edit_profile.html', form=form)
+        return render_template('users/edit_profile.html', form=form, orgs=Organization.get_attached_to_user(current_user))
 
     def post(self):
         form = EditForm()

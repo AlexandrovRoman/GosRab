@@ -1,3 +1,4 @@
+{% import "macros.html" as  macros %}
 {% set title = "Редактирование" %}
 {% extends "users/user_button.html" %}
 {% block user_content %}
@@ -46,7 +47,15 @@
             <p><a class="btn btn-sm btn-primary col-12" href="/organization/profile/redact/add_organization"
                   role="button">Добавить организацию</a></p>
         </div>
-        <h3 class="m-2 card-text font-weight-normal text-center">В данный момент, нет привязанных организаций</h3>
+        {% if orgs %}
+            <div class="row mb-2 nav-tabs-justified">
+                {% for org in orgs %}
+                    {{ macros.organization_card(org) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <h3 class="m-2 card-text font-weight-normal text-center">В данный момент, нет привязанных организаций</h3>
+        {% endif %}
         <hr class="featurette-divider">
         {{ form.submit(class="btn btn-primary btn-lg btn-block", type="submit") }}
     </form>

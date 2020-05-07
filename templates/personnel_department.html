@@ -1,3 +1,4 @@
+{% import "macros.html" as  macros %}
 {% set title = "Кадровый отдел" %}
 {% extends "base.html" %}
 {% block content %}
@@ -6,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="card col-11 col-sm-11 col-md-11 col-lg-11 col-xl-12 shadow-lg">
                 <p class="mt-3"><a class="btn-sm btn-primary"
-                                   href="/organization/profile/menu_organization?org_id={{ org.id }}"
+                                   href="/organization/profile/menu_organization/{{ org.id }}"
                                    role="button">&larr; Меню организации</a></p>
                 <h1 class="font-weight-normal text-center">{{ org.name }}</h1>
                 <h3 class="font-weight-normal text-center">Кадровый отдел организации</h3>
@@ -93,70 +94,8 @@
                             </tbody>
                         </table>
                     </details>
-                    <details class="text-center col-md-6" open="">
-                        <summary class="h1 card-text font-weight-normal mb-3 mx-auto">Требуемые работники</summary>
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                            <tr>
-                                <th scope="col">Должность</th>
-                                <th scope="col">Зарплата</th>
-                                <th scope="col">Поиск по фильтру</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for vacancy in required_workers %}
-                                <tr>
-                                    <td>{{ vacancy.title }}</td>
-                                    <td>{{ vacancy.salary }}₽</td>
-                                    <td>
-                                        <a class="btn btn-primary btn-lg btn-block btn-sm"
-                                           href="/organization/showpretenders/{{ vacancy.id }}">Поиск сотрудника</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-
-                            </tbody>
-                        </table>
-                    </details>
-                    <details class="text-center col-md-12" open="">
-                        <summary class="h1 card-text font-weight-normal mb-3 mx-auto">Работники организации</summary>
-                        <table class="table table-hover table-bordered">
-                            <thead>
-                            <tr>
-                                <th scope="col">Фио</th>
-                                <th scope="col">Должность</th>
-                                <th scope="col">Зарплата</th>
-                                <th scope="col">Т2</th>
-                                <th scope="col">Профиль</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for vacancy in workers %}
-                                <tr>
-                                    <td>{{ vacancy.worker.full_name }}</td>
-                                    <td>{{ vacancy.title }}</td>
-                                    <td>{{ vacancy.salary }}₽</td>
-                                    {% if vacancy.worker.t2_rel %}
-                                        <td>
-                                            <p class="mt-3"><a class="btn-sm btn-primary"
-                                                               href="/users/profile/t2?user_id={{ vacancy.worker.id }}"
-                                                               role="button">T2</a></p>
-                                        </td>
-                                    {% else %}
-                                        <td>
-                                            <p class="mt-3"><a class="btn-sm btn-primary" role="button">T2</a></p>
-                                        </td>
-                                    {% endif %}
-                                    <td>
-                                        <button class="btn btn-primary btn-lg btn-block btn-sm" type="submit" disabled>
-                                            Перейти
-                                        </button>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </details>
+                    {{ macros.organization_reqired_workers(required_workers) }}
+                    {{ macros.organization_workers(workers) }}
                 </div>
                 <hr class="featurette-divider">
                 <footer class="container">
