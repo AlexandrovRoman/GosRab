@@ -3,7 +3,7 @@ import shutil
 import sys
 from pprint import pprint
 
-from news.models import HotNews, News
+from news.models import News
 from organization.models import Organization, Vacancy
 from users.models import User, Course, T2Form
 from utils.clear_postgresql_db import DB
@@ -24,7 +24,6 @@ def create_test_models():
     export_from_excel('test_models/t2.xlsx', T2Form.new)
 
     export_from_excel('test_models/vacancies.xlsx', Vacancy.new)
-    export_from_excel('test_models/hot_news.xlsx', HotNews.new)
     export_from_excel('test_models/news.xlsx', News.new)
     export_from_excel('test_models/courses.xlsx', Course.new)
 

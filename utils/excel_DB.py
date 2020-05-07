@@ -1,6 +1,6 @@
 import openpyxl
 from users.models import User, Course
-from news.models import HotNews, News
+from news.models import News
 from organization.models import Organization
 
 
@@ -15,6 +15,5 @@ def export_from_excel(file, add_func):
 if __name__ == '__main__':
     export_from_excel('test_models/orgs.xlsx', Organization.new)
     export_from_excel('test_models/users.xlsx', User.new)
-    export_from_excel('test_models/hot_news.xlsx', HotNews.new)
     export_from_excel('test_models/news.xlsx', News.new)
     export_from_excel('test_models/courses.xlsx', Course.new)

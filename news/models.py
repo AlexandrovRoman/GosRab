@@ -3,43 +3,28 @@ import datetime
 from app.models import ModelMixin
 
 
-class HotNews(db.Model, ModelMixin):
-    __tablename__ = 'hot_news'
-
-    id = db.Column(db.Integer,
-                   primary_key=True, autoincrement=True)
-    title = db.Column(db.String(80), nullable=True)
-    description = db.Column(db.String, nullable=True)
-    date = db.Column(db.DateTime, default=datetime.datetime.now)
-    tags = db.Column(db.String, nullable=True)  # Тэги новости через запятую
-    link = db.Column(db.String, default='#')
-
-    def __init__(self, title=None, description=None, date=None, tags=None, link=None):
-        super().__init__(title=title, description=description, date=date, tags=tags, link=link)
-
-    def __repr__(self):
-        return '<News {}>'.format(self.title)
-
-    @classmethod
-    def new(cls, title, description, link='#'):
-        super().new(title, description, link=link)
-
-
 class News(db.Model, ModelMixin):
     __tablename__ = 'news'
 
     id = db.Column(db.Integer,
                    primary_key=True, autoincrement=True)
-    title = db.Column(db.String(80), nullable=True)
-    description = db.Column(db.String, nullable=True)
-    image_link = db.Column(db.String, nullable=True)
+    title = db.Column(db.String(40))
+    preview = db.Column(db.String(80))
+    description = db.Column(db.String)
+    date = db.Column(db.DateTime, default=datetime.datetime.now)
+    tags = db.Column(db.String, default="")  # Тэги новости через запятую
+    image = db.Column(db.Binary, nullable=True)
 
-    def __init__(self, title=None, description=None, image_link=None):
-        super().__init__(title=title, description=description, image_link=image_link)
+    def __init__(self, title=None, preview=None, description=None, date=None, tags=None, image=None):
+        super().__init__(title=title, preview=preview, description=description, date=date, tags=tags, image=image)
 
     def __repr__(self):
         return '<News {}>'.format(self.title)
 
     @classmethod
-    def new(cls, title, description, image_link):
-        super().new(title, description, image_link)
+    def new(cls, title, preview, description, tags="", image_link=None, image=None):
+        if not image:
+            if image_link:
+                with open(image_link, "rb") as f:
+                    image = f.read()
+        super().new(title, preview, description, tags=tags, image=image)
