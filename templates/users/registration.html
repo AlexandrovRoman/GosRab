@@ -5,30 +5,27 @@
 {% block content %}
     <div class="column">
         <div class="d-flex justify-content-center mt-5" style="height: 43px">
-            <img class="mb-4" src="{{ url_for('static', filename="icon/icon.png") }}" alt=""
-                 style="width: 43px; height: 43px">
-            <img class="mb-4 mx-4" src="{{ url_for('static', filename="icon/Gos.jpg") }}" alt=""
-                 style="width: 300px; height: 51px">
+            <img src="{{ url_for('static', filename='icon/icon.png') }}" alt=""
+                 style="width: 60px; height: 60px">
         </div>
-
         <div class="container marketing mt-3">
             <div class="row justify-content-center">
-                <div class="card col-md-4 shadow">
+                <div class="card col-md-4 mb-4 mt-2 shadow">
                     <div class="column mb-3 text-center">
                         <div class="h1 text-center mt-3">Регистрация</div>
                         <form novalidate method="POST" action="">
                             <div>
                                 {{ form.csrf_token }}
-                                </div>
-                                {% for field in form if field.name != 'csrf_token' and field != form.submit %}
-                                <div class="col-md-12 mt-3">
-                                    {{ field.label(class="h4 my-1") }}
-                                    {{ field(class="form-control my-2") }}
-                                    {% for error in field.errors %}
-                                    <div class="error">{{ error }}</div>
-                                    {% endfor %}
-                                </div>
+                            </div>
+                            {% for field in form if field.name != 'csrf_token' and field != form.submit %}
+                            <div class="col-md-12 mt-3">
+                                {{ field.label(class="h4 my-1") }}
+                                {{ field(class="form-control my-2") }}
+                                {% for error in field.errors %}
+                                <div class="error">{{ error }}</div>
                                 {% endfor %}
+                            </div>
+                            {% endfor %}
                             {{ form.submit(class="btn btn-primary btn-lg btn-block mt-3", type="submit") }}
                         </form>
                     </div>

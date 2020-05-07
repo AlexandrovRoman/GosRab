@@ -2,9 +2,11 @@
 {% set footer = false %}
 {% extends "base.html" %}
 {% block content %}
-    <div class="pricing-header mt-px-50 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
-        <h1 class="display-1 mt-5">{{ error }}</h1>
-        <h2>{{ discription }}</h2>
-    </div>
-    <p  style="width: 20%; margin: auto"><a class="btn btn-lg btn-primary col-12" href="/users/logout" role="button">Выйти из аккаунта</a></p>
+<div class="pricing-header mt-px-200 py-3 pt-md-5 pb-md-4 mt-5 mx-auto text-center ">
+    <h1 class="mt-5">Не подтверждена почта</h1>
+    <h2>Вам было прислано письмо, пожалуйста перейдите по ссылке и подтвердите вашу почту</h2>
+</div>
+<div class="d-flex justify-content-center">
+    <p class="justify-content-center" style="margin: auto"><a class="btn btn-lg btn-primary" href="/users/logout" role="button">Выйти из аккаунта</a></p>
+</div>
 {% endblock %}
