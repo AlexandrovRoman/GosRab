@@ -4,7 +4,7 @@ from base64 import b64encode
 
 
 def index():
-    news = News.query.order_by(News.date.asc())
+    news = News.query.order_by(News.date.desc())
     return render_template('news/index.html', news=news, b64encode=b64encode)
 
 
