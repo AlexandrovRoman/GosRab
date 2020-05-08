@@ -32,7 +32,7 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
         return f'<Organization {self.name}>'
 
     @classmethod
-    def get_by_id(cls, user, org_id: int):
+    def get_by_id(cls, user,org_id: int):
         org = cls.get_by(id=org_id)
         if user.id != org.owner_id:
             return None
