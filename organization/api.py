@@ -1,4 +1,5 @@
 from flask import jsonify
+import json
 from flask_login import current_user
 from flask_restful import reqparse, Resource
 from app.api_utils import abort_obj_not_found
@@ -57,5 +58,6 @@ class VacancyListResource(Resource):
         vacancies = [vac for vac in Vacancy.all() if vac.worker_id == None]
         # Выглядит ущербнее,но метод to_dict есть только у SerializerMixin,
         # а добавление его в родители Vacancy дает рекурсию при вызове организации
-        return jsonify({'vacancy': [{'id': vac.id, 'org_id': vac.org_id, 'salary': vac.salary, 'title': vac.title} for
-                                    vac in vacancies]})
+        return jsonify({'vacancy': [
+            {'id': vac.id, 'org_id': vac.org_id, 'salary': vac.salary, 'title': vac.title} for
+            vac in vacancies]})

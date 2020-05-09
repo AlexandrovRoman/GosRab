@@ -31,6 +31,7 @@ class BaseConfig:
     EMAIL_SENDER_LOGIN = 'pfrproject2020@gmail.com'
     EMAIL_SENDER_PASSWORD = environ.get('EMAIL_SENDER_PASSWORD', '')
     JWT_SECRET_KEY = environ.get("JWT_SECRET_KEY", "cdrrftpocfpreio")
+    JSON_AS_ASCII = False
 
 
 class ProductionConfig(BaseConfig):
