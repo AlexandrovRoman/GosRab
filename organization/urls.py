@@ -1,8 +1,7 @@
 from utils.urls import relative_path
 from app import api
 from .api import OrganizationResource, OrganizationListResource, VacancyListResource
-from .views import organizations, menu_organization, send_resume, show_pretenders, hire_worker, vacancies_organization, \
-    personnel_department
+from .views import organizations, menu_organization, send_resume, show_pretenders, hire_worker, vacancies_organization, personnel_department
 from.views import AddOrganization, Job
 
 # Add your urls
