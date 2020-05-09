@@ -38,7 +38,7 @@ class OrganizationListResource(Resource):
     def get(self):
         orgs = Organization.all()
         return jsonify({'organization': [org.to_dict(
-            only=('id', 'name', 'creation_date', 'vacancies', 'owner_id', 'org_type', 'org_desc', 'api_token')) for org
+            only=('id', 'name', 'creation_date', 'vacancies', 'owner_id', 'org_type', 'org_desc')) for org
             in orgs]})
 
     def post(self):

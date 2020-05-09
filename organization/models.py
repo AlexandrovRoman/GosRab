@@ -54,7 +54,7 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
         return [vacancy for vacancy in self.vacancies if vacancy.worker_id is not None]
 
     def refresh_token(self):
-        self.api_token = create_jwt(self.id)
+        self.api_token = create_jwt(self.name)
 
 
 class Vacancy(db.Model, ModelMixin):
