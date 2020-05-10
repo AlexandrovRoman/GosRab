@@ -1,46 +1,16 @@
 from flask import jsonify
-from flask_login import current_user
-from flask_restful import reqparse, Resource
-from app.api_utils import abort_obj_not_found
+from flask_restful import reqparse
+from app.api_utils import get_or_abort
+from app.BaseAPI import BasicResource
 from users.models import User
 from .views import Registration
 
 
-def abort_user_not_found(user_id):
-    abort_obj_not_found(user_id, User)
+def get_or_abort_user(user_id):
+    return get_or_abort(user_id, User)
 
 
-class UserResource(Resource):
-    def get(self, user_id):
-
-        # Тут по сути дублируется запрос к бд, посмотри как оптимизировать
-        abort_user_not_found(user_id)
-        user = User.get(user_id)
-
-        # Наверное слишком, достаточно чтобы пользователь просто был авторизован
-        if user.id != getattr(current_user, "id", None):
-            return jsonify({'user': 'Operation not allowed to this user'})
-
-        return jsonify({'user': user.to_dict(
-            only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
-
-    def delete(self, user_id):
-        abort_user_not_found(user_id)
-        # Нужно придумать как авторизовываться, через url нужно делать первый запрос со своими данными,
-        # сервер должен записать тебя в сессию. И тогда уже возможны данные проверки
-        # Короче нужно что-то типо init запроса, в котором будет создаваться сессия с конкретным токеном
-        # (или данными пользователя)
-        if user_id != getattr(current_user, "id", None):
-            return jsonify({'deleting': 'Operation not allowed to this user'})
-        user = User.get(user_id)
-        user.delete()
-        return jsonify({'deleting': 'OK'})
-
-
-class UserListResource(Resource):
-    """Что тут делает создание пользователя?!
-    Тут ведь вроде должны лежать действия с группой пользователей. Короче наверное стоит удалить"""
-
+class UserResource(BasicResource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('surname', required=True)
@@ -48,11 +18,44 @@ class UserListResource(Resource):
     parser.add_argument('email', required=True)
     parser.add_argument('password', required=True)
 
+    def get(self, user_id):
+        self.set_authorized_user()
+        if not self.authorized_user:
+            return self.basic_error('Login before using API')
+        user = get_or_abort_user(user_id)
+
+        return jsonify({'user': user.to_dict(
+            only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
+
+    def delete(self, user_id):
+        self.set_authorized_user()
+        if not self.authorized_user:
+            return self.basic_error('Login before using API')
+
+        if user_id != self.authorized_user.id:
+            return self.basic_error('delete is not allowed to this user')
+
+        user = get_or_abort_user(user_id)
+        user.delete()
+        return jsonify({'deleting': 'OK'})
+
     def post(self):
-        # Почему нет никакой валидации аргументов?
+        self.set_authorized_user()
+        if not self.authorized_user:
+            return self.basic_error('Login before using API')
+
+        # При использовании этого метода появляется smtplib.SMTPAuthenticationError: (501,
+        # b'5.5.2 Cannot Decode response h12sm4255952lji.25 - gsmtp'), остальное работает
         args = self.parser.parse_args()
         if User.get_by(email=args['email']):
-            return jsonify({'error': 'email already taken'})
+            return self.basic_error('email already taken')
+
+        if any(map(str.isdigit, args['name'] + args['surname'] + args['fathername'])):
+            return self.basic_error('invalid name, surname or fathername')
+
+        if '@' not in args['email'] or '.' not in args['email']:
+             return self.basic_error('invalid email')
+
         user = User(
             name=args['name'],
             surname=args['surname'],
@@ -61,8 +64,6 @@ class UserListResource(Resource):
             password=args['password']
         )
         user.save(add=True)
-
-        # Если создавать пользователя буз этого, то аккаунт будет бесполезным, т.к его нельзя будет подтвердить
         Registration.send_email(user)
 
         return jsonify({'adding': 'OK'})

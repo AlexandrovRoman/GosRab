@@ -57,7 +57,7 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
         self.api_token = create_jwt(self.name)
 
 
-class Vacancy(db.Model, ModelMixin):
+class Vacancy(db.Model, ModelMixin, SerializerMixin):
     __tablename__ = 'vacancies'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
