@@ -20,3 +20,6 @@ urlpatterns = [
 ]
 
 api.add_resource(UserResource, '/user/<int:user_id>', '/user',  methods=['GET', 'DELETE', 'POST'])
+
+# api.add_resource(UserResource, '/user/<int:user_id>', methods=['GET', 'DELETE'])
+# api.add_resource(UserResource, '/user', methods=['POST'])

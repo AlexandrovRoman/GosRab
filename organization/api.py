@@ -23,15 +23,12 @@ class OrganizationResource(BasicResource):
         org = get_or_abort_org(org_id)
         response_info = org.to_dict(
             only=('id', 'name', 'creation_date', 'owner_id', 'org_type', 'org_desc'))
-        response_info['free_vacancies'] = [i.to_dict(only=('id', 'salary', 'title', 'org_id')) for i in
-                                           org.vacancies
-                                           if i.worker_id == None]
+        response_info['free_vacancies'] = [vac.to_dict(only=('id', 'salary', 'title', 'org_id'))
+                                           for vac in org.vacancies if vac.worker_id is None]
         if self.authorized_user.id == org.owner_id:
-            response_info['staff'] = [i.to_dict(only=('id', 'salary', 'title',
-                                                      'org_id', 'resume', 'worker_id')) for i in org.vacancies if
-                                      i.worker_id != None]
+            response_info['staff'] = [vac.to_dict(only=('id', 'salary', 'title', 'org_id', 'resume', 'worker_id'))
+                                      for vac in org.vacancies if vac.worker_id is not None]
         return jsonify({'organization': response_info})
-
 
     def delete(self, org_id):
         self.set_authorized_user()
@@ -43,7 +40,6 @@ class OrganizationResource(BasicResource):
             return self.basic_error('delete is not allowed to this organization')
         org.delete()
         return jsonify({'deleting': 'OK'})
-
 
     def post(self):
         self.set_authorized_user()

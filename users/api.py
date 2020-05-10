@@ -4,6 +4,7 @@ from app.api_utils import get_or_abort
 from app.BaseAPI import BasicResource
 from users.models import User
 from .views import Registration
+# import re
 
 
 def get_or_abort_user(user_id):
@@ -52,6 +53,9 @@ class UserResource(BasicResource):
 
         if any(map(str.isdigit, args['name'] + args['surname'] + args['fathername'])):
             return self.basic_error('invalid name, surname or fathername')
+
+        # if not re.search(r".+@.+\..+", args["email"]):  # .+ - любое количество, любых символов, \ - экранирование символа
+        #     return self.basic_error('invalid email')
 
         if '@' not in args['email'] or '.' not in args['email']:
              return self.basic_error('invalid email')

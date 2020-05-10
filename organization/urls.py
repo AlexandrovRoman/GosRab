@@ -1,8 +1,8 @@
 from utils.urls import relative_path
 from app import api
 from .api import OrganizationResource, VacancyListResource
-from .views import organizations, menu_organization, send_resume, show_pretenders, hire_worker, vacancies_organization, \
-    personnel_department
+from .views import (organizations, menu_organization, send_resume, show_pretenders,
+                    hire_worker, vacancies_organization, personnel_department)
 from .views import AddOrganization, Job
 
 # Add your urls
@@ -24,3 +24,7 @@ urlpatterns = [
 api.add_resource(VacancyListResource, '/vacancy')
 api.add_resource(OrganizationResource, '/organization/<int:org_id>', '/organization',
                  methods=['GET', 'DELETE', 'POST'])
+
+# Может все таки так?
+# api.add_resource(OrganizationResource, '/organization/<int:org_id>', methods=['GET', 'DELETE'])
+# api.add_resource(OrganizationResource, '/organization', methods=['POST'])

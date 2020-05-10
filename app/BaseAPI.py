@@ -6,8 +6,7 @@ from app.config import Config
 from flask import session, jsonify
 
 
-class UserLoginResource(Resource):
-
+class ApiEntryPoint(Resource):
     def get(self, email, password):
         user = User.get_logged(email, password)
         if user:
@@ -16,17 +15,16 @@ class UserLoginResource(Resource):
             return jsonify({'authorization': 'OK'})
         return jsonify({'error': 'incorrect email or password'})
 
-    @classmethod
-    def return_authorized_user(self):
+    @staticmethod
+    def get_authorized_user():
         if 'current_user_jwt' in session:
             return User.get(jwt.decode(session['current_user_jwt'], Config.JWT_SECRET_KEY)['payload']['id'])
         return None
 
 
 class BasicResource(Resource):
-
     def basic_error(self, message):
         return jsonify({'error': message})
 
     def set_authorized_user(self):
-        self.authorized_user = UserLoginResource.return_authorized_user()
+        self.authorized_user = ApiEntryPoint.get_authorized_user()
