@@ -1,8 +1,9 @@
 from flask import jsonify
 from flask_restful import reqparse
 from app.api_utils import get_or_abort
+from app.tokens import check_tokens
 from organization.models import Organization, Vacancy
-from app.BaseAPI import BasicResource
+from app.BaseAPI import BasicResource, request_decorator
 
 
 def get_or_abort_org(org_id):
@@ -15,11 +16,8 @@ class OrganizationResource(BasicResource):
     parser.add_argument('org_type', required=True)
     parser.add_argument('org_desc', required=True)
 
+    @request_decorator
     def get(self, org_id):
-        self.set_authorized_user()
-        if not self.authorized_user:
-            return self.basic_error('Login before using API')
-
         org = get_or_abort_org(org_id)
         response_info = org.to_dict(
             only=('id', 'name', 'creation_date', 'owner_id', 'org_type', 'org_desc'))
@@ -30,22 +28,18 @@ class OrganizationResource(BasicResource):
                                       for vac in org.vacancies if vac.worker_id is not None]
         return jsonify({'organization': response_info})
 
-    def delete(self, org_id):
+    @request_decorator
+    def delete(self, org_id, org_token):
         self.set_authorized_user()
-        if not self.authorized_user:
-            return self.basic_error('Login before using API')
 
         org = get_or_abort_org(org_id)
-        if self.authorized_user.id != org.owner_id:
+        if not check_tokens(org.api_token, org_token):
             return self.basic_error('delete is not allowed to this organization')
         org.delete()
         return jsonify({'deleting': 'OK'})
 
+    @request_decorator
     def post(self):
-        self.set_authorized_user()
-        if not self.authorized_user:
-            return self.basic_error('Login before using API')
-
         args = self.parser.parse_args()
         org = Organization.new(
             name=args['name'],
@@ -53,15 +47,12 @@ class OrganizationResource(BasicResource):
             org_type=args['org_type'],
             org_desc=args['org_desc']
         )
-        org.save(add=True)
         return jsonify({'adding': 'OK'})
 
 
 class VacancyListResource(BasicResource):
+    @request_decorator
     def get(self):
-        self.set_authorized_user()
-        if not self.authorized_user:
-            return self.basic_error('Login before using API')
         vacancies = Vacancy.all().filter_by(worker_id=None)
         return jsonify({'vacancy': [vac.to_dict(
             only=('id', 'salary', 'title', 'org_id')) for vac in vacancies]})

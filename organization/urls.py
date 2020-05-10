@@ -22,9 +22,6 @@ urlpatterns = [
 ]
 
 api.add_resource(VacancyListResource, '/vacancy')
-api.add_resource(OrganizationResource, '/organization/<int:org_id>', '/organization',
+api.add_resource(OrganizationResource, '/organization/<int:org_id>', '/organization/<int:org_id>/<string:org_token>',
+                 '/organization',
                  methods=['GET', 'DELETE', 'POST'])
-
-# Может все таки так?
-# api.add_resource(OrganizationResource, '/organization/<int:org_id>', methods=['GET', 'DELETE'])
-# api.add_resource(OrganizationResource, '/organization', methods=['POST'])
