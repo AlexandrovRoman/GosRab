@@ -23,17 +23,19 @@ class ApiEntryPoint(Resource):
 
 
 class BasicResource(Resource):
-    def basic_error(self, message):
+    @staticmethod
+    def basic_error(message):
         return jsonify({'error': message})
 
     def set_authorized_user(self):
         self.authorized_user = ApiEntryPoint.get_authorized_user()
 
 
-def request_decorator(method):
+def jwt_login_required(method):
     def check_API_rights(self, **kwargs):
         self.set_authorized_user()
         if not self.authorized_user:
             return self.basic_error('Login before using API')
         return method(self, **kwargs)
+
     return check_API_rights

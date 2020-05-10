@@ -23,5 +23,4 @@ urlpatterns = [
 
 api.add_resource(VacancyListResource, '/vacancy')
 api.add_resource(OrganizationResource, '/organization/<int:org_id>', '/organization/<int:org_id>/<string:org_token>',
-                 '/organization',
-                 methods=['GET', 'DELETE', 'POST'])
+                 '/organization', methods=['GET', 'DELETE', 'POST'])
