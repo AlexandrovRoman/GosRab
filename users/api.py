@@ -12,8 +12,6 @@ def get_or_abort_user(user_id):
 
 
 class UserResource(BasicResource):
-    method_decorators = [jwt_login_required]
-
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('surname', required=True)
@@ -21,19 +19,22 @@ class UserResource(BasicResource):
     parser.add_argument('email', required=True)
     parser.add_argument('password', required=True)
 
+    @jwt_login_required
     def get(self, user_id):
         user = get_or_abort_user(user_id)
         return jsonify({'user': user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
 
+    @jwt_login_required
     def delete(self, user_id):
+        user = get_or_abort_user(user_id)
         if user_id != self.authorized_user.id:
             return self.basic_error('delete is not allowed to this user')
 
-        user = get_or_abort_user(user_id)
         user.delete()
         return jsonify({'deleting': 'OK'})
 
+    @jwt_login_required
     def post(self):
         args = self.parser.parse_args()
         if User.get_by(email=args['email']):
@@ -53,6 +54,6 @@ class UserResource(BasicResource):
             password=args['password']
         )
         user.save(add=True)
-        Registration.send_email(user)
-
-        return jsonify({'adding': 'OK'})
+        # Registration.send_email(user)
+        return jsonify({'adding': 'OK', 'user': user.to_dict(
+            only=('id', 'name', 'surname', 'fathername', 'birth_date'))})

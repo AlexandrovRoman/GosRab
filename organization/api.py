@@ -11,13 +11,12 @@ def get_or_abort_org(org_id):
 
 
 class OrganizationResource(BasicResource):
-    method_decorators = [jwt_login_required]
-
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('org_type', required=True)
     parser.add_argument('org_desc', required=True)
 
+    @jwt_login_required
     def get(self, org_id):
         org = get_or_abort_org(org_id)
         response_info = org.to_dict(
@@ -26,19 +25,23 @@ class OrganizationResource(BasicResource):
         response_info['free_vacancies'] = [vac.to_dict(only=('id', 'salary', 'title', 'org_id'))
                                            for vac in vacancies if vac.worker_id is None]
         if self.authorized_user.id == org.owner_id:
-            response_info['staff'] = [vac.to_dict(only=('id', 'salary', 'title', 'org_id', 'resume', 'worker_id'))
-                                      for vac in vacancies if vac.worker_id is not None]
+            response_info['staff'] = [
+                vac.to_dict(only=('id', 'salary', 'title', 'org_id', 'resume', 'worker_id'))
+                for vac in vacancies if vac.worker_id is not None]
+            response_info['api_token'] =  org.api_token
         return jsonify({'organization': response_info})
 
+    @jwt_login_required
     def delete(self, org_id, org_token):
+        org = get_or_abort_org(org_id)
         self.set_authorized_user()
 
-        org = get_or_abort_org(org_id)
         if not check_tokens(org.api_token, org_token):
             return self.basic_error('delete is not allowed to this organization')
         org.delete()
         return jsonify({'deleting': 'OK'})
 
+    @jwt_login_required
     def post(self):
         args = self.parser.parse_args()
         org = Organization(
@@ -48,12 +51,14 @@ class OrganizationResource(BasicResource):
             org_desc=args['org_desc']
         )
         org.save(add=True)
-        return jsonify({'adding': 'OK'})
+        return jsonify({'adding': 'OK',
+                        'organization': org.to_dict(
+                            only=('id', 'name', 'creation_date', 'owner_id', 'org_type', 'org_desc', 'api_token'))})
 
 
 class VacancyListResource(BasicResource):
-    method_decorators = [jwt_login_required]
 
-    def get(self):
-        vacancies = Vacancy.all().filter_by(worker_id=None)
+    @jwt_login_required
+    def get(self, offset=0):
+        vacancies = Vacancy.all(offset=offset).filter_by(worker_id=None)
         return jsonify({'vacancy': [vac.to_dict(only=('id', 'salary', 'title', 'org_id')) for vac in vacancies]})

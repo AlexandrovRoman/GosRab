@@ -1,6 +1,7 @@
 from app.tokens import create_jwt
 from flask_restful import Resource
 from users.models import User
+from organization.models import Organization
 import jwt
 from app.config import Config
 from flask import session, jsonify
@@ -14,6 +15,11 @@ class ApiEntryPoint(Resource):
                 user.to_dict(only=('id', 'name', 'surname', 'fathername', 'email')))
             return jsonify({'authorization': 'OK'})
         return jsonify({'error': 'incorrect email or password'})
+
+    def delete(self):
+        if 'current_user_jwt' in session:
+            del session['current_user_jwt']
+        return jsonify({'sign out': 'OK'})
 
     @staticmethod
     def get_authorized_user():

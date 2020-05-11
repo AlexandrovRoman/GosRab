@@ -8,4 +8,4 @@ urlpatterns = [
     add_relative_path('/organization/', include('organization.urls'))
 ]
 
-api.add_resource(ApiEntryPoint, '/login/<string:email>/<string:password>')
+api.add_resource(ApiEntryPoint, '/login/<string:email>/<string:password>', '/login', methods=["GET", "DELETE"])
