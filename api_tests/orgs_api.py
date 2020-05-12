@@ -2,7 +2,7 @@ import requests
 from app import config
 
 
-class TestOrganizationResource:
+class SetupOrganizationResource:
     def setup(self):
         self.session = requests.Session()
 
@@ -51,7 +51,7 @@ class TestOrganizationResource:
         self.session.delete(f"{self.user_url}/{self.login_id}")
 
 
-class TestOrganizationResourceGet(TestOrganizationResource):
+class TestOrganizationResourceGet(SetupOrganizationResource):
     def setup(self):
         super().setup()
 
@@ -67,7 +67,7 @@ class TestOrganizationResourceGet(TestOrganizationResource):
         assert list(self.session.get(f"{self.url}").json().keys()) == ['organization']
 
 
-class TestOrganizationResourcePost(TestOrganizationResource):
+class TestOrganizationResourcePost(SetupOrganizationResource):
     def setup(self):
         super().setup()
         self.current_org_id = None
@@ -102,7 +102,7 @@ class TestOrganizationResourcePost(TestOrganizationResource):
         super().teardown()
 
 
-class TestOrganizationResourceDelete(TestOrganizationResource):
+class TestOrganizationResourceDelete(SetupOrganizationResource):
     def setup(self):
         super().setup()
 

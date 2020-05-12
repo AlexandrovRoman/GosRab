@@ -7,7 +7,7 @@ from app.config import Config
 from flask import session, jsonify
 
 
-class ApiEntryPoint(Resource):
+class UserApiEntryPoint(Resource):
     def get(self, email, password):
         user = User.get_logged(email, password)
         if user:
@@ -56,7 +56,7 @@ class BasicResource(Resource):
         return jsonify({'error': message})
 
     def set_authorized_user(self):
-        self.authorized_user = ApiEntryPoint.get_authorized_user()
+        self.authorized_user = UserApiEntryPoint.get_authorized_user()
 
     def set_authorized_org(self):
         self.authorized_org = OrgApiEntryPoint.get_authorized_org()

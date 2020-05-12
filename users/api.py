@@ -53,6 +53,6 @@ class UserResource(BasicResource):
             password=args['password']
         )
         user.save(add=True)
-        # Registration.send_email(user)
+        Registration.send_email(user)
         return jsonify({'adding': 'OK', 'user': user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
