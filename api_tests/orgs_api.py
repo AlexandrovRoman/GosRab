@@ -6,21 +6,32 @@ class TestOrganizationResource:
     def setup(self):
         self.session = requests.Session()
 
-        self.login = "new_email@yandex.ru"
-        self.password = "456asdf"
-
         host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
         self.url = f"http://{host}/api/organization"
+        self.user_url = f"http://{host}/api/user"
         self.entry_url = f"http://{host}/api/login"
         self.org_entry_url = f"http://{host}/api/org_login"
 
-        self.test_json = {'name': 'Организация для входа',
-                          "org_type": 'OAO',
-                          "org_desc": 'For tests'
-                          }
+        self.test_org_json = {'name': 'Организация для входа',
+                              "org_type": 'OAO',
+                              "org_desc": 'For tests'
+                              }
+        self.test_user_json = {"name": "Пример",
+                               "surname": "Пример",
+                               "fathername": "Иванов",
+                               "email": "correctj@email.com",
+                               "password": "abc123"
+                               }
+
+        json = self.session.post(self.user_url, json=self.test_user_json).json()
+        print(json)
+        self.login = self.test_user_json['email']
+        self.password = self.test_user_json['password']
+        self.login_id = json['user']['id']
         self.auth()
-        json = self.session.post(self.url, json=self.test_json).json()
-        self.login_org_id = json['organization']['id']
+
+        json = self.session.post(self.url, json=self.test_org_json).json()
+        self.org_login_id = json['organization']['id']
         self.password_org_jwt = json['organization']['api_token']
 
         self.org_auth()
@@ -29,12 +40,15 @@ class TestOrganizationResource:
         assert self.session.get(f"{self.entry_url}/{self.login}/{self.password}").json() == {'authorization': 'OK'}
 
     def org_auth(self):
-        assert self.session.get(f"{self.org_entry_url}/{self.login_org_id}/{self.password_org_jwt}").json() == {
+        assert self.session.get(f"{self.org_entry_url}/{self.org_login_id}/{self.password_org_jwt}").json() == {
             'authorization': 'OK'}
 
-    def teardown_module(self):
+    def teardown(self):
+
         self.org_auth()
         self.session.delete(f"{self.url}")
+        self.auth()
+        self.session.delete(f"{self.user_url}/{self.login_id}")
 
 
 class TestOrganizationResourceGet(TestOrganizationResource):
@@ -85,6 +99,7 @@ class TestOrganizationResourcePost(TestOrganizationResource):
             self.session.get(f"{self.org_entry_url}/{self.current_org_id}/{self.current_org_jwt}").json()
             self.session.delete(f"{self.url}").json()
         self.session.delete(self.entry_url)
+        super().teardown()
 
 
 class TestOrganizationResourceDelete(TestOrganizationResource):
@@ -109,4 +124,3 @@ class TestOrganizationResourceDelete(TestOrganizationResource):
             self.my_org_id = json['organization']['id']
         self.session.get(f"{self.org_entry_url}/{self.my_org_id}/{self.correct_jwt}").json()
         assert self.session.delete(f"{self.url}").json() == {'deleting': 'OK'}
-

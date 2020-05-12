@@ -6,8 +6,6 @@ class TestUserResource:
     def setup(self):
         self.session = requests.Session()
 
-        self.login = "new_email@yandex.ru"
-        self.password = "456asdf"
         host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
         self.url = f"http://{host}/api/user"
         self.entry_url = f"http://{host}/api/login"
@@ -15,7 +13,7 @@ class TestUserResource:
         self.test_json = {"name": "Пример",
                           "surname": "Пример",
                           "fathername": "Иванов",
-                          "email": "righta3sd399idf9,@email.com",
+                          "email": "correct@email.com",
                           "password": "abc123"
                           }
 
@@ -29,9 +27,9 @@ class TestUserResource:
     def auth(self):
         assert self.session.get(f"{self.entry_url}/{self.login}/{self.password}").json() == {'authorization': 'OK'}
 
-    def teardown_module(cls):
-        cls.auth()
-        cls.session.delete(f"{cls.url}/{cls.login_id}")
+    def teardown(self):
+        self.auth()
+        self.session.delete(f"{self.url}/{self.login_id}")
 
 
 class TestUserResourcePost(TestUserResource):
@@ -43,7 +41,7 @@ class TestUserResourcePost(TestUserResource):
             "name": "Пример",
             "surname": "Пример",
             "fathername": "Иванов",
-            "email": "right789d0@email.com",
+            "email": "right@email.com",
             "password": "abc123"
         }
 
@@ -82,6 +80,8 @@ class TestUserResourcePost(TestUserResource):
         if self.current_user_id:
             self.session.delete(f'{self.url}/{self.current_user_id}')
         self.session.delete(self.entry_url)
+        super().teardown()
+
 
 
 class TestUserResourceGet(TestUserResource):
@@ -117,7 +117,7 @@ class TestUserResourceDelete(TestUserResource):
             "name": "Пример",
             "surname": "Пример",
             "fathername": "Иванов",
-            "email": "corectys@email.com",
+            "email": "right@email.com",
             "password": "abc123"
         }
 
