@@ -34,7 +34,6 @@ class UserResource(BasicResource):
         user.delete()
         return jsonify({'deleting': 'OK'})
 
-    @jwt_login_required
     def post(self):
         args = self.parser.parse_args()
         if User.get_by(email=args['email']):
@@ -54,6 +53,6 @@ class UserResource(BasicResource):
             password=args['password']
         )
         user.save(add=True)
-        Registration.send_email(user)
+        # Registration.send_email(user)
         return jsonify({'adding': 'OK', 'user': user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
