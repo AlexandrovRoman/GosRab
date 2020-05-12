@@ -2,7 +2,7 @@ import requests
 from app import config
 
 
-class TestOrganizationResource:
+class SetupOrganizationResource:
     def setup(self):
         self.login = "new_email@yandex.ru"
         self.password = "456asdf"
@@ -30,7 +30,7 @@ class TestOrganizationResource:
             'authorization': 'OK'}
 
 
-class TestOrganizationResourceGet(TestOrganizationResource):
+class TestOrganizationResourceGet(SetupOrganizationResource):
     def setup(self):
         super().setup()
 
@@ -46,7 +46,7 @@ class TestOrganizationResourceGet(TestOrganizationResource):
         assert list(self.session.get(f"{self.url}").json().keys()) == ['organization']
 
 
-class TestOrganizationResourcePost(TestOrganizationResource):
+class TestOrganizationResourcePost(SetupOrganizationResource):
     def setup(self):
         super().setup()
         self.current_org_id = None
@@ -80,7 +80,7 @@ class TestOrganizationResourcePost(TestOrganizationResource):
         self.session.delete(self.entry_url)
 
 
-class TestOrganizationResourceDelete(TestOrganizationResource):
+class TestOrganizationResourceDelete(SetupOrganizationResource):
     def setup(self):
         super().setup()
 
