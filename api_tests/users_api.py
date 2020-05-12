@@ -5,26 +5,33 @@ from app import config
 class TestUserResource:
     def setup(self):
         self.session = requests.Session()
-        self.test_login_json = {
-            "name": "Пример",
-            "surname": "Пример",
-            "fathername": "Иванов",
-            "email": "testemail@email.com",
-            "password": "abc123"
-        }
 
+        self.login = "new_email@yandex.ru"
+        self.password = "456asdf"
         host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
         self.url = f"http://{host}/api/user"
         self.entry_url = f"http://{host}/api/login"
 
-        self.session.post(self.url, json=self.test_login_json).json()
-        self.login = self.test_login_json['email']
-        self.password = self.test_login_json['password']
+        self.test_json = {"name": "Пример",
+                          "surname": "Пример",
+                          "fathername": "Иванов",
+                          "email": "righta3sd399idf9,@email.com",
+                          "password": "abc123"
+                          }
+
+        json = self.session.post(self.url, json=self.test_json).json()
+        self.login = self.test_json['email']
+        self.password = self.test_json['password']
+        self.login_id = json['user']['id']
 
         self.auth()
 
     def auth(self):
         assert self.session.get(f"{self.entry_url}/{self.login}/{self.password}").json() == {'authorization': 'OK'}
+
+    def teardown_module(cls):
+        cls.auth()
+        cls.session.delete(f"{cls.url}/{cls.login_id}")
 
 
 class TestUserResourcePost(TestUserResource):
@@ -36,7 +43,7 @@ class TestUserResourcePost(TestUserResource):
             "name": "Пример",
             "surname": "Пример",
             "fathername": "Иванов",
-            "email": "right@email.com",
+            "email": "right789d0@email.com",
             "password": "abc123"
         }
 
@@ -110,7 +117,7 @@ class TestUserResourceDelete(TestUserResource):
             "name": "Пример",
             "surname": "Пример",
             "fathername": "Иванов",
-            "email": "corecttdelete@email.com",
+            "email": "corectys@email.com",
             "password": "abc123"
         }
 

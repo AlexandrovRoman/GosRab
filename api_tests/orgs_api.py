@@ -4,22 +4,25 @@ from app import config
 
 class SetupOrganizationResource:
     def setup(self):
+        self.session = requests.Session()
+
         self.login = "new_email@yandex.ru"
         self.password = "456asdf"
-
-        self.login_org_id = 1
-        self.password_org_jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.' \
-                                'eyJwYXlsb2FkIjoiXHUwNDFlXHUwNDQwXHUwNDMzXHUwNDMwXHUwNDNkXHUwNDM4XHUwNDM3XHUwNDMwX' \
-                                'HUwNDQ2XHUwNDM4XHUwNDRmIDEiLCJpYXQiOjE1ODkyNjYyNjEsImV4cCI6MTU4OTg3MTA2MX0.' \
-                                'imoepJ11Hbd5mhhTVIDBiJv-pjdpt6oh3y3TyUkYPDc'
 
         host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
         self.url = f"http://{host}/api/organization"
         self.entry_url = f"http://{host}/api/login"
         self.org_entry_url = f"http://{host}/api/org_login"
 
-        self.session = requests.Session()
+        self.test_json = {'name': 'Организация для входа',
+                          "org_type": 'OAO',
+                          "org_desc": 'For tests'
+                          }
         self.auth()
+        json = self.session.post(self.url, json=self.test_json).json()
+        self.login_org_id = json['organization']['id']
+        self.password_org_jwt = json['organization']['api_token']
+
         self.org_auth()
 
     def auth(self):
@@ -28,6 +31,10 @@ class SetupOrganizationResource:
     def org_auth(self):
         assert self.session.get(f"{self.org_entry_url}/{self.login_org_id}/{self.password_org_jwt}").json() == {
             'authorization': 'OK'}
+
+    def teardown_module(self):
+        self.org_auth()
+        self.session.delete(f"{self.url}")
 
 
 class TestOrganizationResourceGet(SetupOrganizationResource):
@@ -102,3 +109,4 @@ class TestOrganizationResourceDelete(SetupOrganizationResource):
             self.my_org_id = json['organization']['id']
         self.session.get(f"{self.org_entry_url}/{self.my_org_id}/{self.correct_jwt}").json()
         assert self.session.delete(f"{self.url}").json() == {'deleting': 'OK'}
+
