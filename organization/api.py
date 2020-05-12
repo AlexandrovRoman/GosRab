@@ -1,7 +1,6 @@
 from flask import jsonify
 from flask_restful import reqparse
 from app.api_utils import get_or_abort
-from app.tokens import check_tokens
 from organization.models import Organization, Vacancy
 from app.BaseAPI import BasicResource, jwt_login_required, jwt_org_required
 
