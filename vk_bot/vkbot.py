@@ -7,6 +7,9 @@ import random
 from vk_bot.db_session import *
 from vk_bot.__all_models import BugReport, Comment
 from vk_bot.vacancies import get_vacancies, ServerError
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 
 class GroupBot:
@@ -100,6 +103,10 @@ class GroupBot:
 
 
 if __name__ == '__main__':
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
     global_init(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_URL}/{DB_NAME}')
+    db = SQLAlchemy(app)
+    migrate = Migrate(app, db)
     bot = GroupBot(TOKEN, GROUP_ID)
     bot.loop()
