@@ -4,6 +4,13 @@ from vk_bot.db_session import *
 
 
 class Message:
+
+    id = sqlalchemy.Column(sqlalchemy.Integer,
+                           primary_key=True, autoincrement=True)
+    sender_id = sqlalchemy.Column(sqlalchemy.Integer)
+    date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.utcnow)
+    message = sqlalchemy.Column(sqlalchemy.String)
+
     @classmethod
     def new(cls, sender_id, message):
         session = create_session()
@@ -16,18 +23,6 @@ class Message:
 class BugReport(SqlAlchemyBase, Message):
     __tablename__ = 'bug_reports'
 
-    id = sqlalchemy.Column(sqlalchemy.Integer,
-                           primary_key=True, autoincrement=True)
-    sender_id = sqlalchemy.Column(sqlalchemy.Integer)
-    date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.utcnow)
-    message = sqlalchemy.Column(sqlalchemy.String)
-
 
 class Comment(SqlAlchemyBase, Message):
     __tablename__ = 'comments'
-
-    id = sqlalchemy.Column(sqlalchemy.Integer,
-                           primary_key=True, autoincrement=True)
-    sender_id = sqlalchemy.Column(sqlalchemy.Integer)
-    date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.utcnow)
-    message = sqlalchemy.Column(sqlalchemy.String)
