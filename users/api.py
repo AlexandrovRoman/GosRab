@@ -1,33 +1,17 @@
 from flask import jsonify
-from flask_login import current_user
-from flask_restful import reqparse, Resource
-from app.api_utils import abort_obj_not_found
+from flask_restful import reqparse
+from app.api_utils import get_or_abort
+from app.BaseAPI import BasicResource, jwt_login_required
 from users.models import User
+from .views import Registration
+import re
 
 
-def abort_user_not_found(user_id):
-    abort_obj_not_found(user_id, User)
+def get_or_abort_user(user_id):
+    return get_or_abort(user_id, User)
 
 
-class UserResource(Resource):
-    def get(self, user_id):
-        abort_user_not_found(user_id)
-        user = User.get(user_id)
-        if user.id != getattr(current_user, "id", None):
-            return jsonify({'user': 'Operation not allowed to this user'})
-        return jsonify({'user': user.to_dict(
-            only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
-
-    def delete(self, user_id):
-        abort_user_not_found(user_id)
-        if user_id != getattr(current_user, "id", None):
-            return jsonify({'deleting': 'Operation not allowed to this user'})
-        user = User.get(user_id)
-        user.delete()
-        return jsonify({'deleting': 'OK'})
-
-
-class UserListResource(Resource):
+class UserResource(BasicResource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('surname', required=True)
@@ -35,17 +19,32 @@ class UserListResource(Resource):
     parser.add_argument('email', required=True)
     parser.add_argument('password', required=True)
 
-    def get(self):
-        # Кто может смотреть данные всех юзеров?
-        users = User.all(limits=True)
-        return jsonify({'user': [user.to_dict(
-            only=('id', 'name', 'surname', 'fathername', 'birth_date')) for user in users]})
+    @jwt_login_required
+    def get(self, user_id):
+        user = get_or_abort_user(user_id)
+        return jsonify({'user': user.to_dict(
+            only=('id', 'name', 'surname', 'fathername', 'birth_date'))})
+
+    @jwt_login_required
+    def delete(self, user_id):
+        user = get_or_abort_user(user_id)
+        if user_id != self.authorized_user.id:
+            return self.basic_error('delete is not allowed to this user')
+
+        user.delete()
+        return jsonify({'deleting': 'OK'})
 
     def post(self):
-        # Кто может добавить юзера?
         args = self.parser.parse_args()
         if User.get_by(email=args['email']):
-            return jsonify({'error': 'email already taken'})
+            return self.basic_error('email already taken')
+
+        if any(map(str.isdigit, args['name'] + args['surname'] + args['fathername'])):
+            return self.basic_error('invalid name, surname or fathername')
+
+        if not re.search(r".+@.+\..+", args["email"]):
+            return self.basic_error('invalid email')
+
         user = User(
             name=args['name'],
             surname=args['surname'],
@@ -54,4 +53,6 @@ class UserListResource(Resource):
             password=args['password']
         )
         user.save(add=True)
-        return jsonify({'adding': 'OK'})
+        Registration.send_email(user)
+        return jsonify({'adding': 'OK', 'user': user.to_dict(
+            only=('id', 'name', 'surname', 'fathername', 'birth_date'))})

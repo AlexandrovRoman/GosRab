@@ -134,7 +134,8 @@ class Registration(MethodView):
         login_user(user)
         return redirect('/users/profile')
 
-    def send_email(self, user):
+    @staticmethod
+    def send_email(user):
         token = generate_confirmation_token(user.email)
         confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('activate_mess.html', confirm_url=confirm_url)
