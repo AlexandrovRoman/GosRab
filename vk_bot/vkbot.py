@@ -1,3 +1,5 @@
+from typing import NoReturn
+from vk_bot.mess_templates import info, feedback, bug_report, api_docs, vacancy_filter, else_res
 from vk_bot.vk_config import GROUP_ID, TOKEN
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -8,73 +10,98 @@ import datetime
 from vk_bot.vacancies import get_vacancies, ServerError
 
 
-def main():
-    global_init("feedback/feedback.sqlite")
-    vk_session = vk_api.VkApi(
-        token=TOKEN)
-    vk = vk_session.get_api()
+class GroupBot:
+    def __init__(self, token: str, group_id: int) -> None:
+        vk_session = vk_api.VkApi(token=token)
+        self.__vk = vk_session.get_api()
+        self.__longpoll = VkBotLongPoll(vk_session, group_id)
+        self.__bot_state = {}
 
-    longpoll = VkBotLongPoll(vk_session, GROUP_ID)
-    bot_state = {}
+    def _send_mess(self, recipient: int, mess: str) -> None:
+        self.__vk.messages.send(user_id=recipient,
+                                message=mess,
+                                random_id=random.randint(0, 2 ** 64))
 
-    def send_msg(msg):
-        vk.messages.send(user_id=event.obj.message['from_id'],
-                         message=msg,
-                         random_id=random.randint(0, 2 ** 64))
+    def _new_mess_event(self, event) -> None:
+        if event.obj.message['from_id'] in self.__bot_state and self.__bot_state[event.obj.message['from_id']]:
+            self.__has_story(event.obj.message['from_id'], event.obj.message['text'])
+        elif event.obj.message['from_id'] not in self.__bot_state:
+            self.__has_not_story(event.obj.message['from_id'])
+        else:
+            self.__new_user(event.obj.message['from_id'], event.obj.message['text'][0])
 
-    for event in longpoll.listen():
-        if event.type == VkBotEventType.MESSAGE_NEW:
-            if event.obj.message['from_id'] in bot_state and bot_state[event.obj.message['from_id']]:
-                state = bot_state[event.obj.message['from_id']]
-                if state == 1:
-                    send_msg('Спасибо, ваше мнение для нас очень важно.')
-                    Comment().new(event.obj.message['from_id'], datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                  event.obj.message['text'])
-                    bot_state[event.obj.message['from_id']] = 0
-                elif state == 2:
-                    BugReport().new(event.obj.message['from_id'], datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                    event.obj.message['text'])
-                    send_msg('Спасибо за ваш отзыв, мы постараемся исправить проблему в ближайшем будущем.')
-                    bot_state[event.obj.message['from_id']] = 0
-                elif state == 4:
-                    parameters = [r.strip() for r in event.obj.message['text'].split(',')]
-                    try:
-                        vacancies = get_vacancies(parameters[0], parameters[1])
-                    except ServerError:
-                        send_msg('Не удалось получить ответ от сервера, попробуйте позже')
-                        bot_state[event.obj.message['from_id']] = 0
-                    except Exception:
-                        send_msg('Данные введены некорректно, попробуйте заново.')
-                        send_msg('Формат: <должность>, <мин. зарплата>')
-                    else:
-                        if len(vacancies) == 0:
-                            send_msg('По данным критериям ничего не найдено')
-                        else:
-                            vacancy_list = [f"{i}) {v['title']}, {v['salary']}" for i, v in enumerate(vacancies)]
-                            send_msg('\n'.join(vacancy_list))
+    def __has_not_story(self, recipient: int) -> None:
+        self._send_mess(recipient, info)
+        self.__bot_state[recipient] = 0
 
-                if bot_state[event.obj.message['from_id']] == 0:
-                    send_msg('1 - написать отзыв или предложение\n 2 - сообщить о неправильной работе сайта\n 3 - документация к api\n 4 - посмотреть список доступных вакансий\n иначе напишите сообщение и модератор вскоре на него ответит')
+    def __new_user(self, recipient: int, key: str) -> None:
+        events = {
+            "1": (1, feedback),
+            "2": (2, bug_report),
+            "3": (None, api_docs),
+            "4": (4, vacancy_filter),
+        }
+        try:
+            state, mess = events[key]
+            self._send_mess(recipient, mess)
+            if isinstance(state, int):
+                self.__bot_state[recipient] = state
+        except KeyError:
+            self._send_mess(recipient, else_res)
 
-            elif event.obj.message['from_id'] not in bot_state:
-                send_msg('1 - написать отзыв или предложение\n 2 - сообщить о неправильной работе сайта\n 3 - документация к api\n 4 - посмотреть список доступных вакансий\n иначе напишите сообщение и модератор вскоре на него ответит')
-                bot_state[event.obj.message['from_id']] = 0
-            else:
-                key = event.obj.message['text'][0]
-                if key == '1':
-                    send_msg('Пожалуйста, поделитесь вашим мнением по поводу сайта.')
-                    bot_state[event.obj.message['from_id']] = 1
-                elif key == '2':
-                    send_msg('Пожалуйста, максимально подробно опишите вашу проблему.')
-                    bot_state[event.obj.message['from_id']] = 2
-                elif key == '3':
-                    send_msg('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-                elif key == '4':
-                    send_msg('Введите название должности и минимальную желаемую зарплату по образцу:<должность>, <мин. зарплата>')
-                    bot_state[event.obj.message['from_id']] = 4
-                else:
-                    send_msg('Модератор вам скоро ответит, пожалуйста подождите.')
+    def __end_feedback_dialog(self, recipient: int, usr_mess: str) -> None:
+        self._send_mess(recipient, 'Спасибо, ваше мнение для нас очень важно.')
+        Comment().new(recipient, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), usr_mess)
+        self.__bot_state[recipient] = 0
+
+    def __end_bug_report_dialog(self, recipient: int, usr_mess: str) -> None:
+        self._send_mess(recipient, 'Спасибо за ваш отзыв, мы постараемся исправить проблему в ближайшем будущем.')
+        BugReport().new(recipient, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                        usr_mess)
+        self.__bot_state[recipient] = 0
+
+    def __get_vacancies(self, recipient: int, usr_mess: str) -> None:
+        parameters = [r.strip() for r in usr_mess.split(',')]
+        try:
+            vacancies = get_vacancies(parameters[0], parameters[1])
+        except ServerError:
+            self._send_mess(recipient, 'Не удалось получить ответ от сервера, попробуйте позже')
+            self.__bot_state[recipient] = 0
+            return
+        except Exception:
+            self._send_mess(recipient, 'Данные введены некорректно, попробуйте заново.')
+            self._send_mess(recipient, 'Формат: <должность>, <мин. зарплата>')
+            return
+        if len(vacancies) == 0:
+            self._send_mess(recipient, 'По данным критериям ничего не найдено')
+        else:
+            vacancy_list = [f"{i}) {v['title']}, {v['salary']}" for i, v in enumerate(vacancies)]
+            self._send_mess(recipient, '\n'.join(vacancy_list))
+
+    def __send_default_mess(self, recipient: int, _=None) -> None:
+        self._send_mess(recipient, info)
+
+    def __has_story(self, recipient: int, usr_mess: str) -> None:
+        events = [self.__send_default_mess, self.__end_feedback_dialog,
+                  self.__end_bug_report_dialog, self.__get_vacancies]
+        state = self.__bot_state[recipient]
+        try:
+            events[state](recipient, usr_mess)
+        except IndexError:
+            self.__send_default_mess(recipient)
+
+    def loop(self) -> NoReturn:
+        handlers = {
+            VkBotEventType.MESSAGE_NEW: self._new_mess_event
+        }
+        for event in self.__longpoll.listen():
+            try:
+                handlers[event.type](event)
+            except KeyError:
+                print(f"Событие {event.type} не поддерживается")
 
 
 if __name__ == '__main__':
-    main()
+    global_init("feedback/feedback.sqlite")
+    bot = GroupBot(TOKEN, GROUP_ID)
+    bot.loop()
