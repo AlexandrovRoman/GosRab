@@ -1,12 +1,11 @@
 from typing import NoReturn
 from vk_bot.mess_templates import info, feedback, bug_report, api_docs, vacancy_filter, else_res
-from vk_bot.vk_config import GROUP_ID, TOKEN
+from vk_bot.vk_config import GROUP_ID, TOKEN, DB_USER, DB_PASSWORD, DB_URL, DB_NAME
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import random
 from vk_bot.db_session import *
 from vk_bot.__all_models import BugReport, Comment
-import datetime
 from vk_bot.vacancies import get_vacancies, ServerError
 
 
@@ -51,13 +50,12 @@ class GroupBot:
 
     def __end_feedback_dialog(self, recipient: int, usr_mess: str) -> None:
         self._send_mess(recipient, 'Спасибо, ваше мнение для нас очень важно.')
-        Comment().new(recipient, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), usr_mess)
+        Comment().new(recipient, usr_mess)
         self.__bot_state[recipient] = 0
 
     def __end_bug_report_dialog(self, recipient: int, usr_mess: str) -> None:
         self._send_mess(recipient, 'Спасибо за ваш отзыв, мы постараемся исправить проблему в ближайшем будущем.')
-        BugReport().new(recipient, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                        usr_mess)
+        BugReport().new(recipient, usr_mess)
         self.__bot_state[recipient] = 0
 
     def __get_vacancies(self, recipient: int, usr_mess: str) -> None:
@@ -102,6 +100,6 @@ class GroupBot:
 
 
 if __name__ == '__main__':
-    global_init("feedback/feedback.sqlite")
+    global_init(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_URL}/{DB_NAME}')
     bot = GroupBot(TOKEN, GROUP_ID)
     bot.loop()
