@@ -23,4 +23,4 @@ login_manager.init_app(app)
 db_init(Config.SQLALCHEMY_DATABASE_URI, SqlAlchemyBase, None)
 session = create_session()
 
-api = Api(app)
+api = Api(app, prefix='/api')
