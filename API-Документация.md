@@ -21,7 +21,7 @@
 
 **3. Условия использования:**
 
-Все запросы должны осуществляться по данному адресу: https://pfproject.herokuapp.com/
+Все запросы должны осуществляться по данному адресу: https://pfproject.herokuapp.com/api
 
 На все запросы возвращается JSON-объект в качестве ответа.
 
@@ -33,7 +33,7 @@
 
 **Авторизация для пользователей:**
 
-- `GET` `/api/login/<string:email>/<string:password>` 
+- `GET` `/login/<string:email>/<string:password>` 
 
   Авторизует пользователя для использования API при передаче корректных данных:
 
@@ -59,9 +59,9 @@
 
   
 
-- `DELETE` `/api/login`
+- `DELETE` `/login`
 
-  Деавторизует пользователя данной сессии.
+  Закрытие данной сессии.
 
   <u>Пример ответа:</u>
 
@@ -75,7 +75,7 @@
 
 **Авторизация для организаций:**
 
-- `GET` `/api/org_login/<int:org_id>/<string:jwt> `
+- `GET` `/org_login/<int:org_id>/<string:jwt> `
 
   Авторизует организациюдля использования API при передаче корректных данных:
 
@@ -109,7 +109,7 @@
 
   
 
-- `DELETE` `/api/org_login`
+- `DELETE` `/org_login`
 
   Деавторизует организацию данной сессии.
 
@@ -133,7 +133,7 @@
 
 **Пользователь:**
 
-- `GET` `/api/user/<int:user_id>` 
+- `GET` `/user/<int:user_id>` 
 
   *Авторизация пользователя: Требуется*
 
@@ -177,13 +177,13 @@
 
   ```json
   {
-      "message": "User with id 787 not found"
+      "message": "User with id 3 not found"
   }
   ```
 
   
 
-- `DELETE` `/api/user/<int:user_id>` 
+- `DELETE` `/user/<int:user_id>` 
 
   *Авторизация пользователя: Требуется*
   
@@ -217,7 +217,7 @@
   
   
 
-- `POST` `/api/user` 
+- `POST` `/user` 
 
   *Авторизация пользователя: Не требуется*
 
@@ -255,12 +255,12 @@
   ```json
   {
       "message": {
-          "fathername": "Missing required parameter in the JSON body or the post body or the query string"
+          "error": "invalid name, surname or fathername"
       }
   }
   ```
   
-  Передана ранее использованная почта
+  Передана эл. почта зарегистрированная в системе
   
   ```json
   {
@@ -280,7 +280,7 @@
 
 **Организация:**
 
-- `GET` `/api/organization` 
+- `GET` `/organization` 
 
   *Авторизация организации: Требуется*
 
@@ -377,7 +377,7 @@
 
   
 
-- `DELETE` `/api/organization` 
+- `DELETE` `/organization` 
 
   *Авторизация организации: Требуется*
   
@@ -403,7 +403,7 @@
   
   
 
-- `POST` `/api/organization` 
+- `POST` `/organization` 
 
   *Авторизация организации: Не требуется*
 
@@ -428,9 +428,9 @@
           "api_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXlsb2FkIjoiXHUwNDFkXHUwNDIzIFx1MDQ0Mlx1MDQzMlx1MDQzMFx1MDQ0MCIsImlhdCI6MTU4OTM5NTkwOSwiZXhwIjoxNTkwMDAwNzA5fQ.eZINE5M01wWZ37CTFGoz_5ud_OwHI2NBa48XjgFWOrU",
           "creation_date": "2020-05-13",
           "id": 24,
-          "name": "НУ твар",
-          "org_desc": "ааа",
-          "org_type": "ыыы",
+          "name": "РЖД",
+          "org_desc": "Ответственны за транспортировку граждан",
+          "org_type": "ПАО",
           "owner_id": 54
       }
   }
@@ -460,7 +460,7 @@
 
 **Вакансии:**
 
-- `GET` `api/vacancy`
+- `GET` `/vacancy`
 
   *Авторизация пользователя: Требуется*
 
@@ -470,7 +470,7 @@
   
   | Параметр запроса | Описание                                                     |
   | ---------------- | ------------------------------------------------------------ |
-  | offset           | Необязательный параметр.Обозначает ID вакансии с которой будет выведена первая тысяча вакансий |
+  | offset           | Необязательный параметр. Обозначает ID вакансии с которой будет выведена первая тысяча вакансий |
   
   Пример ответа:
   
