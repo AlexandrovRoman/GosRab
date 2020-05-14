@@ -1,6 +1,6 @@
 from app import api
 from utils.urls import relative_path
-from .api import UserListResource, UserResource
+from .api import UserResource
 from .views import profile, logout, personnel, education, notification, t2, confirm_email
 from .views import Login, EditProfile, Registration, ChangePassword, RestorePassword
 
@@ -19,5 +19,4 @@ urlpatterns = [
     relative_path('profile/t2/<int:user_id>', t2)
 ]
 
-api.add_resource(UserListResource, '/api/user')
-api.add_resource(UserResource, '/api/user/<int:user_id>')
+api.add_resource(UserResource, '/user/<int:user_id>', '/user',  methods=['GET', 'DELETE', 'POST'])
