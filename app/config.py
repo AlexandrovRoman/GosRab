@@ -10,7 +10,7 @@ models = [
 # Special urlpatterns
 urlpatterns = [
     'app.urls',
-    'errors.views',
+    'errors.urls',
     'admin.urls',
 ]
 
