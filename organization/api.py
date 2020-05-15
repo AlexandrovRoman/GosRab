@@ -1,8 +1,7 @@
 from flask import jsonify
 from flask_restful import reqparse
-from app.api_utils import get_or_abort
+from app.api_utils import get_or_abort, BasicResource, jwt_login_required, jwt_org_required
 from organization.models import Organization, Vacancy
-from app.BaseAPI import BasicResource, jwt_login_required, jwt_org_required
 
 
 def get_or_abort_org(org_id):
@@ -56,8 +55,6 @@ class VacancyListResource(BasicResource):
     @jwt_login_required
     def get(self):
         args = self.parser.parse_args()
-        offset = 0
-        if args['offset']:
-            offset = abs(int(args['offset']))
+        offset = abs(int(args.get('offset', 0)))
         vacancies = Vacancy.get_by(worker_id=None).all(offset=offset)
         return jsonify({'vacancy': [vac.to_dict(only=('id', 'salary', 'title', 'org_id')) for vac in vacancies]})

@@ -1,5 +1,5 @@
 import datetime
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, abort
 from flask.views import MethodView, View
 from flask_login import current_user, login_required
 from app import session
@@ -40,7 +40,7 @@ def send_resume(vacancy_id):
 def menu_organization(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return 'Нет доступа'
+        return abort(403)
 
     return render_template("organization/menu_organization.html", org=org)
 
@@ -50,7 +50,7 @@ def menu_organization(org_id):
 def vacancies_organization(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return 'Нет доступа'
+        return abort(403)
 
     return render_template("organization/vacancies_organization.html", org=org)
 
@@ -60,7 +60,7 @@ def vacancies_organization(org_id):
 def personnel_department(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return 'Нет доступа'
+        return abort(403)
     if request.method == 'POST':
         Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save()
 
@@ -80,15 +80,15 @@ def show_pretenders(vacancy_id):
     vacancy = Vacancy.query.filter_by(id=vacancy_id).first_or_404()
     if vacancy.has_permission(current_user):
         return render_template('organization/show_pretenders.html', vacancy=vacancy)
-    return 'Вы не являетесь владельцем вакансии'
+    return abort(403)
 
 
 @login_required
 @check_confirmed
 def hire_worker(resume_id):
-    resume = session.query(Resume).get(resume_id)
+    resume = Resume.get_by(id=resume_id)
     if not resume:
-        return 'Резюме отсутствует'
+        return abort(404)
     vacancy = resume.vacancy
     if vacancy.has_permission(current_user):
         for r in vacancy.resume:
@@ -99,7 +99,7 @@ def hire_worker(resume_id):
         vacancy.save()
         # Выслать письмо об принятии на должность
         return redirect('/organization/profile/organizations/')
-    return 'Вы не являетесь владельцем вакансии'
+    return abort(403)
 
  
 class AddOrganization(MethodView):

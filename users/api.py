@@ -1,7 +1,6 @@
 from flask import jsonify
 from flask_restful import reqparse
-from app.api_utils import get_or_abort
-from app.BaseAPI import BasicResource, jwt_login_required
+from app.api_utils import get_or_abort, BasicResource, jwt_login_required
 from users.models import User
 from .views import Registration
 import re

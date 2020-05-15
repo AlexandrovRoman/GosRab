@@ -77,10 +77,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
             birthday = self.birth_date.replace(year=today.year)
         except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
             birthday = self.birth_date.replace(year=today.year, month=self.birth_date.month + 1, day=1)
-        if birthday > today:
-            return today.year - self.birth_date.year - 1
-        else:
-            return today.year - self.birth_date.year
+        return today.year - self.birth_date.year - 1 if birthday > today else today.year - self.birth_date.year
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
@@ -111,9 +108,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
 
     def has_user_permission(self, user):
         for vac in self.vacancies:
-            if user.binded_org.id == vac.org_id:
-                return True
-            if vac.organization.owner_id == user.id:
+            if user.binded_org.id == vac.org_id or vac.organization.owner_id == user.id:
                 return True
         return False
 
@@ -128,41 +123,41 @@ class T2Form(db.Model, ModelMixin):
     linked_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     linked_user = orm.relation('User')
 
-    compile_date = db.Column(db.Date, default=datetime.datetime.now())
-    service_number = db.Column(db.Integer, default=55)
-    taxpayer_id_number = db.Column(db.String, default='0123456789012')
-    pension_insurance_certificate = db.Column(db.String, default='123-456-789 12')
+    compile_date = db.Column(db.Date, default=datetime.datetime.now)
+    service_number = db.Column(db.Integer)
+    taxpayer_id_number = db.Column(db.String)
+    pension_insurance_certificate = db.Column(db.String)
 
-    work_nature = db.Column(db.String, default='Постоянная')  # Характер работы
-    work_kind = db.Column(db.String, default='Основная')  # Вид работы
+    work_nature = db.Column(db.String)  # Характер работы
+    work_kind = db.Column(db.String)  # Вид работы
 
-    employment_contract_id = db.Column(db.Integer, default=0)
-    employment_contract_date = db.Column(db.Date, default=datetime.datetime.now())
+    employment_contract_id = db.Column(db.Integer)
+    employment_contract_date = db.Column(db.Date, default=datetime.datetime.now)
 
-    birthdate = db.Column(db.Date, default=datetime.datetime.now())
+    birthdate = db.Column(db.Date, default=datetime.datetime.now)
 
     birthplace = db.Column(db.String)
-    birthplace_okato = db.Column(db.String, default='42432712412')
+    birthplace_okato = db.Column(db.String)
 
     nationality = db.Column(db.String, default='Россия')
-    nationality_okin = db.Column(db.String, default='1')
+    nationality_okin = db.Column(db.String)
 
-    foreign_language_knowledge = db.Column(db.String, default='Не имеет знаний иностраных языков')
-    foreign_language_knowledge_okin = db.Column(db.String, default='016,017')
-    education = db.Column(db.String, default='Среднее')
-    education_okin = db.Column(db.String, default='07')
+    foreign_language_knowledge = db.Column(db.String)
+    foreign_language_knowledge_okin = db.Column(db.String)
+    education = db.Column(db.String)
+    education_okin = db.Column(db.String)
 
-    education_list = db.Column(db.String, default='Отсутствует')  # Разделитель ;
+    education_list = db.Column(db.String)  # Разделитель ;
 
-    profession = db.Column(db.String, default='Маркетолог')
-    profession_code = db.Column(db.String, default='23461')
-    profession_other = db.Column(db.String, default='')
-    profession_other_code = db.Column(db.String, default='')
+    profession = db.Column(db.String)
+    profession_code = db.Column(db.String)
+    profession_other = db.Column(db.String)
+    profession_other_code = db.Column(db.String)
 
-    experience_checked = db.Column(db.Date, default=datetime.datetime.now())
-    experience = db.Column(db.String, default='1,2,3,4,5,6,7,8,9,10,11,12')
+    experience_checked = db.Column(db.Date, default=datetime.datetime.now)
+    experience = db.Column(db.String)
 
-    marriage_okin = db.Column(db.String, default='2')
+    marriage_okin = db.Column(db.String)
 
     family = db.Column(db.String, default='Отсутствует')
     passport_id = db.Column(db.String)
@@ -265,19 +260,25 @@ class Course(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course_type = db.Column(db.String(20))
     course_name = db.Column(db.String(70))
-    data = db.Column(db.String(20))  # TODO: сделать в формате начало - конец
+    start = db.Column(db.Date)  # TODO: сделать в формате начало - конец
+    end = db.Column(db.Date)
     description = db.Column(db.String)
-    image = db.Column(db.String(20))  # TODO: хранить картинку в юазе данных
+    image = db.Column(db.Binary)
 
     def __init__(self,
                  course_type=None,
                  course_name=None,
-                 data=None,
+                 start=None,
+                 end=None,
                  description=None,
                  image=None):
         super().__init__(course_type=course_type, course_name=course_name,
-                         data=data, description=description, image=image)
+                         start=start, end=end, description=description, image=image)
 
     @classmethod
-    def new(cls, course_type, name, data, description, image):
-        super().new(course_type, name, data, description, image)
+    def new(cls, course_type, name, start, end, description, image_link, image):
+        if not image:
+            if image_link:
+                with open(image_link, "rb") as f:
+                    image = f.read()
+        super().new(course_type, name, start.date(), end.date(), description, image)

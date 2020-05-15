@@ -27,7 +27,7 @@
                             <div class="mb-2 text-muted">{{ cours.data }}</div>
                             <p class="card-text mb-auto">{{ cours.description }}</p>
                         </div>
-                        <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="{{ url_for('static', filename=cours.image) }}" style="height:250px; width: 199px" alt="Card image cap">
+                        <img class="card-img-right flex-auto d-none d-md-block img-thumbnail img-fluid" src="data:image/png;base64,{{ b64encode(cours.image).decode('utf-8') }}" style="height:250px; width: 199px" alt="Card image cap">
                     </div>
                 </div>
 

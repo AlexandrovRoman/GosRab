@@ -1,6 +1,6 @@
 from datetime import datetime
 from threading import Thread
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
 from app.tokens import create_jwt
@@ -33,7 +33,7 @@ def logout():
 def personnel():
     org = current_user.binded_org
     if org is None:
-        return 'Не привязан ни к одной'
+        return abort(404)
     organization_info = {
         'org': org,
         'workers': org.get_workers(),
@@ -44,7 +44,7 @@ def personnel():
 
 
 def education():
-    return render_template("users/education.html", courses=Course.all())
+    return render_template("users/education.html", courses=Course.query.order_by(Course.start.desc()))
 
 
 @login_required
@@ -52,7 +52,7 @@ def education():
 def notification():
     form = NotificationForm()
     if form.validate_on_submit():
-        pass
+        pass  # TODO: Сделать уведомления
     return render_template('users/notifications.html', form=form)
 
 
@@ -61,13 +61,12 @@ def notification():
 def t2(user_id):
     target = User.get(user_id)
     if not target.has_user_permission(current_user):
-        return 'Нет доступа к форме этого пользователя'
+        return abort(403)
 
-    # TODO: Create html templates
     if target is None:
-        return 'Нет пользователя'
+        return abort(404)
     if not target.t2_rel:  # Если не обладает формой T2
-        return 'Нет формы T2'
+        return abort(404)
 
     return render_template("users/T2.html", form=target.t2_rel[0])
 
@@ -170,7 +169,7 @@ class RestorePassword(MethodView):
             return self.get()
         user = User.get_by(email=form.email.data)
         if not user:
-            return 'Такой пользователь отсутствует'
+            return abort(404)
         user.restore_token = create_jwt(datetime.now().timestamp())
         user.save()
 
@@ -193,7 +192,7 @@ class ChangePassword(MethodView):
             return self.get()
         user = User.get_by(email=email)
         if user.restore_token != token:
-            return 'Жульё, не воруй чужие аккаунты'
+            return abort(403)
         user.set_password(form.password.data)
         user.restore_token = None
         user.save()
