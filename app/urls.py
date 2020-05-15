@@ -1,6 +1,6 @@
 from utils.urls import add_relative_path, include
 from app import api
-from app.BaseAPI import UserApiEntryPoint, OrgApiEntryPoint
+from app.APIEntryPoints import UserApiEntryPoint, OrgApiEntryPoint
 
 urlpatterns = [
     add_relative_path('/users/', include('users.urls')),

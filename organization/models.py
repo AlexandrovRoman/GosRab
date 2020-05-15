@@ -34,13 +34,11 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
     @classmethod
     def get_by_id(cls, user, org_id: int):
         org = cls.get_by(id=org_id)
-        if user.id != org.owner_id:
-            return None
-        return org
+        return org if user.id == org.owner_id else None
 
     @classmethod
     def get_attached_to_user(cls, user):
-        return session.query(cls).filter(cls.owner_id == user.id).all()
+        return session.query(cls).filter_by(owner_id=user.id).all()
 
     @classmethod
     def new(cls, name, owner_id, org_type, org_desc, date=None):
@@ -82,6 +80,7 @@ class Vacancy(db.Model, ModelMixin, SerializerMixin):
         if self.organization.owner_id == user.id:
             return True
 
+        # TODO: Это точно нормально? Может просто user in self.organization.personnels
         for p in self.organization.personnels:
             if user.id == p.id:
                 return True

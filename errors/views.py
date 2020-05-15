@@ -1,18 +1,24 @@
 from flask import render_template, redirect, url_for
-from app import app, login_manager
 
 
-@app.errorhandler(404)
 def not_found_error(error):
-    return render_template('errors/error.html', error=404, discription="Файл не найден или находится в разработке")
+    return render_template('errors/error.html', error=404, description="Файл не найден или находится в разработке")
 
 
-@app.errorhandler(500)
+def forbidden(error):
+    return render_template('errors/error.html', error=403,
+                           description="Ваших прав не достаточно для доступа к данному ресурсу")
+
+
 def server_error(error):
     return render_template('errors/error.html', error=500,
-                           discription="Проблемы с сервером или ведутся санитарные работы")
+                           description="Проблемы с сервером или ведутся санитарные работы")
 
 
-@login_manager.unauthorized_handler
+def page_not_implemented(error):
+    return render_template('errors/error.html', error=501,
+                           description="Данная страница находится в разработке")
+
+
 def authorize():
     return redirect(url_for('login'))

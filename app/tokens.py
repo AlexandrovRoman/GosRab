@@ -14,7 +14,7 @@ def create_jwt(payload, exp_days=7):
 
 def check_tokens(token_a, token_b):
     try:
-        return jwt.decode(token_a, Config.JWT_SECRET_KEY)['payload'] == jwt.decode(token_b, Config.JWT_SECRET_KEY)[
-            'payload']
+        return jwt.decode(token_a, Config.JWT_SECRET_KEY)['payload'] == jwt.decode(token_b,
+                                                                                   Config.JWT_SECRET_KEY)['payload']
     except jwt.exceptions.DecodeError:
         return False
