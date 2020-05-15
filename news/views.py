@@ -9,4 +9,4 @@ def index():
 
 
 def news_info(news_id):
-    return render_template("news/news.html", news=News.get_by(id=news_id))
+    return render_template("news/news.html", news=News.get_by(id=news_id), b64encode=b64encode)

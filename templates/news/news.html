@@ -4,12 +4,25 @@
 {% set height = "150px" %}
 {% extends "base.html" %}
 {% block content %}
-    <div class="container marketing">
-
-        <hr class="featurette-divider">
+    <div class="container marketing mt-3">
         <div class="row featurette">
-            <h1>{{ news.title }}</h1>
-            <p>{{ news.description }}</p>
+            <div class="col-md-7">
+                <h2 class="featurette-heading">{{ news.title }}</h2>
+                <p class="lead">{{ news.description }}</p>
+            </div>
+            {% if news.image %}
+                <div class="col"><img src="data:image/png;base64,{{ b64encode(news.image).decode('utf-8') }}" alt="" class="w-100">
+            {% endif %}
+            </div>
+
         </div>
+       <div class="row featurette">
+
+           <div class="col-md-1 float-left">Ключевые слова: {{ news.tags }}</div>
+           <div class="col-md-4">{{ news.date.date() }}</div>
+       </div>
+
+    <hr class="featurette-divider">
     </div>
+
 {% endblock %}

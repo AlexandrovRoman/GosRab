@@ -55,6 +55,9 @@ class VacancyListResource(BasicResource):
     @jwt_login_required
     def get(self):
         args = self.parser.parse_args()
-        offset = abs(int(args.get('offset', 0)))
+        try:
+            offset = abs(int(args.get('offset')))
+        except TypeError:
+            offset = 0
         vacancies = Vacancy.get_by(worker_id=None).all(offset=offset)
         return jsonify({'vacancy': [vac.to_dict(only=('id', 'salary', 'title', 'org_id')) for vac in vacancies]})

@@ -276,7 +276,7 @@ class Course(db.Model, ModelMixin):
                          start=start, end=end, description=description, image=image)
 
     @classmethod
-    def new(cls, course_type, name, start, end, description, image_link, image):
+    def new(cls, course_type, name, start, end, description, image_link=None, image=None):
         if not image:
             if image_link:
                 with open(image_link, "rb") as f:

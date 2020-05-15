@@ -1,3 +1,4 @@
+from base64 import b64encode
 from datetime import datetime
 from threading import Thread
 from flask import render_template, request, redirect, url_for, flash, abort
@@ -44,7 +45,8 @@ def personnel():
 
 
 def education():
-    return render_template("users/education.html", courses=Course.query.order_by(Course.start.desc()))
+    return render_template("users/education.html",
+                           courses=Course.query.order_by(Course.start.desc()), b64encode=b64encode)
 
 
 @login_required
