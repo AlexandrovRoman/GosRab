@@ -1,6 +1,6 @@
 from typing import NoReturn
 from vk_bot.mess_templates import info, feedback, bug_report, api_docs, vacancy_filter, else_res
-from vk_bot.vk_config import GROUP_ID, TOKEN
+from vk_bot.vk_config import GROUP_ID, TOKEN, EMAIL, PASSWORD
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import random
@@ -64,18 +64,17 @@ class GroupBot:
             self.__bot_state[recipient] = 0
 
         def __get_vacancies(self, recipient: int, usr_mess: str) -> None:
-            print('asasaas')
             parameters = [r.strip() for r in usr_mess.split(',')]
-            api = UserApiSession(parameters[0], parameters[1])
+            api = UserApiSession(EMAIL, PASSWORD)
             try:
-                vacancies = api.get_vacancies(parameters[2], parameters[3], format='list', filter='sal')
+                vacancies = api.get_vacancies(parameters[0], parameters[1], format='list', filter='sal')
             except ServerError as e:
                 self._send_mess(recipient, e.args[0])
                 self.__bot_state[recipient] = 0
                 return
             except CustomError as e:
                 self._send_mess(recipient, e.args[0])
-                self._send_mess(recipient, 'Формат: <эл.почта>, <пароль>, <должность>, <мин. зарплата>')
+                self._send_mess(recipient, 'Формат: <должность>, <мин. зарплата>')
                 return
             if len(vacancies) == 0:
                 self._send_mess(recipient, 'По данным критериям ничего не найдено')

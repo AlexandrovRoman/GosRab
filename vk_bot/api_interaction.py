@@ -14,8 +14,7 @@ class ServerError(CustomError):
 
 class AuthorizationError(CustomError):
     def __init__(self):
-        super().__init__('Адрес почты или пароль введены некорректно'
-                         'Формат: <эл.почта>, <пароль>, <должность>, <мин. зарплата>')
+        super().__init__('Адрес почты или пароль введены некорректно')
 
 
 class CriterionError(CustomError):
