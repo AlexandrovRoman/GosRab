@@ -6,6 +6,11 @@ class CustomError(Exception):
     pass
 
 
+class MinSalTypeError(CustomError):
+    def __init__(self):
+        super().__init__('Минимальная зарплата должна быть числом')
+
+
 class ServerError(CustomError):
     def __init__(self):
         super().__init__('Не удалось получить ответ от сервера, повторите попытку позже.')
