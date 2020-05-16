@@ -6,7 +6,7 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import random
 from vk_bot.db_session import *
 from vk_bot.__all_models import BugReport, Comment
-from vk_bot.api_interaction import UserApiSession, ServerError, CustomError, MinSalTypeError
+from vk_bot.api_interaction import UserApiSession, ServerError, CustomError, InputFormatError
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -71,8 +71,6 @@ class GroupBot:
     def __get_vacancies(self, recipient: int, usr_mess: str) -> None:
         try:
             self.__unsafe_get_vacancies(recipient, usr_mess)
-        except ValueError:
-            raise CustomError("Incorrect params")
         except ServerError as e:
             self.__send_error_messages(recipient, e)
             self.__reset_state(recipient)
@@ -82,13 +80,19 @@ class GroupBot:
 
     def __unsafe_get_vacancies(self, recipient: int, usr_mess: str) -> None:
         api = UserApiSession(EMAIL, PASSWORD)
+        self.__check_input_format(usr_mess)
         name, min_salary, *_ = [r.strip() for r in usr_mess.split(',')]
-        if not min_salary.isdigit():
-            raise MinSalTypeError()
         vacancy_list = [f"{i + 1}) {v['title']}, {v['salary']}"
                         for i, v in enumerate(api.get_vacancies(name, int(min_salary), format_=list, filter_='sal'))]
         self._send_mess(recipient, '\n'.join(vacancy_list) or "По данным критериям ничего не найдено")
         self.__bot_state[recipient] = 0
+
+    def __check_input_format(self, msg):
+        try:
+            name, min_salary, *_ = [r.strip() for r in msg.split(',')]
+            assert not min_salary.isdigit()
+        except Exception:
+            raise InputFormatError()
 
     def __send_default_mess(self, recipient: int, _=None) -> None:
         self._send_mess(recipient, info)

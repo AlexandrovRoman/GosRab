@@ -6,9 +6,9 @@ class CustomError(Exception):
     pass
 
 
-class MinSalTypeError(CustomError):
+class InputFormatError(CustomError):
     def __init__(self):
-        super().__init__('Минимальная зарплата должна быть числом')
+        super().__init__('Неправильный формат ввода')
 
 
 class ServerError(CustomError):
