@@ -89,8 +89,8 @@ class GroupBot:
 
     def __check_input_format(self, msg):
         try:
-            name, min_salary, *_ = [r.strip() for r in msg.split(',')]
-            assert not min_salary.isdigit()
+            args = [r.strip() for r in msg.split(',')]
+            assert args[1].isdigit() and len(args) == 2
         except Exception:
             raise InputFormatError()
 
