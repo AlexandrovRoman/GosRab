@@ -255,7 +255,7 @@
   ```json
   {
       "message": {
-          "error": "fathername": "Missing required parameter in the JSON body or the post body or the query string"
+          "fathername": "Missing required parameter in the JSON body or the post body or the query string"
       }
   }
   ```
