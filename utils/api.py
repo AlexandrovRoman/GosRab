@@ -1,8 +1,6 @@
 from flask import jsonify
 from flask_restful import abort, Resource
 
-from app.APIEntryPoints import UserApiEntryPoint, OrgApiEntryPoint
-
 
 def get_or_abort(id_, cls):
     obj = cls.get_by(id=id_)
@@ -15,12 +13,6 @@ class BasicResource(Resource):
     @staticmethod
     def basic_error(message):
         return jsonify({'error': message})
-
-    def set_authorized_user(self):
-        self.authorized_user = UserApiEntryPoint.get_authorized_user()
-
-    def set_authorized_org(self):
-        self.authorized_org = OrgApiEntryPoint.get_authorized_org()
 
 
 def jwt_login_required(method):

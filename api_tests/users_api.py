@@ -1,5 +1,6 @@
 import requests
 from app import config
+from flask import url_for
 
 
 class TestUserResource:
@@ -81,7 +82,6 @@ class TestUserResourcePost(TestUserResource):
             self.session.delete(f'{self.url}/{self.current_user_id}')
         self.session.delete(self.entry_url)
         super().teardown()
-
 
 
 class TestUserResourceGet(TestUserResource):

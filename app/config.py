@@ -10,8 +10,6 @@ models = [
 # Special urlpatterns
 urlpatterns = [
     'app.urls',
-    'errors.views',
-    'admin.urls',
 ]
 
 HOST = environ.get('HOST', '127.0.0.1')
@@ -44,4 +42,4 @@ class DevelopConfig(BaseConfig):
     ASSETS_DEBUG = True
 
 
-Config = ProductionConfig
+Config = DevelopConfig

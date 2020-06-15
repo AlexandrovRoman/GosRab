@@ -138,7 +138,7 @@ class Registration(MethodView):
     @staticmethod
     def send_email(user):
         token = generate_confirmation_token(user.email)
-        confirm_url = url_for('confirm_email', token=token, _external=True)
+        confirm_url = url_for('users.confirm_email', token=token, _external=True)
         html = render_template('activate_mess.html', confirm_url=confirm_url)
 
         Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()

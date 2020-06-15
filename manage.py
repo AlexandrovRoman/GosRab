@@ -1,6 +1,5 @@
 from flask_dj import manage
-from flask_dj.app_init import add_urls
-from app import app, config
+from app import app, config, urls
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
@@ -26,7 +25,6 @@ manage.manager.option("--templates", "-t", action="store_true")(
 
 @manage.manager.command
 def runserver():
-    add_urls(config.urlpatterns)
     if not app.debug:
         print(f"Correct url: http://{config.HOST}:{config.PORT}/")
     manage.runserver(config.HOST, config.PORT)
