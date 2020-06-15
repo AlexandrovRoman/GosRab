@@ -1,7 +1,5 @@
 from os import path
-import sqlalchemy.ext.declarative as dec
 from flask import Flask
-from flask_dj.app_init import create_session, db_init
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -14,13 +12,10 @@ app = Flask(__name__, template_folder=path.join(path.split(here)[0], "templates"
 
 app.config.from_object(Config)
 db = SQLAlchemy(app)
+session = db.session
 migrate = Migrate(app, db)
-
-SqlAlchemyBase = dec.declarative_base()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-db_init(Config.SQLALCHEMY_DATABASE_URI, SqlAlchemyBase, None)
-session = create_session()
 
 api = Api(app, prefix='/api')

@@ -1,10 +1,11 @@
 from utils.urls import add_relative_path, include
-from app import api
+from app import api, app
 from app.APIEntryPoints import UserApiEntryPoint, OrgApiEntryPoint
+from news.urls import bp
 
+app.register_blueprint(bp)
 urlpatterns = [
     add_relative_path('/users/', include('users.urls')),
-    add_relative_path('/', include('news.urls')),
     add_relative_path('/organization/', include('organization.urls'))
 ]
 
