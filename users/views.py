@@ -4,7 +4,7 @@ from threading import Thread
 from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
-from utils.tokens import create_jwt
+from utils.api import create_jwt
 from organization.models import Organization
 from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm, NotificationForm
 from users.models import User, Course
@@ -34,7 +34,7 @@ def logout():
 def personnel():
     org = current_user.binded_org
     if org is None:
-        return abort(404)
+        abort(404)
     organization_info = {
         'org': org,
         'workers': org.get_workers(),
@@ -63,12 +63,10 @@ def notification():
 def t2(user_id):
     target = User.get(user_id)
     if not target.has_user_permission(current_user):
-        return abort(403)
+        abort(403)
 
-    if target is None:
-        return abort(404)
-    if not target.t2_rel:  # Если не обладает формой T2
-        return abort(404)
+    if target is None or not target.t2_rel:
+        abort(404)
 
     return render_template("users/T2.html", form=target.t2_rel[0])
 
@@ -77,13 +75,7 @@ class EditProfile(MethodView):
     decorators = [check_confirmed, login_required]
 
     def get(self):
-        form = EditForm()
-        for field in ['surname', 'name',
-                      'fathername', 'sex',
-                      'marriage', 'email',
-                      'birth_date', 'about_myself',
-                      ]:
-            form[field].data = getattr(current_user, field)
+        form = EditForm(obj=current_user)
         return render_template('users/edit_profile.html', form=form, orgs=Organization.get_attached_to_user(current_user))
 
     def post(self):
@@ -171,7 +163,7 @@ class RestorePassword(MethodView):
             return self.get()
         user = User.get_by(email=form.email.data)
         if not user:
-            return abort(404)
+            abort(404)
         user.restore_token = create_jwt(datetime.now().timestamp())
         user.save()
 
@@ -194,7 +186,7 @@ class ChangePassword(MethodView):
             return self.get()
         user = User.get_by(email=email)
         if user.restore_token != token:
-            return abort(403)
+            abort(403)
         user.set_password(form.password.data)
         user.restore_token = None
         user.save()

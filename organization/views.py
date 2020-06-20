@@ -39,7 +39,7 @@ def send_resume(vacancy_id):
 def menu_organization(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return abort(403)
+        abort(403)
 
     return render_template("organization/menu_organization.html", org=org)
 
@@ -49,7 +49,7 @@ def menu_organization(org_id):
 def vacancies_organization(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return abort(403)
+        abort(403)
 
     return render_template("organization/vacancies_organization.html", org=org)
 
@@ -61,7 +61,7 @@ def personnel_department(org_id):
     if org is None:
         return abort(403)
     if request.method == 'POST':
-        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save()
+        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save(add=True)
 
     organization_info = {
         'org': org,
@@ -79,7 +79,7 @@ def show_pretenders(vacancy_id):
     vacancy = Vacancy.query.filter_by(id=vacancy_id).first_or_404()
     if vacancy.has_permission(current_user):
         return render_template('organization/show_pretenders.html', vacancy=vacancy)
-    return abort(403)
+    abort(403)
 
 
 @login_required
@@ -98,7 +98,7 @@ def hire_worker(resume_id):
         vacancy.save()
         # TODO: Выслать письмо об принятии на должность
         return redirect(url_for('organization.organizations'))
-    return abort(403)
+    abort(403)
 
  
 class AddOrganization(MethodView):

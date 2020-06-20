@@ -2,6 +2,8 @@ import openpyxl
 from users.models import User, Course, T2Form
 from news.models import News
 from organization.models import Organization, Vacancy
+from app.config import here
+from os import path
 
 
 def export_from_excel(file, add_func):
@@ -12,10 +14,15 @@ def export_from_excel(file, add_func):
         add_func(*params)
 
 
+def _abs_xls_path(filename):
+    filename = filename if "." in filename else filename + ".xlsx"
+    return path.join(here, "test_models", filename)
+
+
 if __name__ == '__main__':
-    export_from_excel('../test_models/orgs.xlsx', Organization.new)
-    export_from_excel('../test_models/users.xlsx', User.new)
-    export_from_excel('../test_models/t2.xlsx', T2Form.new)
-    export_from_excel('../test_models/vacancies.xlsx', Vacancy.new)
-    export_from_excel('../test_models/news.xlsx', News.new)
-    export_from_excel('../test_models/courses.xlsx', Course.new)
+    export_from_excel(_abs_xls_path("orgs"), Organization.new)
+    export_from_excel(_abs_xls_path("users"), User.new)
+    export_from_excel(_abs_xls_path("t2"), T2Form.new)
+    export_from_excel(_abs_xls_path("vacancies"), Vacancy.new)
+    export_from_excel(_abs_xls_path("news"), News.new)
+    export_from_excel(_abs_xls_path("courses"), Course.new)

@@ -3,7 +3,7 @@ from flask import jsonify, session
 from flask_restful import reqparse, Resource
 
 from app import Config
-from utils.tokens import check_tokens, create_jwt
+from utils.api import check_tokens, create_jwt
 from users.api import BasicUserResource
 from utils.api import get_or_abort, BasicResource as _BasicResource, jwt_login_required, jwt_org_required
 from organization.models import Organization, Vacancy

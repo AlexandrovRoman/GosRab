@@ -3,9 +3,8 @@ import jwt
 from flask import jsonify, session
 from flask_restful import reqparse, Resource
 from app import Config
-from utils.tokens import create_jwt
 from users.models import User
-from utils.api import get_or_abort, BasicResource as _BasicResource, jwt_login_required
+from utils.api import get_or_abort, BasicResource as _BasicResource, jwt_login_required, create_jwt
 from .views import Registration
 
 

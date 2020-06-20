@@ -2,7 +2,7 @@ from app import db
 from datetime import datetime
 from utils.models import ModelMixin
 from sqlalchemy_serializer import SerializerMixin
-from utils.tokens import create_jwt
+from utils.api import create_jwt
 from users.models import User
 
 
