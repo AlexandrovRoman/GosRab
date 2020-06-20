@@ -1,15 +1,15 @@
 import requests
 from app import config
-from flask import url_for
 
 
 class TestUserResource:
     def setup(self):
         self.session = requests.Session()
 
-        host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
-        self.url = f"http://{host}/api/user"
-        self.entry_url = f"http://{host}/api/login"
+        protocol = "http"
+        base_url = f"{protocol}://{config.HOST}:{config.PORT}"  # or {protocol}://pfproject.herokuapp.com
+        self.url = f"{base_url}/api/user"
+        self.entry_url = f"{base_url}/api/login"
 
         self.test_json = {"name": "Пример",
                           "surname": "Пример",
