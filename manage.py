@@ -3,7 +3,7 @@ from app import app, config, urls
 
 """database-methods: https://flask-migrate.readthedocs.io/en/latest/
 db init - начало поддержки миграций
-db migrate - миграция бды
+db migrate - миграция бд
 db upgrade - обновление бд
 db downgrade - откат миграции
 some methods:
@@ -16,7 +16,7 @@ startapp name - создание приложения name, возможно с�
 # https://getbootstrap.com/2.3.2/components
 
 manage.init_manage_and_app(app)
-manage.init_db_commands(config.models)
+# manage.init_db_commands(config.models)
 
 manage.manager.option("--templates", "-t", action="store_true")(
     manage.manager.option("--static", "-st", action="store_true")(
@@ -25,6 +25,7 @@ manage.manager.option("--templates", "-t", action="store_true")(
 
 @manage.manager.command
 def runserver():
+    urls.register_blueprints()
     if not app.debug:
         print(f"Correct url: http://{config.HOST}:{config.PORT}/")
     manage.runserver(config.HOST, config.PORT)

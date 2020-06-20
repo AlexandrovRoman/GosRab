@@ -27,17 +27,17 @@ class GroupBot:
     def _new_mess_event(self, event) -> None:
         print(self.__bot_state)
         if self.__bot_state.get(event.obj.message['from_id'], False):
-            self.__has_story(event.obj.message['from_id'], event.obj.message['text'])
+            self._has_story(event.obj.message['from_id'], event.obj.message['text'])
         elif event.obj.message['from_id'] not in self.__bot_state:
-            self.__has_not_story(event.obj.message['from_id'])
+            self._has_not_story(event.obj.message['from_id'])
         else:
-            self.__new_user(event.obj.message['from_id'], event.obj.message['text'][0])
+            self._new_user(event.obj.message['from_id'], event.obj.message['text'][0])
 
-    def __has_not_story(self, recipient: int) -> None:
+    def _has_not_story(self, recipient: int) -> None:
         self._send_mess(recipient, info)
         self.__bot_state[recipient] = 0
 
-    def __new_user(self, recipient: int, key: str) -> None:
+    def _new_user(self, recipient: int, key: str) -> None:
         events = {
             "1": (1, feedback),
             "2": (2, bug_report),
@@ -52,35 +52,35 @@ class GroupBot:
         except KeyError:
             self._send_mess(recipient, else_res)
 
-    def __end_feedback_dialog(self, recipient: int, usr_mess: str) -> None:
+    def _end_feedback_dialog(self, recipient: int, usr_mess: str) -> None:
         self._send_mess(recipient, 'Спасибо, ваше мнение для нас очень важно.')
         Comment().new(recipient, usr_mess)
         self.__bot_state[recipient] = 0
 
-    def __end_bug_report_dialog(self, recipient: int, usr_mess: str) -> None:
+    def _end_bug_report_dialog(self, recipient: int, usr_mess: str) -> None:
         self._send_mess(recipient, 'Спасибо за ваш отзыв, мы постараемся исправить проблему в ближайшем будущем.')
         BugReport().new(recipient, usr_mess)
         self.__bot_state[recipient] = 0
 
-    def __send_error_messages(self, recipient: int, ex: Exception) -> None:
+    def _send_error_messages(self, recipient: int, ex: Exception) -> None:
         self._send_mess(recipient, str(ex))
 
-    def __reset_state(self, recipient: int) -> None:
+    def _reset_state(self, recipient: int) -> None:
         self.__bot_state[recipient] = 0
 
-    def __get_vacancies(self, recipient: int, usr_mess: str) -> None:
+    def _get_vacancies(self, recipient: int, usr_mess: str) -> None:
         try:
-            self.__unsafe_get_vacancies(recipient, usr_mess)
+            self._unsafe_get_vacancies(recipient, usr_mess)
         except ValueError:
             raise CustomError("Incorrect params")
         except ServerError as e:
-            self.__send_error_messages(recipient, e)
-            self.__reset_state(recipient)
+            self._send_error_messages(recipient, e)
+            self._reset_state(recipient)
         except CustomError as e:
-            self.__send_error_messages(recipient, e)
+            self._send_error_messages(recipient, e)
             self._send_mess(recipient, 'Формат: <должность>, <мин. зарплата>')
 
-    def __unsafe_get_vacancies(self, recipient: int, usr_mess: str) -> None:
+    def _unsafe_get_vacancies(self, recipient: int, usr_mess: str) -> None:
         api = UserApiSession(EMAIL, PASSWORD)
         name, min_salary, *_ = [r.strip() for r in usr_mess.split(',')]
         vacancy_list = [f"{i + 1}) {v['title']}, {v['salary']}"
@@ -88,17 +88,17 @@ class GroupBot:
         self._send_mess(recipient, '\n'.join(vacancy_list) or "По данным критериям ничего не найдено")
         self.__bot_state[recipient] = 0
 
-    def __send_default_mess(self, recipient: int, _=None) -> None:
+    def _send_default_mess(self, recipient: int, _=None) -> None:
         self._send_mess(recipient, info)
 
-    def __has_story(self, recipient: int, usr_mess: str) -> None:
-        events = [self.__send_default_mess, self.__end_feedback_dialog,
-                  self.__end_bug_report_dialog, self.__get_vacancies]
+    def _has_story(self, recipient: int, usr_mess: str) -> None:
+        events = [self._send_default_mess, self._end_feedback_dialog,
+                  self._end_bug_report_dialog, self._get_vacancies]
         state = self.__bot_state[recipient]
         try:
             events[state](recipient, usr_mess)
         except IndexError:
-            self.__send_default_mess(recipient)
+            self._send_default_mess(recipient)
 
     def loop(self) -> NoReturn:
         handlers = {

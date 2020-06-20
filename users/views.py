@@ -4,7 +4,7 @@ from threading import Thread
 from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
-from app.tokens import create_jwt
+from utils.tokens import create_jwt
 from organization.models import Organization
 from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm, NotificationForm
 from users.models import User, Course
@@ -26,7 +26,7 @@ def profile():
 @login_required
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect(url_for("news.index"))
 
 
 @login_required
@@ -96,7 +96,7 @@ class EditProfile(MethodView):
             if attr not in ignore:
                 setattr(current_user, attr, request.form[attr])
         current_user.save()
-        return redirect(url_for('profile'))
+        return redirect(url_for('users.profile'))
 
 
 class Login(MethodView):
@@ -110,7 +110,7 @@ class Login(MethodView):
             user = User.get_logged(request.form['email'], request.form['password'])
             if user is not None:
                 login_user(user)
-                return redirect('/users/profile')
+                return redirect(url_for('users.profile'))
         return self.get()
 
 
@@ -133,7 +133,7 @@ class Registration(MethodView):
         user.save(add=True)
         print('Зарегистрирован пользователь:', user)
         login_user(user)
-        return redirect('/users/profile')
+        return redirect(url_for('users.profile'))
 
     @staticmethod
     def send_email(user):
@@ -157,7 +157,7 @@ def confirm_email():
         user.save()
         print('Account confirmed', user, user.confirmed)
         flash('You have confirmed your account. Thanks!', 'success')
-    return redirect('/')
+    return redirect(url_for('news.index'))
 
 
 class RestorePassword(MethodView):
@@ -199,4 +199,4 @@ class ChangePassword(MethodView):
         user.restore_token = None
         user.save()
         login_user(user)
-        return redirect('/users/profile')
+        return redirect(url_for('users.profile'))

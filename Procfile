@@ -1,4 +1,4 @@
-web: python manage.py runserver
+web: gunicorn run:app
 create_test_models: python prepare_db.py
 init: python manage.py db init
 migrate: python manage.py db migrate

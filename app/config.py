@@ -1,16 +1,8 @@
-from os import environ
+from os import environ, path
 
-# add your file containing models
-models = [
-    'users.models',
-    'news.models',
-    'organization.models',
-]
-
-# Special urlpatterns
-urlpatterns = [
-    'app.urls',
-]
+here = path.abspath(path.dirname(__file__))
+template_folder = path.join(path.split(here)[0], "templates")
+static_folder = path.join(path.split(here)[0], "static")
 
 HOST = environ.get('HOST', '127.0.0.1')
 PORT = int(environ.get('PORT', 5000))
