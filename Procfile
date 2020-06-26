@@ -1,4 +1,4 @@
-web: gunicorn app:app
+web: gunicorn manage:app
 create_test_models: python utils/excel_DB.py
 init: python flask db init
 migrate: python flask db migrate
