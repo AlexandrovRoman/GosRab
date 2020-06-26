@@ -76,17 +76,17 @@ class EditProfile(MethodView):
 
     def get(self):
         form = EditForm(obj=current_user)
-        return render_template('users/edit_profile.html', form=form, orgs=Organization.get_attached_to_user(current_user))
+        return render_template('users/edit_profile.html',
+                               form=form, orgs=Organization.get_attached_to_user(current_user))
 
     def post(self):
         form = EditForm()
         if not form.validate_on_submit():
             return self.get()
-        ignore = ("birth_date",)
+
+        form.populate_obj(current_user)
         setattr(current_user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
-        for attr in request.form:
-            if attr not in ignore:
-                setattr(current_user, attr, request.form[attr])
+
         current_user.save()
         return redirect(url_for('users.profile'))
 
@@ -115,14 +115,17 @@ class Registration(MethodView):
         form = RegisterForm()
         if not form.validate_on_submit():
             return self.get()
+
         if User.get_by(email=request.form['email']):
             return 'Email уже использован'
+
         birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
         user = User(request.form['name'], request.form['surname'],
                     request.form['fathername'], request.form['email'],
                     request.form['password'], sex=request.form['sex'], birth_date=birth_date)
         self.send_email(user)
         user.save(add=True)
+
         print('Зарегистрирован пользователь:', user)
         login_user(user)
         return redirect(url_for('users.profile'))
@@ -139,16 +142,19 @@ class Registration(MethodView):
 def confirm_email():
     token = request.args['token']
     email = confirm_token(token)
+
     user = User.query.filter_by(email=email).first_or_404()
     if not current_user.is_authenticated:
         login_user(user)
+
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
-    else:
-        user.confirmed = True
-        user.save()
-        print('Account confirmed', user, user.confirmed)
-        flash('You have confirmed your account. Thanks!', 'success')
+        return redirect(url_for('news.index'))
+
+    user.confirmed = True
+    user.save()
+    print('Account confirmed', user, user.confirmed)
+    flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('news.index'))
 
 
@@ -184,9 +190,11 @@ class ChangePassword(MethodView):
         form = ForgotPasswordForm()
         if not form.validate_on_submit():
             return self.get()
+
         user = User.get_by(email=email)
         if user.restore_token != token:
             abort(403)
+
         user.set_password(form.password.data)
         user.restore_token = None
         user.save()

@@ -80,4 +80,4 @@ class Resume(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     vacancy_id = db.Column(db.Integer, db.ForeignKey('vacancy.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    title = db.Column(db.String)
+    content = db.Column(db.String)

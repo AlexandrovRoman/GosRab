@@ -24,10 +24,10 @@ def send_resume(vacancy_id):
     form = SendResumeForm()
     if form.validate_on_submit():
         resume = Resume(
-            title=form.contents.data,
             user_id=current_user.id,
             vacancy_id=vacancy_id,
         )
+        form.populate_obj(resume)
         resume.save(add=True)
         return redirect(url_for("organization.job"))
 
@@ -114,23 +114,22 @@ class AddOrganization(MethodView):
             return self.get()
         org = Organization(
                 date=datetime.datetime.now().date(),
-                name=form.name.data,
-                org_type=form.org_type.data,
-                org_desc=form.org_desc.data,
                 owner_id=current_user.id
             )
+        form.populate_obj(org)
         org.save(add=True)
         return redirect(url_for('organization.organizations'))
 
 
 class Job(View):
-    def filter_vacancy(self, vacancy):
+    @staticmethod
+    def filter_vacancy(vacancy):
         organization = request.args.get('organization')
         if organization and organization not in vacancy.organization.name:
             return False
 
         position = request.args.get('position')
-        if position and position not in vacancy.title:
+        if position and position not in vacancy.content:
             return False
 
         salary = request.args.get('salary')
