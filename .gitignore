@@ -1,7 +1,6 @@
 .idea/
 __pycache__/
-migrations/
 venv/
 *.log
 *.db
-*.http
+.pytest_cache/

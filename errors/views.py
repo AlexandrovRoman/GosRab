@@ -21,4 +21,4 @@ def page_not_implemented(error):
 
 
 def authorize():
-    return redirect(url_for('login'))
+    return redirect(url_for('users.login'))

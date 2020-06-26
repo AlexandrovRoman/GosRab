@@ -1,14 +1,12 @@
-from app import db, session
+from app import db
 from datetime import datetime
-from app.models import ModelMixin
+from utils.models import ModelMixin
 from sqlalchemy_serializer import SerializerMixin
-from app.tokens import create_jwt
+from utils.api import create_jwt
 from users.models import User
 
 
 class Organization(db.Model, ModelMixin, SerializerMixin):
-    __tablename__ = 'organizations'
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=True)
     creation_date = db.Column(db.Date, default=datetime.now)
@@ -38,7 +36,7 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
 
     @classmethod
     def get_attached_to_user(cls, user):
-        return session.query(cls).filter_by(owner_id=user.id).all()
+        return cls.query.filter_by(owner_id=user.id).all()
 
     @classmethod
     def new(cls, name, owner_id, org_type, org_desc, date=None):
@@ -56,11 +54,9 @@ class Organization(db.Model, ModelMixin, SerializerMixin):
 
 
 class Vacancy(db.Model, ModelMixin, SerializerMixin):
-    __tablename__ = 'vacancies'
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    org_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
-    worker_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    org_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    worker_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     salary = db.Column(db.Integer)
     title = db.Column(db.String)
     resume = db.relationship("Resume", backref='vacancy')
@@ -77,21 +73,11 @@ class Vacancy(db.Model, ModelMixin, SerializerMixin):
         super().new(org_id, worker_id, salary, title)
 
     def has_permission(self, user):
-        if self.organization.owner_id == user.id:
-            return True
-
-        # TODO: Это точно нормально? Может просто user in self.organization.personnels
-        for p in self.organization.personnels:
-            if user.id == p.id:
-                return True
-
-        return False
+        return self.organization.owner_id == user.id or user in self.organization.personnels
 
 
 class Resume(db.Model, ModelMixin):
-    __tablename__ = 'resume'
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    vacancy_id = db.Column(db.Integer, db.ForeignKey('vacancies.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    title = db.Column(db.String)
+    vacancy_id = db.Column(db.Integer, db.ForeignKey('vacancy.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    content = db.Column(db.String)

@@ -14,5 +14,5 @@ class AddOrganizationForm(FlaskForm):
 
 
 class SendResumeForm(FlaskForm):
-    contents = TextAreaField('Ваше резюме')
+    content = TextAreaField('Ваше резюме')
     submit = SubmitField('Оправить работодателю')
