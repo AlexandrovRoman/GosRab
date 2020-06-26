@@ -14,9 +14,7 @@
                     <div class="column mb-3 text-center">
                         <div class="h1 text-center mt-3">Регистрация</div>
                         <form novalidate method="POST" action="">
-                            <div>
-                                {{ form.csrf_token }}
-                            </div>
+                                {{ form.hidden_tag() }}
                             {% for field in form if field.name != 'csrf_token' and field != form.submit %}
                             <div class="col-md-12 mt-3">
                                 {{ field.label(class="h4 my-1") }}
