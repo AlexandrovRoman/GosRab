@@ -4,11 +4,11 @@ from flask_script import Manager
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
+urls.register_blueprints()
 
 
 @manager.command
 def runserver():
-    urls.register_blueprints()
     app.run(config.HOST, config.PORT)
 
 
