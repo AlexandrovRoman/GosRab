@@ -1,8 +1,6 @@
 from news.views import index, news_info
-from utils.urls import relative_path
+from flask import Blueprint
 
-# Add your urls
-urlpatterns = [
-    relative_path('', index),
-    relative_path("news/<int:news_id>", news_info),
-]
+bp = Blueprint("news", __name__, url_prefix="/")
+bp.add_url_rule("", view_func=index)
+bp.add_url_rule("news/<int:news_id>", view_func=news_info)

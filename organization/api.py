@@ -1,6 +1,11 @@
-from flask import jsonify
-from flask_restful import reqparse
-from app.api_utils import get_or_abort, BasicResource, jwt_login_required, jwt_org_required
+import jwt
+from flask import jsonify, session
+from flask_restful import reqparse, Resource
+
+from app import Config
+from utils.api import check_tokens, create_jwt
+from users.api import BasicUserResource
+from utils.api import get_or_abort, BasicResource as _BasicResource, jwt_login_required, jwt_org_required
 from organization.models import Organization, Vacancy
 
 
@@ -8,7 +13,37 @@ def get_or_abort_org(org_id):
     return get_or_abort(org_id, Organization)
 
 
-class OrganizationResource(BasicResource):
+class OrgApiEntryPoint(Resource):
+    def get(self, org_id, jwt_):
+        org = Organization.get_by(id=org_id)
+        if org and check_tokens(jwt_, org.api_token):
+            session['current_org_jwt'] = create_jwt(org.to_dict(only=('id', 'name')))
+            return jsonify({'authorization': 'OK'})
+        return jsonify({'error': 'incorrect Organization ID or JWT'})
+
+    def delete(self):
+        session.pop('current_org_jwt', None)
+        return jsonify({'sign out of organization': 'OK'})
+
+    @staticmethod
+    def get_authorized_org():
+        try:
+            return Organization.get_by(
+                id=jwt.decode(session['current_org_jwt'], Config.JWT_SECRET_KEY)['payload']['id'])
+        except (TypeError, KeyError):
+            return None
+
+
+class BasicOrgResource(_BasicResource):
+    @staticmethod
+    def basic_error(message):
+        return jsonify({'error': message})
+
+    def set_authorized_org(self):
+        self.authorized_org = OrgApiEntryPoint.get_authorized_org()
+
+
+class OrganizationResource(BasicOrgResource, BasicUserResource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('org_type', required=True)
@@ -48,7 +83,7 @@ class OrganizationResource(BasicResource):
                             only=('id', 'name', 'creation_date', 'owner_id', 'org_type', 'org_desc', 'api_token'))})
 
 
-class VacancyListResource(BasicResource):
+class VacancyListResource(BasicOrgResource, BasicUserResource):
     parser = reqparse.RequestParser()
     parser.add_argument('offset')
 

@@ -6,9 +6,10 @@ class TestUserResource:
     def setup(self):
         self.session = requests.Session()
 
-        host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
-        self.url = f"http://{host}/api/user"
-        self.entry_url = f"http://{host}/api/login"
+        protocol = "http"
+        base_url = f"{protocol}://{config.HOST}:{config.PORT}"  # or {protocol}://pfproject.herokuapp.com
+        self.url = f"{base_url}/api/user"
+        self.entry_url = f"{base_url}/api/login"
 
         self.test_json = {"name": "Пример",
                           "surname": "Пример",
@@ -81,7 +82,6 @@ class TestUserResourcePost(TestUserResource):
             self.session.delete(f'{self.url}/{self.current_user_id}')
         self.session.delete(self.entry_url)
         super().teardown()
-
 
 
 class TestUserResourceGet(TestUserResource):

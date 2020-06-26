@@ -6,11 +6,12 @@ class SetupOrganizationResource:
     def setup(self):
         self.session = requests.Session()
 
-        host = f"{config.HOST}:{config.PORT}"  # or pfproject.herokuapp.com
-        self.url = f"http://{host}/api/organization"
-        self.user_url = f"http://{host}/api/user"
-        self.entry_url = f"http://{host}/api/login"
-        self.org_entry_url = f"http://{host}/api/org_login"
+        protocol = "http"
+        base_url = f"{protocol}://{config.HOST}:{config.PORT}"  # or {protocol}://pfproject.herokuapp.com
+        self.url = f"{base_url}/api/organization"
+        self.user_url = f"{base_url}/api/user"
+        self.entry_url = f"{base_url}/api/login"
+        self.org_entry_url = f"{base_url}/api/org_login"
 
         self.test_org_json = {'name': 'Организация для входа',
                               "org_type": 'OAO',

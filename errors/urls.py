@@ -1,7 +1,9 @@
-from app import app, login_manager
+from app import login_manager
 from .views import forbidden, not_found_error, server_error, page_not_implemented, authorize
+from flask import Blueprint
 
-reg_er_hand = app.register_error_handler
+bp = Blueprint("errors", __name__)
+reg_er_hand = bp.register_error_handler
 
 urlpatterns = [
     reg_er_hand(403, forbidden),

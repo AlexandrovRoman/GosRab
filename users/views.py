@@ -4,7 +4,7 @@ from threading import Thread
 from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from app import login_manager
-from app.tokens import create_jwt
+from utils.api import create_jwt
 from organization.models import Organization
 from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm, NotificationForm
 from users.models import User, Course
@@ -26,7 +26,7 @@ def profile():
 @login_required
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect(url_for("news.index"))
 
 
 @login_required
@@ -34,7 +34,7 @@ def logout():
 def personnel():
     org = current_user.binded_org
     if org is None:
-        return abort(404)
+        abort(404)
     organization_info = {
         'org': org,
         'workers': org.get_workers(),
@@ -63,12 +63,10 @@ def notification():
 def t2(user_id):
     target = User.get(user_id)
     if not target.has_user_permission(current_user):
-        return abort(403)
+        abort(403)
 
-    if target is None:
-        return abort(404)
-    if not target.t2_rel:  # Если не обладает формой T2
-        return abort(404)
+    if target is None or not target.t2_rel:
+        abort(404)
 
     return render_template("users/T2.html", form=target.t2_rel[0])
 
@@ -77,26 +75,20 @@ class EditProfile(MethodView):
     decorators = [check_confirmed, login_required]
 
     def get(self):
-        form = EditForm()
-        for field in ['surname', 'name',
-                      'fathername', 'sex',
-                      'marriage', 'email',
-                      'birth_date', 'about_myself',
-                      ]:
-            form[field].data = getattr(current_user, field)
-        return render_template('users/edit_profile.html', form=form, orgs=Organization.get_attached_to_user(current_user))
+        form = EditForm(obj=current_user)
+        return render_template('users/edit_profile.html',
+                               form=form, orgs=Organization.get_attached_to_user(current_user))
 
     def post(self):
         form = EditForm()
         if not form.validate_on_submit():
             return self.get()
-        ignore = ("birth_date",)
+
+        form.populate_obj(current_user)
         setattr(current_user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
-        for attr in request.form:
-            if attr not in ignore:
-                setattr(current_user, attr, request.form[attr])
+
         current_user.save()
-        return redirect(url_for('profile'))
+        return redirect(url_for('users.profile'))
 
 
 class Login(MethodView):
@@ -110,7 +102,7 @@ class Login(MethodView):
             user = User.get_logged(request.form['email'], request.form['password'])
             if user is not None:
                 login_user(user)
-                return redirect('/users/profile')
+                return redirect(url_for('users.profile'))
         return self.get()
 
 
@@ -123,22 +115,25 @@ class Registration(MethodView):
         form = RegisterForm()
         if not form.validate_on_submit():
             return self.get()
+
         if User.get_by(email=request.form['email']):
             return 'Email уже использован'
+
         birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
         user = User(request.form['name'], request.form['surname'],
                     request.form['fathername'], request.form['email'],
                     request.form['password'], sex=request.form['sex'], birth_date=birth_date)
         self.send_email(user)
         user.save(add=True)
+
         print('Зарегистрирован пользователь:', user)
         login_user(user)
-        return redirect('/users/profile')
+        return redirect(url_for('users.profile'))
 
     @staticmethod
     def send_email(user):
         token = generate_confirmation_token(user.email)
-        confirm_url = url_for('confirm_email', token=token, _external=True)
+        confirm_url = url_for('users.confirm_email', token=token, _external=True)
         html = render_template('activate_mess.html', confirm_url=confirm_url)
 
         Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()
@@ -147,17 +142,20 @@ class Registration(MethodView):
 def confirm_email():
     token = request.args['token']
     email = confirm_token(token)
+
     user = User.query.filter_by(email=email).first_or_404()
     if not current_user.is_authenticated:
         login_user(user)
+
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
-    else:
-        user.confirmed = True
-        user.save()
-        print('Account confirmed', user, user.confirmed)
-        flash('You have confirmed your account. Thanks!', 'success')
-    return redirect('/')
+        return redirect(url_for('news.index'))
+
+    user.confirmed = True
+    user.save()
+    print('Account confirmed', user, user.confirmed)
+    flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('news.index'))
 
 
 class RestorePassword(MethodView):
@@ -171,7 +169,7 @@ class RestorePassword(MethodView):
             return self.get()
         user = User.get_by(email=form.email.data)
         if not user:
-            return abort(404)
+            abort(404)
         user.restore_token = create_jwt(datetime.now().timestamp())
         user.save()
 
@@ -192,11 +190,13 @@ class ChangePassword(MethodView):
         form = ForgotPasswordForm()
         if not form.validate_on_submit():
             return self.get()
+
         user = User.get_by(email=email)
         if user.restore_token != token:
-            return abort(403)
+            abort(403)
+
         user.set_password(form.password.data)
         user.restore_token = None
         user.save()
         login_user(user)
-        return redirect('/users/profile')
+        return redirect(url_for('users.profile'))

@@ -1,6 +1,6 @@
 from app import db
 import datetime
-from app.models import ModelMixin
+from utils.models import ModelMixin
 
 
 class News(db.Model, ModelMixin):

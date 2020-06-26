@@ -4,12 +4,10 @@ from sqlalchemy import orm
 from app import db
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import ModelMixin
+from utils.models import ModelMixin
 
 
 class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
-    __tablename__ = 'users'
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     t2_rel = orm.relation("T2Form", back_populates='linked_user')
 
@@ -33,7 +31,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
 
     restore_token = db.Column(db.String, nullable=True)
 
-    work_department_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
+    work_department_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
     salary = db.Column(db.Integer, nullable=True)
 
     vacancies = db.relationship("Vacancy", backref='worker')
@@ -120,7 +118,7 @@ class T2Form(db.Model, ModelMixin):
 
     org_name_prop = db.Column(db.String)
 
-    linked_user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    linked_user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     linked_user = orm.relation('User')
 
     compile_date = db.Column(db.Date, default=datetime.datetime.now)
@@ -147,7 +145,7 @@ class T2Form(db.Model, ModelMixin):
     education = db.Column(db.String)
     education_okin = db.Column(db.String)
 
-    education_list = db.Column(db.String)  # Разделитель ;
+    education_list = db.Column(db.String)  # TODO: Education model
 
     profession = db.Column(db.String)
     profession_code = db.Column(db.String)
@@ -255,8 +253,6 @@ class T2Form(db.Model, ModelMixin):
 
 
 class Course(db.Model, ModelMixin):
-    __tablename__ = 'courses'
-
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course_type = db.Column(db.String(20))
     course_name = db.Column(db.String(70))

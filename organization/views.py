@@ -1,8 +1,7 @@
 import datetime
-from flask import render_template, request, redirect, abort
+from flask import render_template, request, redirect, abort, url_for
 from flask.views import MethodView, View
 from flask_login import current_user, login_required
-from app import session
 from organization.forms import AddOrganizationForm, SendResumeForm
 from organization.models import Organization, Vacancy, Resume
 from users.utils import check_confirmed
@@ -25,12 +24,12 @@ def send_resume(vacancy_id):
     form = SendResumeForm()
     if form.validate_on_submit():
         resume = Resume(
-            title=form.contents.data,
             user_id=current_user.id,
             vacancy_id=vacancy_id,
         )
+        form.populate_obj(resume)
         resume.save(add=True)
-        return redirect('/organization/job/')
+        return redirect(url_for("organization.job"))
 
     return render_template("organization/send_resume.html", form=form)
 
@@ -40,7 +39,7 @@ def send_resume(vacancy_id):
 def menu_organization(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return abort(403)
+        abort(403)
 
     return render_template("organization/menu_organization.html", org=org)
 
@@ -50,7 +49,7 @@ def menu_organization(org_id):
 def vacancies_organization(org_id):
     org = Organization.get_by_id(current_user, org_id)
     if org is None:
-        return abort(403)
+        abort(403)
 
     return render_template("organization/vacancies_organization.html", org=org)
 
@@ -62,7 +61,7 @@ def personnel_department(org_id):
     if org is None:
         return abort(403)
     if request.method == 'POST':
-        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save()
+        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save(add=True)
 
     organization_info = {
         'org': org,
@@ -80,7 +79,7 @@ def show_pretenders(vacancy_id):
     vacancy = Vacancy.query.filter_by(id=vacancy_id).first_or_404()
     if vacancy.has_permission(current_user):
         return render_template('organization/show_pretenders.html', vacancy=vacancy)
-    return abort(403)
+    abort(403)
 
 
 @login_required
@@ -93,13 +92,13 @@ def hire_worker(resume_id):
     if vacancy.has_permission(current_user):
         for r in vacancy.resume:
             if r.id != resume_id:
-                pass  # Выслать письма об отказе в пользу другого
+                pass  # TODO: Выслать письма об отказе в пользу другого
             r.delete()
         vacancy.worker_id = resume.user_id
         vacancy.save()
-        # Выслать письмо об принятии на должность
-        return redirect('/organization/profile/organizations/')
-    return abort(403)
+        # TODO: Выслать письмо об принятии на должность
+        return redirect(url_for('organization.organizations'))
+    abort(403)
 
  
 class AddOrganization(MethodView):
@@ -115,23 +114,22 @@ class AddOrganization(MethodView):
             return self.get()
         org = Organization(
                 date=datetime.datetime.now().date(),
-                name=form.name.data,
-                org_type=form.org_type.data,
-                org_desc=form.org_desc.data,
                 owner_id=current_user.id
             )
+        form.populate_obj(org)
         org.save(add=True)
-        return redirect('/organization/profile/organizations/')
+        return redirect(url_for('organization.organizations'))
 
 
 class Job(View):
-    def filter_vacancy(self, vacancy):
+    @staticmethod
+    def filter_vacancy(vacancy):
         organization = request.args.get('organization')
         if organization and organization not in vacancy.organization.name:
             return False
 
         position = request.args.get('position')
-        if position and position not in vacancy.title:
+        if position and position not in vacancy.content:
             return False
 
         salary = request.args.get('salary')
@@ -141,6 +139,6 @@ class Job(View):
         return True
 
     def dispatch_request(self):
-        res = session.query(Vacancy).filter_by(worker_id=None).all()
+        res = Vacancy.query.filter_by(worker_id=None).all()
         return render_template("organization/job.html", vacancies=list(filter(self.filter_vacancy, res)),
                                filters=request.args)
