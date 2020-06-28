@@ -34,4 +34,4 @@ class DevelopConfig(BaseConfig):
     ASSETS_DEBUG = True
 
 
-Config = DevelopConfig
+Config = ProductionConfig

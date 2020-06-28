@@ -44,6 +44,7 @@ class BasicOrgResource(_BasicResource):
 
 
 class OrganizationResource(BasicOrgResource, BasicUserResource):
+# class OrganizationResource(BasicOrgResource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('org_type', required=True)
@@ -84,6 +85,7 @@ class OrganizationResource(BasicOrgResource, BasicUserResource):
 
 
 class VacancyListResource(BasicOrgResource, BasicUserResource):
+# class VacancyListResource(BasicOrgResource):
     parser = reqparse.RequestParser()
     parser.add_argument('offset')
 

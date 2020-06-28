@@ -3,14 +3,13 @@ from datetime import datetime
 from utils.models import ModelMixin
 from sqlalchemy_serializer import SerializerMixin
 from utils.api import create_jwt
-from users.models import User
 
 
 class Organization(db.Model, ModelMixin, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=True)
     creation_date = db.Column(db.Date, default=datetime.now)
-    personnels = db.relationship("User", foreign_keys=[User.work_department_id], backref='binded_org', lazy='select')
+    personnels = db.relationship("User", backref='binded_org', lazy='select')
     vacancies = db.relationship("Vacancy", backref='organization')
     owner_id = db.Column(db.Integer)
     org_type = db.Column(db.String)
