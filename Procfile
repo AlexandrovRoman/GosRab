@@ -1,5 +1,5 @@
 web: gunicorn manage:app
-create_test_models: python utils/excel_DB.py
+create_test_models: python manage.py create_test_models
 init: python manage.py db init
 migrate: python manage.py db migrate
 upgrade: python manage.py db upgrade
