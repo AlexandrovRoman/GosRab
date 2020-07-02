@@ -1,7 +1,7 @@
-web: gunicorn app:app
-create_test_models: python utils/excel_DB.py
-init: python flask db init
-migrate: python flask db migrate
-upgrade: python flask db upgrade
+web: gunicorn manage:app
+create_test_models: python manage.py create_test_models
+init: python manage.py db init
+migrate: python manage.py db migrate
+upgrade: python manage.py db upgrade
 clear: python utils/clear_postgresql_db.py
-shell: python flask shell
+shell: python manage.py shell
