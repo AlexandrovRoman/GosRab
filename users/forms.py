@@ -38,7 +38,8 @@ class SignInForm(FlaskForm):
 
 class ForgotPasswordForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
-    password_again = PasswordField('Пароль повторно', validators=[EqualTo('password', message='Пароли должны совпадать')])
+    password_again = PasswordField('Пароль повторно',
+                                   validators=[EqualTo('password', message='Пароли должны совпадать')])
     submit = SubmitField('Сменить')
 
 

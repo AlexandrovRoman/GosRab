@@ -1,42 +1,38 @@
+from sqlalchemy_serializer import SerializerMixin
 from app import db
 
 
-class ModelMixin:
+class ModelMixin(SerializerMixin):
     ALL_LIMIT = 1000
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     def __init__(self, **db_columns):
         for col_name in db_columns:
-            if not db_columns[col_name] is None:
-                self.set_col(col_name, db_columns[col_name])
+            if not db_columns[col_name] is None and col_name in self.__dict__:
+                setattr(self, col_name, db_columns[col_name])
 
-    def save(self, *, add=False):
-        db.session.merge(self) if not add else db.session.add(self)
+    def save(self):
+        db.session.merge(self) if self.id else db.session.add(self)
         db.session.commit()
 
     def delete(self):
-        db.session.delete(self)
+        self.query.delete()
         db.session.commit()
-
-    def set_model(self, **db_columns):
-        for col_name in db_columns:
-            self.set_col(col_name, db_columns[col_name])
-
-    def set_col(self, col_name, col_value):
-        if col_name in self.__dict__:
-            setattr(self, col_name, col_value)
 
     @classmethod
     def new(cls, *db_columns, **kdb_columns):
+        """ Создание модели с автоматическим сохранением """
+
         obj = cls(*db_columns, **kdb_columns)
-        obj.save(add=True)
+        obj.save()
 
     @classmethod
-    def get_by(cls, **model_fields):
-        return db.session.query(cls).filter_by(**model_fields).first()
+    def get_by(cls, **cols):
+        return db.session.query(cls).filter_by(**cols).one()
 
     @classmethod
     def all(cls, offset=0, limits=False):
-        res = db.session.query(cls)
+        res = cls.query
         if limits:
             res = res.limit(cls.ALL_LIMIT)
         if offset:

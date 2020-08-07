@@ -2,10 +2,11 @@ import re
 import jwt
 from flask import jsonify, session
 from flask_restful import reqparse, Resource
+from sqlalchemy.orm.exc import NoResultFound
 from app import Config
 from users.models import User
 from utils.api import get_or_abort, BasicResource as _BasicResource, jwt_login_required, create_jwt
-from .views import Registration
+from users.utils import send_confirm_message
 
 
 def get_or_abort_user(user_id):
@@ -28,7 +29,7 @@ class UserApiEntryPoint(Resource):
     def get_authorized_user():
         try:
             return User.get(jwt.decode(session['current_user_jwt'], Config.JWT_SECRET_KEY)['payload']['id'])
-        except (TypeError, KeyError):
+        except (TypeError, KeyError, NoResultFound):
             return None
 
 
@@ -78,7 +79,7 @@ class UserResource(BasicUserResource):
             email=args['email'],
             password=args['password']
         )
-        user.save(add=True)
-        Registration.send_email(user)
+        user.save()
+        send_confirm_message(user.email)
         return jsonify({'adding': 'OK', 'user': user.to_dict(
             only=('id', 'name', 'surname', 'fathername', 'birth_date'))})

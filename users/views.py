@@ -1,15 +1,20 @@
+import logging
 from base64 import b64encode
 from datetime import datetime
 from threading import Thread
 from flask import render_template, request, redirect, url_for, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy.orm.exc import NoResultFound
+
 from app import login_manager
+from utils.access_rights import check_confirmed
 from utils.api import create_jwt
 from organization.models import Organization
 from users.forms import RegisterForm, SignInForm, EditForm, ForgotPasswordForm, RestorePasswordForm, NotificationForm
 from users.models import User, Course
-from users.utils import check_confirmed, generate_confirmation_token, send_email, confirm_token
+from users.utils import token_to_email, send_confirm_message, create_or_update_user
 from flask.views import MethodView
+from utils.email import send_email
 
 
 @login_manager.user_loader
@@ -32,13 +37,13 @@ def logout():
 @login_required
 @check_confirmed
 def personnel():
-    org = current_user.binded_org
+    org: Organization = current_user.binded_org
     if org is None:
         abort(404)
     organization_info = {
         'org': org,
-        'workers': org.get_workers(),
-        'required_workers': org.get_required_workers(),
+        'workers': org.exists_workers,
+        'required_workers': org.required_workers,
     }
 
     return render_template('users/personnel.html', **organization_info, len=len)
@@ -68,7 +73,7 @@ def t2(user_id):
     if target is None or not target.t2_rel:
         abort(404)
 
-    return render_template("users/T2.html", form=target.t2_rel[0])
+    return render_template("users/T2.html", form=target.t2_rel)
 
 
 class EditProfile(MethodView):
@@ -77,17 +82,15 @@ class EditProfile(MethodView):
     def get(self):
         form = EditForm(obj=current_user)
         return render_template('users/edit_profile.html',
-                               form=form, orgs=Organization.get_attached_to_user(current_user))
+                               form=form, orgs=current_user.organizations)
 
     def post(self):
         form = EditForm()
-        if not form.validate_on_submit():
+        if not create_or_update_user(form)["ok"]:
             return self.get()
 
-        form.populate_obj(current_user)
-        setattr(current_user, "birth_date", datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date())
+        logging.info(f"{current_user} updated profile")
 
-        current_user.save()
         return redirect(url_for('users.profile'))
 
 
@@ -99,7 +102,7 @@ class Login(MethodView):
     def post(self):
         form = SignInForm()
         if form.validate_on_submit():
-            user = User.get_logged(request.form['email'], request.form['password'])
+            user = User.get_logged(form.email.data, form.password.data)
             if user is not None:
                 login_user(user)
                 return redirect(url_for('users.profile'))
@@ -113,35 +116,20 @@ class Registration(MethodView):
 
     def post(self):
         form = RegisterForm()
-        if not form.validate_on_submit():
+        res = create_or_update_user(form)
+        if not res["ok"]:
             return self.get()
 
-        if User.get_by(email=request.form['email']):
-            return 'Email уже использован'
+        user = res["user"]
 
-        birth_date = datetime.strptime(request.form["birth_date"], "%Y-%m-%d").date()
-        user = User(request.form['name'], request.form['surname'],
-                    request.form['fathername'], request.form['email'],
-                    request.form['password'], sex=request.form['sex'], birth_date=birth_date)
-        self.send_email(user)
-        user.save(add=True)
-
-        print('Зарегистрирован пользователь:', user)
+        logging.info(f"Зарегистрирован пользователь: {user}")
         login_user(user)
         return redirect(url_for('users.profile'))
-
-    @staticmethod
-    def send_email(user):
-        token = generate_confirmation_token(user.email)
-        confirm_url = url_for('users.confirm_email', token=token, _external=True)
-        html = render_template('activate_mess.html', confirm_url=confirm_url)
-
-        Thread(target=send_email, args=(user.email, html, "Confirm your GosRab account")).run()
 
 
 def confirm_email():
     token = request.args['token']
-    email = confirm_token(token)
+    email = token_to_email(token)
 
     user = User.query.filter_by(email=email).first_or_404()
     if not current_user.is_authenticated:
@@ -153,7 +141,7 @@ def confirm_email():
 
     user.confirmed = True
     user.save()
-    print('Account confirmed', user, user.confirmed)
+    logging.info(f"Account confirmed {user} {user.confirmed}")
     flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('news.index'))
 

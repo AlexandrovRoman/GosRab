@@ -1,15 +1,14 @@
 import datetime
 from flask_login import UserMixin
-from sqlalchemy import orm
+from sqlalchemy.orm.exc import NoResultFound
 from app import db
-from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from utils.models import ModelMixin
 
 
-class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
+class User(db.Model, ModelMixin, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    t2_rel = orm.relation("T2Form", back_populates='linked_user')
+    t2_rel = db.relationship("T2Form", back_populates='linked_user', uselist=False)
 
     name = db.Column(db.String(80))
     surname = db.Column(db.String(80))
@@ -22,7 +21,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
     marriage = db.Column(db.String(20), default="Не в браке")
     grate = db.Column(db.String, default='Новичок')
     education = db.Column(db.String, default='Отсутствует')
-    foreign_languges = db.Column(db.String, default='Отсутствует')
+    foreign_languages = db.Column(db.String, default='Отсутствует')
     start_place = db.Column(db.String)
     nationality = db.Column(db.String)
     about_myself = db.Column(db.String, default='Отсутствует')
@@ -33,6 +32,8 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
 
     work_department_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
     salary = db.Column(db.Integer, nullable=True)
+
+    organizations = db.relationship("Organization", back_populates="owner", foreign_keys="Organization.owner_id")
 
     vacancies = db.relationship("Vacancy", backref='worker')
     resume = db.relationship("Resume", backref='user')
@@ -50,7 +51,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
                  marriage=None,
                  grate=None,
                  education=None,
-                 foreign_languges=None,
+                 foreign_languages=None,
                  start_place=None,
                  about_myself=None,
                  confirmed=False):
@@ -60,7 +61,7 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
                          birth_date=birth_date, email=email,
                          hashed_password=generate_password_hash(password),
                          sex=sex, marriage=marriage, grate=grate, education=education,
-                         foreign_languges=foreign_languges, start_place=start_place,
+                         foreign_languages=foreign_languages, start_place=start_place,
                          about_myself=about_myself, confirmed=confirmed)
 
     def __repr__(self):
@@ -89,10 +90,11 @@ class User(db.Model, ModelMixin, UserMixin, SerializerMixin):
 
     @classmethod
     def get_logged(cls, login, password):
-        user = cls.get_by(email=login)
-        if user and user.check_password(password):
-            return user
-        return None
+        try:
+            user = cls.get_by(email=login)
+            return user if user.check_password(password) else None
+        except NoResultFound:
+            return
 
     @classmethod
     def get(cls, user_id):
@@ -119,7 +121,7 @@ class T2Form(db.Model, ModelMixin):
     org_name_prop = db.Column(db.String)
 
     linked_user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    linked_user = orm.relation('User')
+    linked_user = db.relationship('User', back_populates="t2_rel", uselist=False)
 
     compile_date = db.Column(db.Date, default=datetime.datetime.now)
     service_number = db.Column(db.Integer)
@@ -206,7 +208,7 @@ class T2Form(db.Model, ModelMixin):
             linked_user = User(name, surname, fathername, email, password, binded_org, salary,
                                birthdate, gender, marriage,
                                confirmed=True)
-            linked_user.save(add=True)
+            linked_user.save()
             print('На основе Т2 создан пользователь', linked_user.full_name)
 
         super().__init__(org_name_prop=org_name, linked_user_id=linked_user.id,
@@ -256,7 +258,7 @@ class Course(db.Model, ModelMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course_type = db.Column(db.String(20))
     course_name = db.Column(db.String(70))
-    start = db.Column(db.Date)  # TODO: сделать в формате начало - конец
+    start = db.Column(db.Date)
     end = db.Column(db.Date)
     description = db.Column(db.String)
     image = db.Column(db.Binary)

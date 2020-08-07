@@ -4,15 +4,14 @@ from flask.views import MethodView, View
 from flask_login import current_user, login_required
 from organization.forms import AddOrganizationForm, SendResumeForm
 from organization.models import Organization, Vacancy, Resume
-from users.utils import check_confirmed
+from utils.access_rights import check_confirmed
+from typing import Optional
 
 
 @login_required
 @check_confirmed
 def organizations():
-    user_orgs = Organization.get_attached_to_user(current_user)
-
-    return render_template("organization/organizations.html", orgs=user_orgs)
+    return render_template("organization/organizations.html", orgs=current_user.organizations)
 
 
 @login_required
@@ -28,7 +27,7 @@ def send_resume(vacancy_id):
             vacancy_id=vacancy_id,
         )
         form.populate_obj(resume)
-        resume.save(add=True)
+        resume.save()
         return redirect(url_for("organization.job"))
 
     return render_template("organization/send_resume.html", form=form)
@@ -57,17 +56,17 @@ def vacancies_organization(org_id):
 @login_required
 @check_confirmed
 def personnel_department(org_id):
-    org = Organization.get_by_id(current_user, org_id)
+    org: Optional[Organization] = Organization.get_by_id(current_user, org_id)
     if org is None:
         return abort(403)
     if request.method == 'POST':
-        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save(add=True)
+        Vacancy(org_id=org_id, salary=request.form['salary'], title=request.form['title']).save()
 
     organization_info = {
         'org': org,
-        'personnel': org.personnels,
-        'workers': org.get_workers(),
-        'required_workers': org.get_required_workers(),
+        'personnel': org.personnel,
+        'workers': org.exists_workers,
+        'required_workers': org.required_workers,
     }
 
     return render_template("personnel_department.html", **organization_info, len=len)
@@ -117,7 +116,7 @@ class AddOrganization(MethodView):
                 owner_id=current_user.id
             )
         form.populate_obj(org)
-        org.save(add=True)
+        org.save()
         return redirect(url_for('organization.organizations'))
 
 

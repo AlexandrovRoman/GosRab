@@ -44,7 +44,6 @@ class BasicOrgResource(_BasicResource):
 
 
 class OrganizationResource(BasicOrgResource, BasicUserResource):
-# class OrganizationResource(BasicOrgResource):
     parser = reqparse.RequestParser()
     parser.add_argument('name', required=True)
     parser.add_argument('org_type', required=True)
@@ -78,14 +77,13 @@ class OrganizationResource(BasicOrgResource, BasicUserResource):
             org_type=args['org_type'],
             org_desc=args['org_desc']
         )
-        org.save(add=True)
+        org.save()
         return jsonify({'adding': 'OK',
                         'organization': org.to_dict(
                             only=('id', 'name', 'creation_date', 'owner_id', 'org_type', 'org_desc', 'api_token'))})
 
 
 class VacancyListResource(BasicOrgResource, BasicUserResource):
-# class VacancyListResource(BasicOrgResource):
     parser = reqparse.RequestParser()
     parser.add_argument('offset')
 

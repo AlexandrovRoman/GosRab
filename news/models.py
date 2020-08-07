@@ -4,7 +4,7 @@ from utils.models import ModelMixin
 
 
 class News(db.Model, ModelMixin):
-    __tablename__ = 'news'
+    """ Контент новостной ленты сайта """
 
     id = db.Column(db.Integer,
                    primary_key=True, autoincrement=True)
