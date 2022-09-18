@@ -1,7 +1,6 @@
 from app import app, urls, config
 from flask_migrate import MigrateCommand
 from flask_script import Manager
-from utils.excel_DB import export_from_excel
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -15,6 +14,7 @@ def runserver():
 
 @manager.command
 def create_test_models():
+    from utils.excel_DB import export_from_excel
     from users.models import User, Course, T2Form
     from news.models import News
     from organization.models import Organization, Vacancy

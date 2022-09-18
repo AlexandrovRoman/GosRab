@@ -129,7 +129,7 @@ class Job(View):
             return False
 
         position = request.args.get('position')
-        if position and position not in vacancy.content:
+        if position and position not in vacancy.title:
             return False
 
         salary = request.args.get('salary')
