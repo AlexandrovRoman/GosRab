@@ -14,4 +14,4 @@ werkzeug==1.0.0
 flask-restful==0.3.8
 SQLAlchemy-serializer==1.4.1
 flask-jwt-extended==3.24.1
-PyJWT==1.7.1
+PyJWT==2.4.0
